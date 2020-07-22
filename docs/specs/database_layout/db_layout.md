@@ -8,6 +8,7 @@ v4 clickhouse database layout
 #### rawdata.range
 
 Источник: `logreader`  
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
 CREATE TABLE rawdata.range (
@@ -23,11 +24,13 @@ CREATE TABLE rawdata.range (
   prn Int32,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree(d, (time, sat, freq), 8192)
+TTL d + INVERVAL 2 WEEK DELETE
 ```
 
 #### rawdata.satxyz2
 
 Источник: `logreader`  
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
 CREATE TABLE rawdata.satxyz2 (
@@ -40,6 +43,7 @@ CREATE TABLE rawdata.satxyz2 (
   prn Int32,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree(d, (time, sat), 8192)
+TTL d + INVERVAL 2 WEEK DELETE
 ```
 
 ### Таблицы для расчетных данных
