@@ -108,5 +108,65 @@ CREATE TABLE computed.s4 (
   s4 Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
+TTL d + INTERVAL 2 Week DELETE;
+```
+
+### Таблицы для расчетных данных (тестовые)
+
+#### Обычные таблицы
+
+Источник: *rawdata.range*
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE TABLE computed.NT (
+    time UInt64,
+    sat String,
+    sigcomb String,
+    f1 Float64,
+    f2 Float64,
+    nt Float64,
+    d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
+TTL d + INTERVAL 2 Week DELETE;
+```
+
+Источник: *computed.NT*
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE TABLE computed.NTDerivatives (
+    time UInt64,
+    sat String,
+    sigcomb String,
+    f1 Float64,
+    f2 Float64,
+    avgNT Float64,
+    delNT Float64,
+    d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 
+TTL d + INTERVAL 2 Week DELETE;
+```
+
+#### Односекундные таблицы
+
+Источник: *computed.NTDerivatives*
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE TABLE computed.xz1 (
+    time UInt64,
+    sat String,
+    sigcomb String,
+    f1 Float64,
+    f2 Float64,
+    sigNT Float64,
+    sigPhi Float64,
+    gamma Float64,
+    Fc Float64,
+    Pc Float64,
+    d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 
+TTL d + INTERVAL 2 Week DELETE;
 ```
 
