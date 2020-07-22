@@ -1,0 +1,54 @@
+<div class="editor-row">
+    <div class="section gf-form-group">
+        <h5 class="section-heading">Настройки задач</h5>
+        <div class="gf-form">
+          <label class="gf-form-label width-12">Менеджер ресурсов</label>
+          <input type="text" class="gf-form-input width-25" ng-model="ctrl.panel.rmServer" ng-change="ctrl.render()" ng-model-onblur>
+        </div>
+        <div class="gf-form">
+          <label class="gf-form-label width-12">Сервер Livy</label>
+          <input type="text" class="gf-form-input width-25" ng-model="ctrl.panel.livyServer" ng-change="ctrl.render()" ng-model-onblur>
+        </div>
+        <div class="gf-form">
+          <label class="gf-form-label width-12">Путь к JAR-файлу</label>
+          <input type="text" class="gf-form-input width-25" ng-model="ctrl.panel.submitJar" ng-change="ctrl.render()" ng-model-onblur>
+        </div>
+        <div class="gf-form">
+          <label class="gf-form-label width-12">Имя класса задачи</label>
+          <input type="text" class="gf-form-input width-25" ng-model="ctrl.panel.jobClassName" ng-change="ctrl.render()" ng-model-onblur>
+        </div>
+        <div class="gf-form">
+          <label class="gf-form-label width-12">Переменная спутника</label>
+          <select class="gf-form-input width-25" ng-model="ctrl.panel.satTemplateVar" ng-change="ctrl.render()" ng-model-onblur>
+            <option ng-repeat="option in ctrl.dashboard.templating.list" value="{{option.name}}">{{option.label}} ({{option.name}})</option>
+          </select>
+        </div>
+        <gf-form-switch class="gf-form" label="Список задач" label-class="width-12" checked="ctrl.panel.showJobList" on-change="ctrl.render()"></gf-form-switch>
+    </div>
+    <div class="section gf-form-group">
+        <h5 class="section-heading">Настройки исполнения</h5>
+        <div class="gf-form">
+          <label class="gf-form-label width-15">Память драйвера</label>
+          <input type="text" class="gf-form-input width-22" ng-model="ctrl.panel.driverMemory" ng-change="ctrl.render()" ng-model-onblur>
+        </div>
+        <div class="gf-form">
+          <label class="gf-form-label width-15">Ядра драйвера</label>
+          <input type="text" class="gf-form-input width-22" ng-model="ctrl.panel.driverCores" ng-change="ctrl.render()" ng-model-onblur>
+        </div>
+        <div class="gf-form">
+          <label class="gf-form-label width-15">Память исполнителя</label>
+          <input type="text" class="gf-form-input width-22" ng-model="ctrl.panel.executorMemory" ng-change="ctrl.render()" ng-model-onblur>
+        </div>
+        <div class="gf-form">
+          <label class="gf-form-label width-15">Ядра исполнителя</label>
+          <input type="text" class="gf-form-input width-22" ng-model="ctrl.panel.executorCores" ng-change="ctrl.render()" ng-model-onblur>
+        </div>
+        <div class="gf-form">
+          <label class="gf-form-label width-15">Число исполнителей</label>
+          <input type="text" class="gf-form-input width-22" ng-model="ctrl.panel.numExecutors" ng-change="ctrl.render()" ng-model-onblur>
+        </div>
+        <gf-form-switch class="gf-form" label="Динамическое выделение" label-class="width-15" checked="ctrl.panel.dynamicAllocation" on-change="ctrl.render()"></gf-form-switch>
+    </div>
+</div>
+
+

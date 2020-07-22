@@ -1,0 +1,2 @@
+Spark 2.2.1 built for Hadoop 2.6.5
+Build flags: -Psparkr -Phadoop-provided -Pyarn -Pmesos -DzincPort=3038
