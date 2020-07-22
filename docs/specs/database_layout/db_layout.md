@@ -1,4 +1,4 @@
-v1 clickhouse database layout
+v2 clickhouse database layout
 
 ### Таблицы для входных данных
 
@@ -42,11 +42,21 @@ CREATE TABLE computed.tec (
   sat String,
   prn Int32,
   sigcomb String,
-  tec Float64,
+  tec Float64
+  d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree(d, (time, sat), 8192)
+```
+
+```sql
+CREATE TABLE computed.tecFiltered (
+  time UInt64,
+  system String,
+  sat String,
+  prn Int32,
   tecavg Float64,
   tecdelta Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
-) ENGINE = MergeTree(d, time, 8192)
+) ENGINE = ReplacingMergeTree(d, (time, sat), 8192)
 ```
 
 #### Односекундные таблицы
@@ -60,7 +70,7 @@ CREATE TABLE computed.tecsigma (
   sigcomb String,
   tecsigma Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
-) ENGINE = MergeTree(d, time, 8192)
+) ENGINE = ReplacingMergeTree(d, (time, sat), 8192)
 ```
 
 ```sql
@@ -73,6 +83,6 @@ CREATE TABLE computed.s4 (
   freq Float64,
   s4 Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
-) ENGINE = MergeTree(d, time, 8192)
+) ENGINE = ReplacingMergeTree(d, (time, sat), 8192)
 ```
 
