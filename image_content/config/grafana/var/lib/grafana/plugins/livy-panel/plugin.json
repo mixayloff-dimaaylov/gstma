@@ -1,0 +1,24 @@
+{
+  "type": "panel",
+  "name": "Livy",
+  "id": "livy-panel",
+  "css": {
+    "dark":  "css/dark.css",
+    "light":  "css/light.css"
+  },
+  "info": {
+    "description": "Интерфейс задач Livy",
+    "author": {
+      "name": "Алексей Саварцов",
+      "url": "http://infocom-s.ru"
+    },
+    "keywords": ["spark", "livy"],
+    "version": "1.0.0",
+    "updated": "2017-03-20"
+  },
+
+  "dependencies": {
+    "grafanaVersion": "3.x.x",
+    "plugins": [ ]
+  }
+}

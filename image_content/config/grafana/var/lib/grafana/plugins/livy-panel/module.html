@@ -1,0 +1,58 @@
+<section class="controls">
+    <button ng-disabled="ctrl.canSubmit() === false" class="btn btn-success" type="button" ng-click="ctrl.submitJob()">
+            Отправить задачу
+    </button>
+    <span class="server-state">{{ctrl.serverState | serverState}}</span>
+    <span class="server-state server-state-{{ctrl.serverState}} server-state-icon" ng-class="ctrl.serverState | serverStateIcon"></span>
+</section>
+<section class="jobs" style="height: {{ctrl.height - 50}}px;" ng-if="ctrl.panel.showJobList">
+    <div class="livy-jobs">
+        <h5></h5>
+    </div>
+    <table>
+        <tr class="jobs-header">
+            <td colspan="5">Задачи расчета</td>
+        </tr>
+        <tr class="no-jobs" ng-if="ctrl.livyJobs.length == 0">
+            <td colspan="5">Нет задач</td>
+        </tr>
+        <tr ng-repeat="job in ctrl.livyJobs | orderBy: '-id'">
+            <td>{{job.id}}</td>
+            <td><span class="job-state job-state-{{job.state}}">{{job.state | jobState}}</span></td>
+            <td colspan="2">
+                <a ng-if="job.appId" href="{{job.sparkUiUrl}}" target="blank">{{job.appId}}</a>
+                <span title="{{job.args.submitted | dateFormat}}">{{job.args.sat}} {{job.args.timeFrom}} {{job.args.timeTo}}</span>
+            </td>
+            <td>
+                <button class="btn btn-small btn-inverse" title="Удалить" type="button" ng-click="ctrl.killBatch(job.id)">
+                    <i class="fa fa-close pointer"></i>
+                </button>
+            </td>
+        </tr>
+
+        <tr class="jobs-header" ng-if="ctrl.frameworks.length > 0">
+            <td colspan="5">Кластер</td>
+        </tr>
+        <tr ng-repeat="job in ctrl.frameworks">
+            <td><a href="{{ctrl.panel.rmServer}}/#/frameworks/{{job.id}}" target="blank">{{job.idx}}</a></td>
+            <td><span class="job-state job-state-{{job.state}}">{{job.state | jobState}}</span></td>
+            <td>
+                <a href="{{ctrl.panel.rmServer}}/#/frameworks/{{job.id}}" target="blank" title="{{job.args.sat}} {{job.args.timeFrom}} {{job.args.timeTo}}">{{job.name}} {{job.args.sat}}</a>
+                <span ng-if="job.finishedTasks > 0" class="text-success" title="Выполнено задач"><i class="fa fa-check-circle"></i> {{job.finishedTasks}}</span>
+                <span ng-if="job.activeTasks > 0" class="text-info" title="Выполняется задач"><i class="fa fa-info-circle "></i> {{job.activeTasks}}</span>
+                <span ng-if="job.killedTasks > 0" class="text-warning" title="Остановлено задач"><i class="fa fa-exclamation-triangle"></i> {{job.killedTasks}}</span>
+                <span ng-if="job.failedTasks > 0" class="text-error" title="Завершено с ошибкой"><i class="fa fa-times-circle"></i> {{job.failedTasks}}</span>
+            </td>
+            <td>
+                <span title="Запущена {{job.startTime | dateFormat}}">{{job.totalTime | duration}}</span>
+                <span ng-if="job.isRunning">({{job.resources.cpus}} CPU / {{job.resources.mem}} MB)</span>
+                <span ng-if="job.isComplete" title="Завершена {{job.endTime | dateFormat}}">({{job.endTime | calendar}})</span>
+            </td>
+            <td>
+                <button ng-if="job.isRunning" title="Удалить" class="btn btn-small btn-inverse" type="button" ng-click="ctrl.killFramework(job.id)">
+                    <i class="fa fa-close pointer"></i>
+                </button>
+            </td>
+        </tr>
+    </table>
+</section>

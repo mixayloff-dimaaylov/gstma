@@ -1,0 +1,121 @@
+.server-state {
+    float: right;
+    position: relative;
+    padding-left: 7px;
+    margin-top: 7px;
+}
+
+.server-state-icon {
+    margin-top: 12px;
+    font-size: 14px;
+    padding: 0px;
+}
+
+.server-state-online,
+.server-state-success {
+    color: #18a718;
+}
+
+.server-state-pending,
+.server-state-connecting {
+    color: #797979;
+}
+
+.server-state-error,
+.server-state-offline {
+    color: #ff2323;
+}
+
+.job-state {
+    display: inline-block;
+    padding: 2px 4px;
+    font-size: 10.998px;
+    font-weight: bold;
+    line-height: 14px;
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    white-space: nowrap;
+    vertical-align: baseline;
+    background-color: #999;
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+
+.job-state-not_started,
+.job-state-shutting_down {
+    background-color: #999;
+}
+
+.job-state-starting,
+.job-state-idle {
+    background-color: #338bb8;
+}
+
+.job-state-running,
+.job-state-busy {
+    background-color: #f89406;
+}
+
+.job-state-error,
+.job-state-dead {
+    background-color: #b94a48;
+}
+
+.job-state-success {
+    background-color: #468847;
+}
+
+.jobs {
+    overflow-y: auto;
+}
+
+.controls {
+    height: 50px;
+}
+
+.jobs table {
+    width: 100%;
+}
+
+.jobs td {
+    line-height: 1.4;
+    text-align: left;
+    padding: 2px 4px;
+    white-space: nowrap;
+}
+
+.jobs td:first-child {
+    width: 35px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.jobs td:last-child {
+    text-align: right;
+}
+
+.jobs .no-jobs td,
+.jobs .jobs-header td {
+    font-size: 13px;
+    text-align: left;
+}
+
+.jobs-header td {
+    font-weight: bold;
+    border-top: 0;
+}
+
+.started {
+    display: block;
+}
+
+.started-date {
+    font-size: 12px;
+    color: #797979;
+}
+
+.started-time {
+    font-size: 15px;
+    display: block;
+}
+
