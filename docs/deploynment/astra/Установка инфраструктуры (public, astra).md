@@ -63,9 +63,9 @@ HOSTS
 sudo apt-get install -y default-jdk
 
 # Настройка Java
-echo 'JAVA_HOME=/usr/lib/jvm/default-java' | sudo tee /etc/profile.d/java
+echo 'export JAVA_HOME=/usr/lib/jvm/default-java' | sudo tee /etc/profile.d/java.sh
 # Для применения настроек заново зайти под текущего пользователя или выполнить
-# `source /etc/profile.d/java`
+# `source /etc/profile.d/java.sh`
 
 sudo apt-get install -y zookeeper
 sudo apt-get install -y zookeeperd
@@ -149,9 +149,9 @@ sudo mkdir -p /opt/kafka &&\
 sudo tar -xzf /media/cdrom/kafka_*.tgz -C /opt/haddop --strip 1
 
 # Установка переменной окружения PATH
-echo 'PATH=$PATH:/opt/hadoop/bin' | sudo tee /etc/profile.d/hadoop
+echo 'export PATH="$PATH:/opt/hadoop/bin"' | sudo tee /etc/profile.d/hadoop.sh
 # Для применения настроек заново зайти под текущего пользователя или выполнить
-# `source /etc/profile.d/java`
+# `source /etc/profile.d/hadoop.sh`
 ```
 
 Установка приложения производится посредство подготовленного дистрибутива и
