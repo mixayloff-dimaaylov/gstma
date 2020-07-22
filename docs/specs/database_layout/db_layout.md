@@ -80,10 +80,15 @@ CREATE TABLE computed.s4 (
   system String,
   sat String,
   prn Int32,
-  sigcomb String,
   freq Float64,
   s4 Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
-) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
+) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
 ```
+
+*Примечание:* s4 считается для частот, а не для их комбинаций.
+
+TODO:
+
+- [ ] Устранить избыточность system,prn/sat=concat(system,prn)
 
