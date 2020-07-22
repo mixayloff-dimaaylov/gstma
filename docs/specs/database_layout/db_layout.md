@@ -1,6 +1,13 @@
 v3 clickhouse database layout
+=============================
 
 ### Таблицы для входных данных
+
+Таблицы, формируемые `logreader`.
+
+#### rawdata.range
+
+Источник: `logreader`  
 
 ```sql
 CREATE TABLE rawdata.range (
@@ -17,6 +24,10 @@ CREATE TABLE rawdata.range (
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree(d, (time, sat, freq), 8192)
 ```
+
+#### rawdata.satxyz2
+
+Источник: `logreader`  
 
 ```sql
 CREATE TABLE rawdata.satxyz2 (
@@ -35,24 +46,28 @@ CREATE TABLE rawdata.satxyz2 (
 
 #### Обычные таблицы
 
+##### computed.tec
+
+Источник: *rawdata.range*  
+
 ```sql
 CREATE TABLE computed.tec (
   time UInt64,
-  system String,
   sat String,
-  prn Int32,
   sigcomb String,
   tec Float64
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
 ```
 
+##### computed.tecFiltered
+
+Источник: *rawdata.range*  
+
 ```sql
 CREATE TABLE computed.tecFiltered (
   time UInt64,
-  system String,
   sat String,
-  prn Int32,
   sigcomb String,
   tecavg Float64,
   tecdelta Float64,
@@ -62,33 +77,32 @@ CREATE TABLE computed.tecFiltered (
 
 #### Односекундные таблицы
 
+##### computed.tecsigma
+
+Источник: *rawdata.range*  
+
 ```sql
 CREATE TABLE computed.tecsigma (
   time UInt64,
-  system String,
   sat String,
-  prn Int32,
   sigcomb String,
   tecsigma Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
 ```
 
+##### computed.s4
+
+Источник: *rawdata.range*  
+*Примечание:* s4 считается для частот, а не для их комбинаций.  
+
 ```sql
 CREATE TABLE computed.s4 (
   time UInt64,
-  system String,
   sat String,
-  prn Int32,
   freq Float64,
   s4 Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
 ```
-
-*Примечание:* s4 считается для частот, а не для их комбинаций.
-
-TODO:
-
-- [ ] Устранить избыточность system,prn/sat=concat(system,prn)
 
