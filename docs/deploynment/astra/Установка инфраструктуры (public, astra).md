@@ -105,7 +105,7 @@ sudo mkdir -p /opt/kafka &&\
 sudo tar -xzf /media/cdrom/kafka_*.tgz -C /opt/kafka --strip 1
 
 # Добавить пользователя
-sudo useradd kafka -m
+sudo useradd kafka -r -U -s /bin/nologin
 ```
 
 #### 2.4.2. Настройка
@@ -117,11 +117,13 @@ sudo useradd kafka -m
 ```sh
 sudo tar -xv --same-owner --same-permissions -f /media/cdrom/configs/kafka.tar.gz -C /
 
-# Создать рабочую директорию Kafka
-sudo mkdir -p /data/kafka-logs
-
 # Добавить unit-файл Kafka в список известных
 sudo systemctl daemon-reload
+
+# Создать рабочую директорию Kafka
+sudo mkdir /data
+sudo mkdir -p /data/kafka-logs
+sudo chown kafka:kafka /data/kafka-logs
 ```
 
 #### 2.4.3. Запуск
