@@ -272,22 +272,24 @@ sudo systemctl status grafana-server.service
 sudo apt-get install -y linux-headers-"$(uname -r)"
 
 # Распаковать установочный дистрибутив
+sudo mkdir -p /tmp/ngpsusbpackage && \
 sudo tar -xzf /media/cdrom/ngpsusbpackage.tar.gz -C /tmp/ngpsusbpackage --strip 1
-cd /tmp/ngpsusbpackage
-chmod a+x ngpsub-install ngpsusb-uninstall
+
+cd /tmp/ngpsusbpackage && \
+sudo chmod a+x ngpsusb-install ngpsusb-uninstall
 
 # Произвести установку
-./ngpsusb-install
+sudo ./ngpsusb-install
 
-# Удалить установочные файлы
-rm -rf /tmp/ngpsusbpackage
+# Удалить копии установочных файлов
+cd ~ && sudo rm -rf /tmp/ngpsusbpackage
 ```
 
 #### 2.8.1. Установка
 
 ```sh
 # Распаковать дистрибутив NovAtelLogReader
-sudo mkdir /opt/NovAtelLogReader &&\
+sudo mkdir /opt/NovAtelLogReader && \
 sudo tar -xzf /media/cdrom/NovAtelLogReader.tar.gz -C /opt/NovAtelLogReader --strip 1
 
 # Дать права на исполнение
@@ -307,5 +309,5 @@ sudo chmod a+x /opt/NovAtelLogReader/NovAtelLogReader
 
 #### 2.8.3. Запуск
 
-Запустить исполняемый файл `/opt/NovAtelLogReader/NovAtelLogReader`.
+Запустить исполняемый файл `/opt/NovAtelLogReader/NovAtelLogReader` от пользователя `root`.
 
