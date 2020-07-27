@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# v6
+
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
 EOL123
@@ -42,46 +44,6 @@ CREATE TABLE IF NOT EXISTS rawdata.satxyz2 (
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat)
 TTL d + INTERVAL 2 WEEK DELETE
-SETTINGS index_granularity=8192
-EOL123
-
-clickhouse-client <<EOL123
-CREATE TABLE IF NOT EXISTS computed.tec (
-  time UInt64,
-  sat String,
-  sigcomb String,
-  tec Float64,
-  d Date MATERIALIZED toDate(round(time / 1000))
-) ENGINE = ReplacingMergeTree()
-PARTITION BY toYYYYMM(d)
-ORDER BY (time, sat, sigcomb)
-SETTINGS index_granularity=8192
-EOL123
-
-clickhouse-client <<EOL123
-CREATE TABLE IF NOT EXISTS computed.tecFiltered (
-  time UInt64,
-  sat String,
-  sigcomb String,
-  tecavg Float64,
-  tecdelta Float64,
-  d Date MATERIALIZED toDate(round(time / 1000))
-) ENGINE = ReplacingMergeTree()
-PARTITION BY toYYYYMM(d)
-ORDER BY (time, sat, sigcomb)
-SETTINGS index_granularity=8192
-EOL123
-
-clickhouse-client <<EOL123
-CREATE TABLE IF NOT EXISTS computed.tecsigma (
-  time UInt64,
-  sat String,
-  sigcomb String,
-  tecsigma Float64,
-  d Date MATERIALIZED toDate(round(time / 1000))
-) ENGINE = ReplacingMergeTree()
-PARTITION BY toYYYYMM(d)
-ORDER BY (time, sat, sigcomb)
 SETTINGS index_granularity=8192
 EOL123
 
@@ -152,3 +114,16 @@ TTL d + INTERVAL 2 WEEK DELETE
 SETTINGS index_granularity=8192
 EOL123
 
+clickhouse-client <<EOL123
+CREATE TABLE IF NOT EXISTS computed.Tc (
+  time UInt64,
+  sat String,
+  sigcomb String,
+  Tc Float64,
+  d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree()
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, sigcomb)
+TTL d + INTERVAL 2 WEEK DELETE
+SETTINGS index_granularity=8192
+EOL123
