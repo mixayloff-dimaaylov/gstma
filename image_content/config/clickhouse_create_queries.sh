@@ -89,7 +89,7 @@ clickhouse-client <<EOL123
 CREATE TABLE IF NOT EXISTS computed.s4 (
   time UInt64,
   sat String,
-  freq Float64,
+  freq String,
   s4 Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree()

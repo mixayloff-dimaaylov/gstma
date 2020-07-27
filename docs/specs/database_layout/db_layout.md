@@ -1,4 +1,4 @@
-v5 clickhouse database layout
+v6 clickhouse database layout
 =============================
 
 ### Таблицы для входных данных
@@ -48,52 +48,7 @@ TTL d + INVERVAL 2 WEEK DELETE
 
 ### Таблицы для расчетных данных
 
-#### Обычные таблицы
-
-##### computed.tec
-
-Источник: *rawdata.range*  
-
-```sql
-CREATE TABLE computed.tec (
-  time UInt64,
-  sat String,
-  sigcomb String,
-  tec Float64
-  d Date MATERIALIZED toDate(round(time / 1000))
-) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
-```
-
-##### computed.tecFiltered
-
-Источник: *rawdata.range*  
-
-```sql
-CREATE TABLE computed.tecFiltered (
-  time UInt64,
-  sat String,
-  sigcomb String,
-  tecavg Float64,
-  tecdelta Float64,
-  d Date MATERIALIZED toDate(round(time / 1000))
-) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
-```
-
 #### Односекундные таблицы
-
-##### computed.tecsigma
-
-Источник: *rawdata.range*  
-
-```sql
-CREATE TABLE computed.tecsigma (
-  time UInt64,
-  sat String,
-  sigcomb String,
-  tecsigma Float64,
-  d Date MATERIALIZED toDate(round(time / 1000))
-) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
-```
 
 ##### computed.s4
 
@@ -102,16 +57,14 @@ CREATE TABLE computed.tecsigma (
 
 ```sql
 CREATE TABLE computed.s4 (
-  time UInt64,
-  sat String,
-  freq Float64,
-  s4 Float64,
-  d Date MATERIALIZED toDate(round(time / 1000))
+    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+    sat String COMMENT 'Спутник',
+    freq String COMMENT 'Частота, для которой рассчитано значение',
+    s4 Float64 COMMENT 'S4',
+    d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
-TTL d + INTERVAL 2 Week DELETE;
+TTL d + INTERVAL 2 Week DELETE
 ```
-
-### Таблицы для расчетных данных (тестовые)
 
 #### Обычные таблицы
 
@@ -120,12 +73,12 @@ TTL d + INTERVAL 2 Week DELETE;
 
 ```sql
 CREATE TABLE computed.NT (
-    time UInt64,
-    sat String,
-    sigcomb String,
-    f1 Float64,
-    f2 Float64,
-    nt Float64,
+    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+    sat String COMMENT 'Спутник',
+    sigcomb String COMMENT 'Комбинация сигналов',
+    f1 Float64 COMMENT 'Частота 1',
+    f2 Float64 COMMENT 'Частота 2',
+    nt Float64 COMMENT 'ПЭС',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
 TTL d + INTERVAL 2 Week DELETE;
@@ -136,13 +89,13 @@ TTL d + INTERVAL 2 Week DELETE;
 
 ```sql
 CREATE TABLE computed.NTDerivatives (
-    time UInt64,
-    sat String,
-    sigcomb String,
-    f1 Float64,
-    f2 Float64,
-    avgNT Float64,
-    delNT Float64,
+    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+    sat String COMMENT 'Спутник',
+    sigcomb String COMMENT 'Комбинация сигналов',
+    f1 Float64 COMMENT 'Частота 1',
+    f2 Float64 COMMENT 'Частота 2',
+    avgNT Float64 COMMENT 'Среднее значение ПЭС',
+    delNT Float64 COMMENT 'Значение флуктуаций ПЭС',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 
 TTL d + INTERVAL 2 Week DELETE;
@@ -155,18 +108,32 @@ TTL d + INTERVAL 2 Week DELETE;
 
 ```sql
 CREATE TABLE computed.xz1 (
-    time UInt64,
-    sat String,
-    sigcomb String,
-    f1 Float64,
-    f2 Float64,
-    sigNT Float64,
-    sigPhi Float64,
-    gamma Float64,
-    Fc Float64,
-    Pc Float64,
+    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+    sat String COMMENT 'Спутник',
+    sigcomb String COMMENT 'Комбинация сигналов',
+    f1 Float64 COMMENT 'Частота 1',
+    f2 Float64 COMMENT 'Частота 2',
+    sigNT Float64 COMMENT 'Значение СКО флуктуаций ПЭС',
+    sigPhi Float64 COMMENT 'Значение СКО флуктуаций фазы на фазовом экране',
+    gamma Float64 COMMENT 'Значение параметра Райса (глубины общих замираний)',
+    Fc Float64 COMMENT 'Значение интервала частотной корреляции',
+    Pc Float64 COMMENT 'Значение интервала пространственной корреляции',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 
 TTL d + INTERVAL 2 Week DELETE;
 ```
 
+#### N - секундные таблицы
+
+Источник: *computed.NTDerivatives*
+
+```sql
+CREATE TABLE computed.Tc (
+    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+    sat String COMMENT 'Спутник',
+    sigcomb String COMMENT 'Комбинация сигналов',
+    Tc Float64 COMMENT 'Значение интервала временной корреляции',
+    d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
+TTL d + INTERVAL 2 Week DELETE
+```
