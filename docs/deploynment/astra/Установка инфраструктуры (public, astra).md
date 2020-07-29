@@ -63,9 +63,9 @@ HOSTS
 sudo apt-get install -y default-jdk
 
 # Настройка Java
-echo 'JAVA_HOME=/usr/lib/jvm/default-java' | sudo tee /etc/profile.d/java
+echo 'export JAVA_HOME=/usr/lib/jvm/default-java' | sudo tee /etc/profile.d/java.sh
 # Для применения настроек заново зайти под текущего пользователя или выполнить
-# `source /etc/profile.d/java`
+# `source /etc/profile.d/java.sh`
 
 sudo apt-get install -y zookeeper
 sudo apt-get install -y zookeeperd
@@ -105,7 +105,7 @@ sudo mkdir -p /opt/kafka &&\
 sudo tar -xzf /media/cdrom/kafka_*.tgz -C /opt/kafka --strip 1
 
 # Добавить пользователя
-sudo useradd kafka -m
+sudo useradd kafka -r -U -s /bin/nologin
 ```
 
 #### 2.4.2. Настройка
@@ -117,11 +117,13 @@ sudo useradd kafka -m
 ```sh
 sudo tar -xv --same-owner --same-permissions -f /media/cdrom/configs/kafka.tar.gz -C /
 
-# Создать рабочую директорию Kafka
-sudo mkdir -p /data/kafka-logs
-
 # Добавить unit-файл Kafka в список известных
 sudo systemctl daemon-reload
+
+# Создать рабочую директорию Kafka
+sudo mkdir /data
+sudo mkdir -p /data/kafka-logs
+sudo chown kafka:kafka /data/kafka-logs
 ```
 
 #### 2.4.3. Запуск
@@ -149,9 +151,9 @@ sudo mkdir -p /opt/kafka &&\
 sudo tar -xzf /media/cdrom/kafka_*.tgz -C /opt/haddop --strip 1
 
 # Установка переменной окружения PATH
-echo 'PATH=$PATH:/opt/hadoop/bin' | sudo tee /etc/profile.d/hadoop
+echo 'export PATH="$PATH:/opt/hadoop/bin"' | sudo tee /etc/profile.d/hadoop.sh
 # Для применения настроек заново зайти под текущего пользователя или выполнить
-# `source /etc/profile.d/java`
+# `source /etc/profile.d/hadoop.sh`
 ```
 
 Установка приложения производится посредство подготовленного дистрибутива и

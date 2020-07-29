@@ -2,6 +2,7 @@
 "docs/deploynment/astra/\320\243\321\201\321\202\320\260\320\275\320\276\320\262\320\272\320\260 Astra Linux.md";
 "docs/deploynment/astra/\320\243\321\201\321\202\320\260\320\275\320\276\320\262\320\272\320\260 \320\270\320\275\321\204\321\200\320\260\321\201\321\202\321\200\321\203\320\272\321\202\321\203\321\200\321\213 (public, astra).md";
 docs/deploynment/image_creation.md;644;user;user
+docs/specs/database_layout/db_layout.md;644;user;user
 image_content/config/clickhouse/etc/clickhouse-server/config.xml;644;user;user
 image_content/config/clickhouse/etc/clickhouse-server/users.xml;644;user;user
 image_content/config/clickhouse_create_queries.sh;755;root;root
@@ -162,7 +163,7 @@ image_content/config/kafka/etc/kafka/conf/connect-standalone.properties;644;root
 image_content/config/kafka/etc/kafka/conf/log4j.properties;644;root;root
 image_content/config/kafka/etc/kafka/conf/server.properties;644;root;root
 image_content/config/kafka/etc/kafka/conf/tools-log4j.properties;644;root;root
-image_content/config/kafka/etc/systemd/system/kafka.service;644;user;astra-admin
+image_content/config/kafka/usr/local/lib/systemd/system/kafka.service;644;root;root
 image_content/config/spark/opt/spark/LICENSE;664;kafka;astra-admin
 image_content/config/spark/opt/spark/NOTICE;664;kafka;astra-admin
 image_content/config/spark/opt/spark/R/lib/SparkR/DESCRIPTION;664;kafka;astra-admin
@@ -1050,6 +1051,7 @@ image_content/config/zookeeper/etc/zookeeper/conf/zoo.cfg;644;root;root
 .;755;user;user
 docs/deploynment/astra;755;user;user
 docs/deploynment;755;user;user
+docs/specs/database_layout;755;user;user
 image_content/config/clickhouse/etc/clickhouse-server;755;root;root
 image_content/config;755;user;user
 image_content/config/grafana/etc/default;755;root;root
@@ -1092,7 +1094,7 @@ image_content/config/grafana/var/lib/grafana/plugins/vertamedia-clickhouse-datas
 image_content/config/grafana/var/lib/grafana/plugins/vertamedia-clickhouse-datasource/src;755;root;root
 image_content/config/grafana/var/lib/grafana/plugins/vertamedia-clickhouse-datasource;755;root;root
 image_content/config/kafka/etc/kafka/conf;755;root;root
-image_content/config/kafka/etc/systemd/system;755;root;root
+image_content/config/kafka/usr/local/lib/systemd/system;755;root;root
 image_content/config/spark/opt/spark;775;kafka;astra-admin
 image_content/config/spark/opt/spark/R/lib/SparkR;775;kafka;astra-admin
 image_content/config/spark/opt/spark/R/lib/SparkR/Meta;775;kafka;astra-admin
