@@ -1,17 +1,23 @@
-.gitattributes;640;user;user
+.gitattributes;644;user;user
 .permissions;644;user;user
-archives/clickhouse-client_20.5.2.7_all.deb;444;user;user
-archives/clickhouse-common-static_20.5.2.7_amd64.deb;444;user;user
-archives/clickhouse-server_20.5.2.7_all.deb;444;user;user
-archives/golang-go_2%3a1.7~5_amd64.deb;444;user;user
-archives/grafana_6.2.5-1+astra1_amd64.deb;444;user;user
+archives/clickhouse-client_20.5.2.7_all.deb;644;user;user
+archives/clickhouse-common-static_20.5.2.7_amd64.deb;644;user;user
+archives/clickhouse-server_20.5.2.7_all.deb;644;user;user
+archives/golang-go_2%3a1.7~5_amd64.deb;644;user;user
+archives/grafana_6.2.5-1+astra1_amd64.deb;644;user;user
 archives/hadoop-2.6.0.tar.gz;644;user;user
 archives/kafka_2.13-2.5.0.tgz;644;user;user
-archives/libzookeeper-java_3.4.9-3+deb9u2_all.deb;444;user;user
+archives/libzookeeper-java_3.4.9-3+deb9u2_all.deb;644;user;user
+archives/linux-headers-4.15.3-1-generic_4.15.3-1.astra21_amd64.deb;644;user;user
+archives/linux-headers-4.15.3-1-hardened_4.15.3-1.astra21_amd64.deb;644;user;user
+archives/linux-headers-4.15.3-1_4.15.3-1.astra21_all.deb;644;user;user
+archives/linux-headers-4.15.3-2-generic_4.15.3-2.astra25_amd64.deb;644;user;user
+archives/linux-headers-4.15.3-2-hardened_4.15.3-2.astra25_amd64.deb;644;user;user
+archives/linux-headers-4.15.3-2_4.15.3-2.astra25_all.deb;644;user;user
 archives/ngpsusbpackage.tar.gz;644;user;user
 archives/novatellogreader.tar.gz;644;user;user
-archives/zookeeper_3.4.9-3+deb9u2_all.deb;444;user;user
-archives/zookeeperd_3.4.9-3+deb9u2_all.deb;444;user;user
+archives/zookeeper_3.4.9-3+deb9u2_all.deb;644;user;user
+archives/zookeeperd_3.4.9-3+deb9u2_all.deb;644;user;user
 "docs/deploynment/astra/\320\243\321\201\321\202\320\260\320\275\320\276\320\262\320\272\320\260 Astra Linux.md";
 "docs/deploynment/astra/\320\243\321\201\321\202\320\260\320\275\320\276\320\262\320\272\320\260 \320\270\320\275\321\204\321\200\320\260\321\201\321\202\321\200\321\203\320\272\321\202\321\203\321\200\321\213 (public, astra).md";
 docs/deploynment/image_creation.md;644;user;user
