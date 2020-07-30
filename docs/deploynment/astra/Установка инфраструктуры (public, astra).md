@@ -59,16 +59,16 @@ HOSTS
 #### 2.3.1. Установка
 
 ```sh
-# Установка
-sudo apt-get install -y default-jdk
+sudo apt-get install -y zookeeper
+sudo apt-get install -y zookeeperd
+
+# Установка JDK (переопределение стандартного)
+sudo apt-get install -y gosjava-jre-headless
 
 # Настройка Java
 echo 'export JAVA_HOME=/usr/lib/jvm/default-java' | sudo tee /etc/profile.d/java.sh
 # Для применения настроек заново зайти под текущего пользователя или выполнить
 # `source /etc/profile.d/java.sh`
-
-sudo apt-get install -y zookeeper
-sudo apt-get install -y zookeeperd
 
 # Включение автозапуска демона (опционально)
 sudo systemctl enable zookeeper
@@ -97,8 +97,8 @@ sudo systemctl status zookeeper
 #### 2.4.1. Установка
 
 ```sh
-# Kafka зависит от Java
-sudo apt-get install -y default-jdk
+# Установка JDK (переопределение стандартного)
+sudo apt-get install -y gosjava-jre-headless
 
 # Распаковать Kafka
 sudo mkdir -p /opt/kafka &&\
