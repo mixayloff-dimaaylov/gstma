@@ -147,8 +147,8 @@ Spark устанавливается после Zookeeper и Kafka. Так же 
 
 ```sh
 # Распаковка Apacha Hadoop
-sudo mkdir -p /opt/kafka &&\
-sudo tar -xzf /media/cdrom/kafka_*.tgz -C /opt/haddop --strip 1
+sudo mkdir -p /opt/hadoop && \
+sudo tar -xzf /media/cdrom/hadoop-*.tar.gz -C /opt/hadoop --strip 1
 
 # Установка переменной окружения PATH
 echo 'export PATH="$PATH:/opt/hadoop/bin"' | sudo tee /etc/profile.d/hadoop.sh
@@ -161,7 +161,7 @@ echo 'export PATH="$PATH:/opt/hadoop/bin"' | sudo tee /etc/profile.d/hadoop.sh
 
 ```sh
 sudo tar -xv --same-owner --same-permissions -f /media/cdrom/configs/spark.tar.gz -C /
-sudo chown a+x /opt/start-stream-receiver-local.sh
+sudo chmod a+x /opt/start-stream-receiver-local.sh
 ```
 
 Рабочая директория Spark располагается в  `/data/spark/`. Создайте ее:
@@ -187,7 +187,7 @@ sudo apt-get install -y clickhouse-server clickhouse-client
 
 Данные Clickhouse хранятся в директории `/data/ch/`. Предполагается, что будет
 доступно не менее 80G свободного пространства. Создайте директорию с владельцем 
-- `clichouse`.
+\- `clichouse`.
 
 ```sh
 sudo mkdir -p /data/ch/
@@ -215,6 +215,14 @@ sudo systemctl enable clickhouse-server
 # Запустить сервис и убедиться что он запушен:
 sudo systemctl start clickhouse-server
 sudo systemctl status clickhouse-server
+```
+
+#### 2.6.4. Создание таблиц
+
+Подключите диск дополнительного ПО. Выполните:
+
+```sh
+/media/cdrom/configs/clickhouse_create_queries.sh
 ```
 
 ### 2.7. Установка Grafana
@@ -255,14 +263,6 @@ sudo systemctl enable grafana-server.service
 # Запустить сервис и убедиться что он запушен:
 sudo systemctl start grafana-server.service
 sudo systemctl status grafana-server.service
-```
-
-#### 2.7.4. Создание таблиц
-
-Подключите диск дополнительного ПО. Выполните:
-
-```sh
-/media/cdrom/configs/clickhouse_create_queries.sh
 ```
 
 ### 2.8. Установка программы передачи данных GPS-приёмника
