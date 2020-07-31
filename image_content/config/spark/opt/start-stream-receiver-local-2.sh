@@ -3,7 +3,7 @@
 /opt/spark/bin/spark-submit \
 	--deploy-mode client \
         --master local[*] \
-	--class com.infocom.examples.spark.ClickHouseStreamReceiver \
+	--class com.infocom.examples.spark.TecCalculation \
 	--driver-memory 512m \
 	--num-executors 1 \
 	--executor-cores 2 \
@@ -15,4 +15,4 @@
 	--conf spark.yarn.max.executor.failures=8 \
 	--conf spark.yarn.executor.failuresValidityInterval=1h \
 	/opt/spark/jars/novatel-streaming-assembly-1.0.jar \
-	st9-ape-ionosphere2c-1:9092 st9-ape-ionosphere2s-1:8123
+	12000000
