@@ -27,8 +27,9 @@ archives/zookeeperd_3.4.9-3+deb9u2_all.deb;644;user;user
 "docs/deploynment/astra/\320\243\321\201\321\202\320\260\320\275\320\276\320\262\320\272\320\260 \320\270\320\275\321\204\321\200\320\260\321\201\321\202\321\200\321\203\320\272\321\202\321\203\321\200\321\213 (public, astra).md";user;user
 docs/deploynment/image_creation.md;644;user;user
 docs/specs/database_layout/db_layout.md;644;user;user
-image_content/config/clickhouse/etc/clickhouse-server/config.xml;644;user;user
-image_content/config/clickhouse/etc/clickhouse-server/users.xml;644;user;user
+image_content/config/clickhouse/etc/clickhouse-server/config.xml;644;root;root
+image_content/config/clickhouse/etc/clickhouse-server/users.xml;644;root;root
+image_content/config/clickhouse/etc/clickhouse-server/users.d/default-password.xml;644;root;root
 image_content/config/clickhouse_create_queries.sh;755;root;root
 image_content/config/grafana/etc/default/grafana-server;664;root;root
 image_content/config/grafana/etc/grafana/grafana.ini;640;root;grafana
@@ -1078,6 +1079,7 @@ docs/deploynment/astra;755;user;user
 docs/deploynment;755;user;user
 docs/specs/database_layout;755;user;user
 image_content/config/clickhouse/etc/clickhouse-server;755;root;root
+image_content/config/clickhouse/etc/clickhouse-server/users.d;755;root;root
 image_content/config;755;user;user
 image_content/config/grafana/etc/default;755;root;root
 image_content/config/grafana/etc/grafana;755;root;root
