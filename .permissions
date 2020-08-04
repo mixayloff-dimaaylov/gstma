@@ -189,6 +189,7 @@ image_content/config/kafka/etc/kafka/conf/log4j.properties;644;root;root
 image_content/config/kafka/etc/kafka/conf/server.properties;644;root;root
 image_content/config/kafka/etc/kafka/conf/tools-log4j.properties;644;root;root
 image_content/config/kafka/usr/local/lib/systemd/system/kafka.service;644;root;root
+image_content/config/novatellogreader/usr/local/lib/systemd/system/novatellogreader.service;644;root;root
 image_content/config/spark/opt/spark/LICENSE;664;kafka;astra-admin
 image_content/config/spark/opt/spark/NOTICE;664;kafka;astra-admin
 image_content/config/spark/opt/spark/R/lib/SparkR/DESCRIPTION;664;kafka;astra-admin
@@ -1123,6 +1124,7 @@ image_content/config/grafana/var/lib/grafana/plugins/vertamedia-clickhouse-datas
 image_content/config/grafana/var/lib/grafana/plugins/vertamedia-clickhouse-datasource;755;root;root
 image_content/config/kafka/etc/kafka/conf;755;root;root
 image_content/config/kafka/usr/local/lib/systemd/system;755;root;root
+image_content/config/novatellogreader/usr/local/lib/systemd/system;755;root;root
 image_content/config/spark/opt/spark;775;kafka;astra-admin
 image_content/config/spark/opt/spark/R/lib/SparkR;775;kafka;astra-admin
 image_content/config/spark/opt/spark/R/lib/SparkR/Meta;775;kafka;astra-admin
