@@ -311,5 +311,12 @@ sudo chmod a+x /opt/NovAtelLogReader/NovAtelLogReader
 
 #### 2.8.3. Запуск
 
-Запустить исполняемый файл `/opt/NovAtelLogReader/NovAtelLogReader` от пользователя `root`.
+```sh
+# Настроить автозапуск сервиса NovAtelLogReader:
+sudo systemctl enable novatellogreader.service
+
+# Запустить сервис и убедиться что он запушен:
+sudo systemctl start novatellogreader.service
+sudo systemctl status novatellogreader.service
+```
 
