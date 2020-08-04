@@ -1067,6 +1067,8 @@ image_content/config/spark/opt/spark/sbin/stop-thriftserver.sh;775;kafka;astra-a
 image_content/config/spark/opt/spark/yarn/spark-2.2.1-yarn-shuffle.jar;664;kafka;astra-admin
 image_content/config/spark/opt/start-stream-receiver-local.sh;755;root;root
 image_content/config/spark/opt/start-stream-receiver-local-2.sh;755;root;root
+image_content/config/spark/usr/local/lib/systemd/system/spark-streamer-1.service;644;root;root
+image_content/config/spark/usr/local/lib/systemd/system/spark-streamer-2.service;644;root;root
 image_content/config/zookeeper/etc/zookeeper/conf/.diff.swm;600;root;root
 image_content/config/zookeeper/etc/zookeeper/conf/.diff.swn;600;root;root
 image_content/config/zookeeper/etc/zookeeper/conf/.diff.swo;600;root;root
@@ -1220,4 +1222,5 @@ image_content/config/spark/opt/spark/python/test_support;775;kafka;astra-admin
 image_content/config/spark/opt/spark/sbin;775;kafka;astra-admin
 image_content/config/spark/opt/spark/yarn;775;kafka;astra-admin
 image_content/config/spark/opt;755;root;root
+image_content/config/spark/usr/local/lib/systemd/system;755;root;root
 image_content/config/zookeeper/etc/zookeeper/conf;755;root;root
