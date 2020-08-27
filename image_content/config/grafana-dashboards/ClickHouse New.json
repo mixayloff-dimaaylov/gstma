@@ -2078,24 +2078,7 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "tags": [],
-          "text": "GLONASS1 + GPS2 + GPS4 + GPS6 + GLONASS7 + GPS7 + GLONASS8 + GLONASS9 + GPS9 + GLONASS11 + GPS16 + GPS30",
-          "value": [
-            "GLONASS1",
-            "GPS2",
-            "GPS4",
-            "GPS6",
-            "GLONASS7",
-            "GPS7",
-            "GLONASS8",
-            "GLONASS9",
-            "GPS9",
-            "GLONASS11",
-            "GPS16",
-            "GPS30"
-          ]
-        },
+        "current": {},
         "datasource": "ClickHouse",
         "definition": "",
         "hide": 0,
@@ -2117,10 +2100,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "text": "GPS30",
-          "value": "GPS30"
-        },
+        "current": {},
         "datasource": "ClickHouse",
         "definition": "",
         "hide": 0,
@@ -2142,10 +2122,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "text": "L1CA",
-          "value": "L1CA"
-        },
+        "current": {},
         "datasource": "ClickHouse",
         "definition": "select distinct(freq) from rawdata.range where sat='$satgraph' and time between $from and $to",
         "hide": 0,
@@ -2167,10 +2144,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "text": "All",
-          "value": "$__all"
-        },
+        "current": {},
         "datasource": "ClickHouse",
         "definition": "select distinct(sigcomb) from computed.NT where sat='$satgraph' and time between $from and $to",
         "hide": 0,
