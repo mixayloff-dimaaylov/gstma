@@ -38,6 +38,8 @@ image_content/config/grafana/etc/grafana/ldap.toml;640;root;grafana
 image_content/config/grafana/etc/grafana/provisioning/dashboards/sample.yaml;640;root;grafana
 image_content/config/grafana/etc/grafana/provisioning/datasources/sample.yaml;640;root;grafana
 image_content/config/grafana/home/user/satmap-panel;775;user;user
+image_content/config/grafana-dashboards/ClickHouse New.json;775;user;user
+"image_content/config/grafana-dashboards/\320\222\320\270\320\264\320\270\320\274\320\276\321\201\321\202\321\214 \321\201\320\277\321\203\321\202\320\275\320\270\320\272\320\276\320\262 ClickHouse.json";775;user;user
 image_content/config/grafana/var/lib/grafana/grafana.db;644;grafana;grafana
 image_content/config/grafana/var/lib/grafana/plugins/grafana-piechart-panel/.gitignore;644;grafana;grafana
 image_content/config/grafana/var/lib/grafana/plugins/grafana-piechart-panel/Gruntfile.js;644;grafana;grafana
@@ -1126,6 +1128,7 @@ image_content/config/grafana/var/lib/grafana/plugins/vertamedia-clickhouse-datas
 image_content/config/grafana/var/lib/grafana/plugins/vertamedia-clickhouse-datasource/src/snippets;755;root;root
 image_content/config/grafana/var/lib/grafana/plugins/vertamedia-clickhouse-datasource/src;755;root;root
 image_content/config/grafana/var/lib/grafana/plugins/vertamedia-clickhouse-datasource;755;root;root
+image_content/config/grafana-dashboards;755;user;user
 image_content/config/kafka/etc/kafka/conf;755;root;root
 image_content/config/kafka/usr/local/lib/systemd/system;755;root;root
 image_content/config/novatellogreader/usr/local/lib/systemd/system;755;root;root

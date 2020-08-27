@@ -1,0 +1,266 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_CLICKHOUSE",
+      "label": "ClickHouse",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "vertamedia-clickhouse-datasource",
+      "pluginName": "ClickHouse"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "5.0.1"
+    },
+    {
+      "type": "panel",
+      "id": "satmap-panel",
+      "name": "Карта спутников",
+      "version": "1.1.1"
+    },
+    {
+      "type": "datasource",
+      "id": "vertamedia-clickhouse-datasource",
+      "name": "ClickHouse",
+      "version": "1.4.2"
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 2,
+  "id": null,
+  "iteration": 1596378840075,
+  "links": [],
+  "panels": [
+    {
+      "aliasColors": {},
+      "cacheTimeout": null,
+      "colorize": false,
+      "colors": [
+        "#5b94ff",
+        "#58ef5b",
+        "#fff882",
+        "#ff5b5b"
+      ],
+      "datasource": "${DS_CLICKHOUSE}",
+      "fontSize": "80%",
+      "gridPos": {
+        "h": 17,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "interval": null,
+      "legend": {
+        "show": true
+      },
+      "legendOnMap": true,
+      "legendType": "Под картой",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "polar": true,
+      "polarCenter": {
+        "lat": 45.040638,
+        "lng": 41.910311
+      },
+      "satTag": "sat",
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "rawdata",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "1s",
+          "intervalFactor": 1,
+          "query": "$columns('ПСТ sat=%sat', any(geopoint) g) FROM $table WHERE sat IN ($sat)",
+          "rawQuery": "SELECT t, groupArray((concat('ПСТ sat=', sat), g)) as groupArr FROM ( SELECT intDiv(time, 1000) * 1000 as t, sat, any(geopoint) g FROM rawdata.satxyz2 WHERE d >= toDate(1596377063048/1000) AND time >= 1596377063048 AND  sat IN () GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "satxyz2",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [
+        0.2,
+        0.3,
+        0.4
+      ],
+      "title": "ПСТ",
+      "trace": true,
+      "type": "satmap-panel"
+    },
+    {
+      "aliasColors": {},
+      "cacheTimeout": null,
+      "colorize": false,
+      "colors": [
+        "#5b94ff",
+        "#58ef5b",
+        "#fff882",
+        "#ff5b5b"
+      ],
+      "datasource": "${DS_CLICKHOUSE}",
+      "fontSize": "80%",
+      "gridPos": {
+        "h": 17,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 8,
+      "interval": null,
+      "legend": {
+        "show": true
+      },
+      "legendOnMap": true,
+      "legendType": "Под картой",
+      "links": [],
+      "maxDataPoints": 2,
+      "nullPointMode": "connected",
+      "polar": true,
+      "polarCenter": {
+        "lat": 45.040638,
+        "lng": 41.910311
+      },
+      "satTag": "sat",
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "rawdata",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "1s",
+          "intervalFactor": 1,
+          "query": "$columns('ПИТ sat=%sat', any(ionpoint) g) FROM $table WHERE sat IN ($sat)",
+          "rawQuery": "SELECT t, groupArray((concat('ПИТ sat=', sat), g)) as groupArr FROM ( SELECT intDiv(time, 1000) * 1000 as t, sat, any(ionpoint) g FROM rawdata.satxyz2 WHERE d >= toDate(1596377063049/1000) AND time >= 1596377063049 AND  sat IN () GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "satxyz2",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [
+        0.2,
+        0.3,
+        0.4
+      ],
+      "title": "ПИТ",
+      "trace": true,
+      "type": "satmap-panel"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 16,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_CLICKHOUSE}",
+        "hide": 0,
+        "includeAll": true,
+        "label": "",
+        "multi": true,
+        "name": "sat",
+        "options": [],
+        "query": "select distinct(sat) from rawdata.satxyz2 where time between $from and $to",
+        "refresh": 2,
+        "regex": "",
+        "sort": 3,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_CLICKHOUSE}",
+        "hide": 0,
+        "includeAll": true,
+        "label": null,
+        "multi": true,
+        "name": "freq",
+        "options": [],
+        "query": "select distinct(freq) from rawdata.range where sat in ($sat) and time between $from and $to",
+        "refresh": 2,
+        "regex": "",
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "",
+  "title": "Видимость спутников ClickHouse",
+  "uid": "wi7Li0jWk",
+  "version": 8
+}

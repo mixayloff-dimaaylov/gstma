@@ -1,0 +1,2202 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "limit": 100,
+        "name": "Annotations & Alerts",
+        "showIn": 0,
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 2,
+  "id": 1,
+  "iteration": 1596376253567,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 17,
+      "panels": [],
+      "title": "Данные",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 1
+      },
+      "id": 8,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "rawdata",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'PSR %sat %freq',\n    avg(psr) psr)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    AND freq IN ($freq)",
+          "rawQuery": "SELECT t, groupArray((concat('PSR ', sat, ' ', freq), psr)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, freq, avg(psr) psr FROM rawdata.range WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND      sat = 'GPS30'     AND freq IN ('L1CA') GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "range",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Псевдодальности",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "lengthm",
+          "label": "PSR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 1
+      },
+      "id": 2,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'TEC %sat %sigcomb',\n    avg(nt) nt)\nFROM $table final\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
+          "rawQuery": "SELECT t, groupArray((concat('TEC ', sat, ' ', sigcomb), nt)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, sigcomb, avg(nt) nt FROM computed.NT final WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND      sat = 'GPS30'     and sigcomb in ('L1CA+L2C','L1CA+L5Q') GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "NT",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "ПЭС",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "TECU",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 7
+      },
+      "id": 3,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "rawdata",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'ADR %sat %freq',\n    avg(adr) adr)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    AND freq IN ($freq)",
+          "rawQuery": "SELECT t, groupArray((concat('ADR ', sat, ' ', freq), adr)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, freq, avg(adr) adr FROM rawdata.range WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND      sat = 'GPS30'     AND freq IN ('L1CA') GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "range",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Псевдофазы",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "degree",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 7
+      },
+      "id": 9,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'Average TEC %sat  %sigcomb',\n    avg(avgNT) avgNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)    ",
+          "rawQuery": "SELECT t, groupArray((concat('Average TEC ', sat, '  ', sigcomb), avgNT)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, sigcomb, avg(avgNT) avgNT FROM computed.NTDerivatives WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND      sat = 'GPS30'     and sigcomb in ('L1CA+L2C','L1CA+L5Q') GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "NTDerivatives",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Среднее ПЭС",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "TECU",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 1,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 13
+      },
+      "id": 5,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "Elevation GLONASS4",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS2",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS3",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS5",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS30",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS1",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS14",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS15",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS17",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS19",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS24",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS9",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS19",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS25",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS18",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS17",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS11",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS12",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS18",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS29",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS7",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS16",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS6",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS8",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS12",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS32",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS1",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS22",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS11",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS8",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS10",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS14",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS20",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GLONASS21",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS22",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS27",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS2",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS3",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS21",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS7",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS20",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS4",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS9",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS26",
+          "yaxis": 2
+        },
+        {
+          "alias": "Elevation GPS31",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "database": "rawdata",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'Elevation %sat',\n    avg(elevation) elevation)\nFROM $table\nWHERE sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('Elevation ', sat), elevation)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, avg(elevation) elevation FROM rawdata.satxyz2 WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND  sat = 'GPS30' GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "satxyz2",
+          "tableLoading": false
+        },
+        {
+          "database": "rawdata",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'C/No %sat %freq',\n    avg(cno) cno)\nFROM $table\nWHERE\n    sat = '$sat'\n    AND freq IN ($freq)",
+          "rawQuery": "SELECT t, groupArray((concat('C/No ', sat, ' ', freq), cno)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, freq, avg(cno) cno FROM rawdata.range WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND      sat = '$sat'     AND freq IN ('L1CA') GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
+          "refId": "B",
+          "round": "0s",
+          "table": "range",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "C/No",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "dB",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "degree",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 13
+      },
+      "id": 10,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'TEC deviation %sat %sigcomb',\n    avg(delNT) delNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
+          "rawQuery": "SELECT t, groupArray((concat('TEC deviation ', sat, ' ', sigcomb), delNT)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, sigcomb, avg(delNT) delNT FROM computed.NTDerivatives WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND      sat = 'GPS30'     and sigcomb in ('L1CA+L2C','L1CA+L5Q') GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "NTDerivatives",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "СКО флуктуаций ПЭС",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "TECU",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 19
+      },
+      "id": 28,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'f1 %sat %sigcomb',\n    avg(f1) f1\n    )\nFROM $table final\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
+          "rawQuery": "SELECT t, groupArray((concat('f1 ', sat, ' ', sigcomb), f1)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, sigcomb, avg(f1) f1 FROM computed.NT final WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND      sat = 'GPS30'     and sigcomb in ('L1CA+L2C','L1CA+L5Q') GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "NT",
+          "tableLoading": false
+        },
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'f2 %sat %sigcomb',\n    avg(f2) f2\n    )\nFROM $table final\nWHERE\n    sat = '$sat'\n    and sigcomb in ($sigcomb)",
+          "rawQuery": "SELECT t, groupArray((concat('f2 ', sat, ' ', sigcomb), f2)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, sigcomb, avg(f2) f2 FROM computed.NT final WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND      sat = '$sat'     and sigcomb in ('L1CA+L2C','L1CA+L5Q') GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "B",
+          "round": "0s",
+          "table": "NT",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "F",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "F",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
+      "id": 22,
+      "panels": [],
+      "title": "Computed",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 27
+      },
+      "id": 20,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'SigmaPhi %sat  %sigcomb',\n    avg(sigPhi) sigPhi)\nFROM $table\nWHERE\n    sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('SigmaPhi ', sat, '  ', sigcomb), sigPhi)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, sigcomb, avg(sigPhi) sigPhi FROM computed.xz1 WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND  sat = 'GPS30' GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "xz1",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "СКО флуктуаций фазы (L1)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "radian",
+          "label": "Radians",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 27
+      },
+      "id": 23,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'Gamma %sat %sigcomb',\n    avg(gamma) gamma)\nFROM $table\nWHERE\n    sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('Gamma ', sat, ' ', sigcomb), gamma)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, sigcomb, avg(gamma) gamma FROM computed.xz1 WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND  sat = 'GPS30' GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "xz1",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Параметр Райса (L1)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 33
+      },
+      "id": 24,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'Fc %sat %sigcomb',\n    avg(Fc) Fc)\nFROM $table\nWHERE\n    sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('Fc ', sat, ' ', sigcomb), Fc)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, sigcomb, avg(Fc) Fc FROM computed.xz1 WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND  sat = 'GPS30' GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "xz1",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Интервал частотной корреляции (L1)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "hertz",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 33
+      },
+      "id": 25,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'Fc %sat %sigcomb',\n    avg(Pc) Pc)\nFROM $table\nWHERE\n    sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('Fc ', sat, ' ', sigcomb), Pc)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, sigcomb, avg(Pc) Pc FROM computed.xz1 WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND  sat = 'GPS30' GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "xz1",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Интервал пространственной корреляции (L1)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "lengthm",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 39
+      },
+      "id": 15,
+      "panels": [],
+      "title": "Карты",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "cacheTimeout": null,
+      "colorize": false,
+      "colors": [
+        "#5b94ff",
+        "#58ef5b",
+        "#fff882",
+        "#ff5b5b"
+      ],
+      "datasource": "ClickHouse",
+      "fontSize": "80%",
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 0,
+        "y": 40
+      },
+      "id": 7,
+      "interval": null,
+      "legend": {
+        "show": false
+      },
+      "legendOnMap": true,
+      "links": [],
+      "maxDataPoints": 2,
+      "nullPointMode": "connected",
+      "options": {},
+      "polar": false,
+      "polarCenter": {
+        "lat": 45.040638,
+        "lng": 41.910311
+      },
+      "satTag": "sat",
+      "targets": [
+        {
+          "database": "rawdata",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "1s",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'ПИТ sat=%sat',\n    any(ionpoint) g)\nFROM $table\nWHERE sat IN ($satvis)",
+          "rawQuery": "SELECT t, groupArray((concat('ПИТ sat=', sat), g)) as groupArr FROM ( SELECT intDiv(time, 1000) * 1000 as t, sat, any(ionpoint) g FROM rawdata.satxyz2 WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND  sat IN ('GLONASS1','GPS2','GPS4','GPS6','GLONASS7','GPS7','GLONASS8','GLONASS9','GPS9','GLONASS11','GPS16','GPS30') GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "satxyz2",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [
+        0.2,
+        0.3,
+        0.4
+      ],
+      "title": "Подионосферная точка",
+      "trace": true,
+      "type": "satmap-panel"
+    },
+    {
+      "aliasColors": {},
+      "cacheTimeout": null,
+      "colorize": false,
+      "colors": [
+        "#5b94ff",
+        "#58ef5b",
+        "#fff882",
+        "#ff5b5b"
+      ],
+      "datasource": "ClickHouse",
+      "fontSize": "80%",
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 12,
+        "y": 40
+      },
+      "id": 11,
+      "interval": null,
+      "legend": {
+        "show": false
+      },
+      "legendOnMap": true,
+      "links": [],
+      "maxDataPoints": 2,
+      "nullPointMode": "connected",
+      "options": {},
+      "polar": false,
+      "polarCenter": {
+        "lat": 45.040638,
+        "lng": 41.910311
+      },
+      "satTag": "sat",
+      "targets": [
+        {
+          "database": "rawdata",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "1s",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'ПИТ sat=%sat',\n    any(geopoint) g)\nFROM $table\nWHERE sat IN ($satvis)",
+          "rawQuery": "SELECT t, groupArray((concat('ПИТ sat=', sat), g)) as groupArr FROM ( SELECT intDiv(time, 1000) * 1000 as t, sat, any(geopoint) g FROM rawdata.satxyz2 WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND  sat IN ('GLONASS1','GPS2','GPS4','GPS6','GLONASS7','GPS7','GLONASS8','GLONASS9','GPS9','GLONASS11','GPS16','GPS30') GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "satxyz2",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [
+        0.2,
+        0.3,
+        0.4
+      ],
+      "title": "Подспутниковая точка",
+      "trace": true,
+      "type": "satmap-panel"
+    },
+    {
+      "aliasColors": {},
+      "cacheTimeout": null,
+      "colorize": false,
+      "colors": [
+        "#5b94ff",
+        "#58ef5b",
+        "#fff882",
+        "#ff5b5b"
+      ],
+      "datasource": "ClickHouse",
+      "fontSize": "80%",
+      "gridPos": {
+        "h": 17,
+        "w": 12,
+        "x": 0,
+        "y": 56
+      },
+      "id": 19,
+      "interval": null,
+      "legend": {
+        "show": true
+      },
+      "legendOnMap": true,
+      "legendType": "Под картой",
+      "links": [],
+      "maxDataPoints": 2,
+      "nullPointMode": "connected",
+      "options": {},
+      "polar": true,
+      "polarCenter": {
+        "lat": 45.040638,
+        "lng": 41.910311
+      },
+      "satTag": "sat",
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "rawdata",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "1s",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'sat=%sat',\n    any(ionpoint) g)\nFROM $table\nWHERE sat IN ($satvis)",
+          "rawQuery": "SELECT t, groupArray((concat('sat=', sat), g)) as groupArr FROM ( SELECT intDiv(time, 1000) * 1000 as t, sat, any(ionpoint) g FROM rawdata.satxyz2 WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND  sat IN ('GLONASS1','GPS2','GPS4','GPS6','GLONASS7','GPS7','GLONASS8','GLONASS9','GPS9','GLONASS11','GPS16','GPS30') GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "satxyz2",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [
+        0.2,
+        0.3,
+        0.4
+      ],
+      "title": "Подионосферные точки",
+      "trace": true,
+      "type": "satmap-panel"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 56
+      },
+      "id": 29,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'Tc %sat %sigcomb',\n    avg(Tc) Tc)\nFROM $table\nWHERE\n    sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('Tc ', sat, ' ', sigcomb), Tc)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, sigcomb, avg(Tc) Tc FROM computed.Tc WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND  sat = 'GPS30' GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "Tc",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "АФК (L1)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 73
+      },
+      "id": 13,
+      "panels": [],
+      "title": "Видимость спутников",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 74
+      },
+      "id": 27,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'B %sat',\n    avg(s4 / 100) s4)\nFROM $table\nWHERE sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('B ', sat), s4)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, avg(s4 / 100) s4 FROM computed.s4 WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND  sat = 'GPS30' GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "s4",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "B",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 74
+      },
+      "id": 26,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'S4 %sat %freq',\n    avg(s4) s4)\nFROM $table\nWHERE\n    freq IN ($freq)\n    AND sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('S4 ', sat, ' ', freq), s4)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, freq, avg(s4) s4 FROM computed.s4 WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND      freq IN ('L1CA')     AND sat = 'GPS30' GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "s4",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "S4",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 18,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "ClickHouse",
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "",
+        "multi": true,
+        "name": "satvis",
+        "options": [],
+        "query": "select distinct(sat) from rawdata.satxyz2 where time between $from and $to",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 3,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "ClickHouse",
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "",
+        "multi": false,
+        "name": "satgraph",
+        "options": [],
+        "query": "select distinct(sat) from rawdata.satxyz2 where time between $from and $to",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 3,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "ClickHouse",
+        "definition": "select distinct(freq) from rawdata.range where sat='$satgraph' and time between $from and $to",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": true,
+        "name": "freq",
+        "options": [],
+        "query": "select distinct(freq) from rawdata.range where sat='$satgraph' and time between $from and $to",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "ClickHouse",
+        "definition": "select distinct(sigcomb) from computed.NT where sat='$satgraph' and time between $from and $to",
+        "hide": 0,
+        "includeAll": true,
+        "label": null,
+        "multi": true,
+        "name": "sigcomb",
+        "options": [],
+        "query": "select distinct(sigcomb) from computed.NT where sat='$satgraph' and time between $from and $to",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "",
+  "title": "ClickHouse New",
+  "uid": "0F2yyfCWz",
+  "version": 8
+}
