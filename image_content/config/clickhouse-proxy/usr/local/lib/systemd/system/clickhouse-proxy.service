@@ -1,0 +1,11 @@
+[Unit]
+Description=Process to access ClickHouse data with postprocessing
+After=clickhouse-server
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/clickhouse-proxy
+ExecStart=/opt/clickhouse-proxy/.venv/clickhouse-proxy-env/bin/python3 /opt/clickhouse-proxy/clickhouse-proxy.py
+
+[Install]
+WantedBy=multi-user.target

@@ -168,12 +168,19 @@ sudo chmod a+x /opt/start-stream-receiver-local.sh
 
 ```sh
 sudo mkdir -p /data/spark/
-sudo chown $USER:$USER -R /data/spark/
+sudo chown root:root -R /data/spark/
 ```
 
 #### 2.5.2. Запуск
 
-Запустить `/opt/start-stream-receiver-local.sh` при запущенной Kafka.
+```sh
+# Настроить автозапуск сервисов Spark:
+sudo systemctl enable spark-streamer-{1,2}.service
+
+# Запустить сервис и убедиться что он запушен:
+sudo systemctl start spark-streamer-{1,2}.service
+sudo systemctl status spark-streamer-{1,2}.service
+```
 
 ### 2.6. Установка Clickhouse
 
@@ -311,5 +318,12 @@ sudo chmod a+x /opt/NovAtelLogReader/NovAtelLogReader
 
 #### 2.8.3. Запуск
 
-Запустить исполняемый файл `/opt/NovAtelLogReader/NovAtelLogReader` от пользователя `root`.
+```sh
+# Настроить автозапуск сервиса NovAtelLogReader:
+sudo systemctl enable novatellogreader.service
+
+# Запустить сервис и убедиться что он запушен:
+sudo systemctl start novatellogreader.service
+sudo systemctl status novatellogreader.service
+```
 
