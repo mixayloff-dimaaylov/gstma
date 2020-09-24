@@ -12,12 +12,13 @@
 
 1. Установка Astra Linux
 2. Настройка сетевого соединения
-3. Установка Zookeeper
-4. Установка Kafka
-5. Установка Spark
-6. Установка Clickhouse
-7. Установка Grafana
-8. Установка программы передачи данных GPS-приёмника
+3. Создание директорию данных
+4. Установка Zookeeper
+5. Установка Kafka
+6. Установка Spark
+7. Установка Clickhouse
+8. Установка Grafana
+9. Установка программы передачи данных GPS-приёмника
 
 #### 2.1. Установка Astra Linux
 
@@ -53,10 +54,39 @@ sudo tee -a /etc/hosts <<HOSTS
 127.0.0.1 st9-ape-ionosphere2s-1
 HOSTS
 ```
+### 3. Создание директорию данных
 
-### 2.3. Установка Zookeeper
+Компоненты комплекса хранят свои временные оперативные данных в директории
+`/data`. Во избежание заполнения корневого раздела рекомендуется создать
+отдельный раздел для нее, с объемом свободного пространства **не менее 20 Гб**,
+размеченный файловой системой `ext4`.
 
-#### 2.3.1. Установка
+После создания раздела с требуемой файловой системой пропишите параметры
+монтирования раздела в файла `/etc/fstab` (замените
+`<блочное_устройство_раздела>` соответствующим значением):
+
+```sh
+echo "<блочное_устройство_раздела> /data ext4 defaults 0 0" | sudo tee -a /etc/fstab
+```
+
+Создайте точку монтирования:
+
+```sh
+sudo mkdir /data
+```
+
+После выполнения вышеописанных действий раздел будет монтироваться в путь
+`/data` автоматически, после каждого запуска системы.
+
+Для продолжения выполнения настройки примонтируйте раздел:
+
+```sh
+sudo mount /data
+```
+
+### 2.4. Установка Zookeeper
+
+#### 2.4.1. Установка
 
 ```sh
 sudo apt-get install -y zookeeper
@@ -74,7 +104,7 @@ echo 'export JAVA_HOME=/usr/lib/jvm/default-java' | sudo tee /etc/profile.d/java
 sudo systemctl enable zookeeper
 ```
 
-#### 2.3.2. Настройка
+#### 2.4.2. Настройка
 
 Для настройки требуется распаковать файлы настроек. Подключите диск
 дополнительного ПО. Распаковка производится при помощи следующей
@@ -84,7 +114,7 @@ sudo systemctl enable zookeeper
 sudo tar -xv --same-owner --same-permissions -f /media/cdrom/configs/zookeeper.tar.gz -C /
 ```
 
-#### 2.3.3. Запуск
+#### 2.4.3. Запуск
 
 ```sh
 # Запуск демона
@@ -92,9 +122,9 @@ sudo systemctl start zookeeper
 sudo systemctl status zookeeper
 ```
 
-### 2.4. Установка Kafka
+### 2.5. Установка Kafka
 
-#### 2.4.1. Установка
+#### 2.5.1. Установка
 
 ```sh
 # Установка JDK (переопределение стандартного)
@@ -108,7 +138,7 @@ sudo tar -xzf /media/cdrom/kafka_*.tgz -C /opt/kafka --strip 1
 sudo useradd kafka -r -U -s /bin/nologin
 ```
 
-#### 2.4.2. Настройка
+#### 2.5.2. Настройка
 
 Для настройки требуется распаковать файлы настроек. Подключите диск
 дополнительного ПО. Распаковка производится при помощи следующей
@@ -126,7 +156,7 @@ sudo mkdir -p /data/kafka-logs
 sudo chown kafka:kafka /data/kafka-logs
 ```
 
-#### 2.4.3. Запуск
+#### 2.5.3. Запуск
 
 ```sh
 # Активация сервиса
@@ -137,9 +167,9 @@ sudo systemctl start kafka.service
 sudo systemctl status kafka.service
 ```
 
-### 2.5. Установка Spark
+### 2.6. Установка Spark
 
-#### 2.5.1. Установка
+#### 2.6.1. Установка
 
 Spark устанавливается после Zookeeper и Kafka. Так же для работы разработанного
 приложения требуется установленный Apache Hadoop. Процесс установки описан
@@ -171,7 +201,7 @@ sudo mkdir -p /data/spark/
 sudo chown root:root -R /data/spark/
 ```
 
-#### 2.5.2. Запуск
+#### 2.6.2. Запуск
 
 ```sh
 # Настроить автозапуск сервисов Spark:
@@ -182,15 +212,15 @@ sudo systemctl start spark-streamer-{1,2}.service
 sudo systemctl status spark-streamer-{1,2}.service
 ```
 
-### 2.6. Установка Clickhouse
+### 2.7. Установка Clickhouse
 
-#### 2.6.1 Установка
+#### 2.7.1 Установка
 
 ```sh
 sudo apt-get install -y clickhouse-server clickhouse-client
 ```
 
-#### 2.6.2. Настройка
+#### 2.7.2. Настройка
 
 Данные Clickhouse хранятся в директории `/data/ch/`. Предполагается, что будет
 доступно не менее 80G свободного пространства. Создайте директорию с владельцем 
@@ -213,7 +243,7 @@ sudo tar -xv --same-owner --same-permissions -f /media/cdrom/configs/clickhouse.
 
 Пользователи и их пароли расположены в файле `/etc/clickhouse-server/users.xml`.
 
-#### 2.6.3. Запуск
+#### 2.7.3. Запуск
 
 ```sh
 # Настроить автозапуск сервера Clickhouse:
@@ -224,7 +254,7 @@ sudo systemctl start clickhouse-server
 sudo systemctl status clickhouse-server
 ```
 
-#### 2.6.4. Создание таблиц
+#### 2.7.4. Создание таблиц
 
 Подключите диск дополнительного ПО. Выполните:
 
@@ -232,9 +262,9 @@ sudo systemctl status clickhouse-server
 /media/cdrom/configs/clickhouse_create_queries.sh
 ```
 
-### 2.7. Установка Grafana
+### 2.8. Установка Grafana
 
-#### 2.7.1. Установка
+#### 2.8.1. Установка
 
 ```sh
 # Установить последний OSS-release:
@@ -242,7 +272,7 @@ sudo apt-get update
 sudo apt-get install -y grafana
 ```
 
-#### 2.7.2. Настройка
+#### 2.8.2. Настройка
 
 Для настройки требуется распаковать файлы настроек. Подключите диск
 дополнительного ПО. Распаковка производится при помощи следующей
@@ -261,7 +291,7 @@ sudo tar -xv --same-owner --same-permissions -f /media/cdrom/configs/grafana.tar
 - Пользователь для веб-интерфейса: admin
 - Пароль от пользователя `admin`: ionadmin
 
-#### 2.7.3. Запуск
+#### 2.8.3. Запуск
 
 ```sh
 # Настроить автозапуск сервера Grafana:
@@ -272,9 +302,9 @@ sudo systemctl start grafana-server.service
 sudo systemctl status grafana-server.service
 ```
 
-### 2.8. Установка программы передачи данных GPS-приёмника
+### 2.9. Установка программы передачи данных GPS-приёмника
 
-#### 2.8.0. Установка драйверов
+#### 2.9.0. Установка драйверов
 
 ```sh
 # Для компиляции модулей ядра требуются загаловочные файлы текущего ядра
@@ -294,7 +324,7 @@ sudo ./ngpsusb-install
 cd ~ && sudo rm -rf /tmp/ngpsusbpackage
 ```
 
-#### 2.8.1. Установка
+#### 2.9.1. Установка
 
 ```sh
 # Распаковать дистрибутив NovAtelLogReader
@@ -305,7 +335,7 @@ sudo tar -xzf /media/cdrom/NovAtelLogReader.tar.gz -C /opt/NovAtelLogReader --st
 sudo chmod a+x /opt/NovAtelLogReader/NovAtelLogReader
 ```
 
-#### 2.8.2. Настройка
+#### 2.9.2. Настройка
 
 Программа настраивается через файлы `*.config` в корневой папке проекта, в
 формате XML. Основной файл настроек - `NovAtelLogReader.exe.config`.
@@ -316,7 +346,7 @@ sudo chmod a+x /opt/NovAtelLogReader/NovAtelLogReader
 - `KafkaBrokers` - IP-адресс или *hostname* сервера **st9-ape-ionosphere2c-1**
 - `ComPortName`  - имя COM-порта с подключенным GPS-приемником
 
-#### 2.8.3. Запуск
+#### 2.9.3. Запуск
 
 ```sh
 # Настроить автозапуск сервиса NovAtelLogReader:
