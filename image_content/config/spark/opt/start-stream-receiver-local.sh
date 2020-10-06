@@ -3,7 +3,7 @@
 /opt/spark/bin/spark-submit \
 	--deploy-mode client \
         --master local[*] \
-	--class com.infocom.examples.spark.ClickHouseStreamReceiver \
+	--class com.infocom.examples.spark.StreamReceiver \
 	--driver-memory 512m \
 	--num-executors 1 \
 	--executor-cores 2 \
