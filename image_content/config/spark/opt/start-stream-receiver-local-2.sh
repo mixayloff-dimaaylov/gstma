@@ -15,5 +15,5 @@
 	--conf spark.yarn.max.executor.failures=8 \
 	--conf spark.yarn.executor.failuresValidityInterval=1h \
 	/opt/spark/jars/novatel-streaming-assembly-1.0.jar \
-	st9-ape-ionosphere2s-1:8123 12000000
+	st9-ape-ionosphere2s-1:8123 120000
         # ClickHouse # delay
