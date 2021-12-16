@@ -82,6 +82,9 @@ services:
       dockerfile: Dockerfile.grafana
     ports:
       - 3000:3000
+    volumes:
+      - './image_content/config/grafana/etc/grafana/provisioning/:/etc/grafana/provisioning/'
+      - './image_content/config/grafana-dashboards/:/var/lib/grafana/dashboards/'
     depends_on:
       - clickhouse
 
