@@ -7,7 +7,6 @@ COPY ./satmap-panel/package.json .
 COPY ./satmap-panel/package-lock.json .
 RUN npm install
 
-COPY ./satmap-panel/Dockerfile .
 COPY ./satmap-panel/LICENSE .
 COPY ./satmap-panel/plugin.json .
 COPY ./satmap-panel/Gruntfile.js .
