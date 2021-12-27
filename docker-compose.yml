@@ -1,0 +1,96 @@
+version: "3.4"
+
+services:
+  zookeeper:
+    container_name: ionosphere-iif-zookeeper
+    image: docker.io/bitnami/zookeeper:3.4.10-r4
+    ports:
+      - "2181:2181"
+    volumes:
+      - "zookeeper_data:/bitnami"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka:
+    container_name: ionosphere-iif-kafka
+    image: docker.io/bitnami/kafka:2.5.0
+    ports:
+      - "9092:9092"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+
+  spark-streamer-1:
+    container_name: ionosphere-iif-spark-streamer-1
+    build:
+      context: ./logserver-spark/
+      target: spark-streamer-1
+    logging:
+      driver: "local"
+      options:
+        max-size: "1g"
+        compress: "true"
+    environment:
+      KAFKA_HOST: 'ionosphere-iif-kafka'
+      CH_HOST: 'ionosphere-iif-clickhouse'
+    volumes:
+      - type: bind
+        source: ./image_content/config/spark/opt/spark/conf/log4j.properties
+        target: /spark/conf/log4j.properties
+    depends_on:
+      - kafka
+      - clickhouse
+
+  spark-streamer-2:
+    container_name: ionosphere-iif-spark-streamer-2
+    build:
+      context: ./logserver-spark/
+      target: spark-streamer-2
+    logging:
+      driver: "local"
+      options:
+        max-size: "1g"
+        compress: "true"
+    environment:
+      CH_HOST: 'ionosphere-iif-clickhouse'
+    volumes:
+      - type: bind
+        source: ./image_content/config/spark/opt/spark/conf/log4j.properties
+        target: /spark/conf/log4j.properties
+    depends_on:
+      - kafka
+      - clickhouse
+
+  clickhouse:
+    container_name: ionosphere-iif-clickhouse
+    image: 'yandex/clickhouse-server:20.5.2.7'
+    ports:
+      - 8123:8123
+    volumes:
+      - './image_content/config/clickhouse/etc/clickhouse-server/:/etc/clickhouse-server/'
+      - './image_content/config/clickhouse_create_queries.sh:/docker-entrypoint-initdb.d/clickhouse_create_queries.sh'
+
+  grafana:
+    container_name: ionosphere-iif-grafana
+    build:
+      context: ./
+      dockerfile: Dockerfile.grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - './image_content/config/grafana/etc/grafana/provisioning/:/etc/grafana/provisioning/'
+      - './image_content/config/grafana-dashboards/:/var/lib/grafana/dashboards/'
+    depends_on:
+      - clickhouse
+
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local

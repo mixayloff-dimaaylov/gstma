@@ -1,0 +1,9 @@
+[submodule "logserver-spark"]
+	path = logserver-spark
+	url = https://github.com/mixayloff-dimaaylov/ionosphere
+[submodule "clickhouse-grafana"]
+	path = clickhouse-grafana
+	url = https://github.com/mixayloff-dimaaylov/clickhouse-grafana
+[submodule "satmap-panel"]
+	path = satmap-panel
+	url = https://github.com/mixayloff-dimaaylov/satmap-panel
