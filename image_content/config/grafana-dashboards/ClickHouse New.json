@@ -714,7 +714,7 @@
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "$columns(\n    'Elevation %sat',\n    avg(elevation) elevation)\nFROM $table\nWHERE sat = '$satgraph'",
+          "query": "$columns(\n    'Elevation %sat',\n    avg(elevation) elevation)\nFROM $table\nWHERE\n    sat = '$satgraph'",
           "rawQuery": "SELECT t, groupArray((concat('Elevation ', sat), elevation)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, avg(elevation) elevation FROM rawdata.satxyz2 WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND  sat = 'GPS30' GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
@@ -731,7 +731,7 @@
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "$columns(\n    'C/No %sat %freq',\n    avg(cno) cno)\nFROM $table\nWHERE\n    sat = '$sat'\n    AND freq IN ($freq)",
+          "query": "$columns(\n    'C/No %sat %freq',\n    avg(cno) cno)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    AND freq IN ($freq)",
           "rawQuery": "SELECT t, groupArray((concat('C/No ', sat, ' ', freq), cno)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, freq, avg(cno) cno FROM rawdata.range WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND      sat = '$sat'     AND freq IN ('L1CA') GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
           "refId": "B",
           "round": "0s",
@@ -961,7 +961,7 @@
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "query": "$columns(\n    'f1 %sat %sigcomb',\n    avg(f1) f1\n    )\nFROM $table final\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
+          "query": "$columns(\n    'f1 %sat %sigcomb',\n    avg(f1) f1\n    )\nFROM $table final\nWHERE\n    sat = '$satgraph'",
           "rawQuery": "SELECT t, groupArray((concat('f1 ', sat, ' ', sigcomb), f1)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, sigcomb, avg(f1) f1 FROM computed.NT final WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND      sat = 'GPS30'     and sigcomb in ('L1CA+L2C','L1CA+L5Q') GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
@@ -983,7 +983,7 @@
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "query": "$columns(\n    'f2 %sat %sigcomb',\n    avg(f2) f2\n    )\nFROM $table final\nWHERE\n    sat = '$sat'\n    and sigcomb in ($sigcomb)",
+          "query": "$columns(\n    'f2 %sat %sigcomb',\n    avg(f2) f2\n    )\nFROM $table final\nWHERE\n    sat = '$sat'",
           "rawQuery": "SELECT t, groupArray((concat('f2 ', sat, ' ', sigcomb), f2)) as groupArr FROM ( SELECT intDiv(time, 500) * 500 as t, sat, sigcomb, avg(f2) f2 FROM computed.NT final WHERE d BETWEEN toDate(1595878988378/1000) AND toDate(1595879279537/1000) AND time BETWEEN 1595878988378 AND 1595879279537 AND      sat = '$sat'     and sigcomb in ('L1CA+L2C','L1CA+L5Q') GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
           "refId": "B",
           "round": "0s",
@@ -1011,7 +1011,7 @@
       },
       "yaxes": [
         {
-          "format": "none",
+          "format": "hertz",
           "label": "F",
           "logBase": 1,
           "max": null,
@@ -1789,7 +1789,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "АФК (L1)",
+      "title": "АКФ (L1)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2198,5 +2198,5 @@
   "timezone": "",
   "title": "ClickHouse New",
   "uid": "0F2yyfCWz",
-  "version": 8
+  "version": 9
 }
