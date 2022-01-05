@@ -1536,6 +1536,8 @@
         "x": 0,
         "y": 40
       },
+      "heatmap": true,
+      "heatmapField": "S4",
       "id": 7,
       "interval": null,
       "legend": {
@@ -1570,6 +1572,40 @@
           "round": "0s",
           "table": "satxyz2",
           "tableLoading": false
+        },
+        {
+          "database": "rawdata",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "$columns(\n  'Псевдодальность sat=%sat',\n  any(psr) g)\nFROM $table\nWHERE sat IN ($satvis)",
+          "rawQuery": "SELECT t, groupArray((concat('Псевдодальность sat=', sat), g)) as groupArr FROM ( SELECT intDiv(time, 1800000) * 1800000 as t, sat, any(psr) g FROM rawdata.range WHERE d BETWEEN toDate(1641367248614/1000) AND toDate(1641370848616/1000) AND time BETWEEN 1641367248614 AND 1641370848616 AND  sat IN ('GLONASS1','GPS2','GPS3','GPS4','GPS6','GPS7','GLONASS8','GPS9','GPS16','GPS20','GPS26','GPS30') GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "refId": "B",
+          "round": "0s",
+          "table": "range",
+          "tableLoading": false
+        },
+        {
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "$columns(\n  'S4 sat=%sat %freq',\n  any(s4) s4)\nFROM $table\nWHERE\n  sat in ($satvis)\n  AND freq IN ($freq)",
+          "rawQuery": "SELECT t, groupArray((concat('S4 sat=', sat, ' ', freq), s4)) as groupArr FROM ( SELECT intDiv(time, 1800000) * 1800000 as t, sat, freq, any(s4) s4 FROM computed.s4 WHERE d BETWEEN toDate(1641367248614/1000) AND toDate(1641370848616/1000) AND time BETWEEN 1641367248614 AND 1641370848616 AND      sat in ('GLONASS1','GPS2','GPS3','GPS4','GPS6','GPS7','GLONASS8','GPS9','GPS16','GPS20','GPS26','GPS30')     AND freq IN ('L1CA','L2CA','L2P') GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
+          "refId": "C",
+          "round": "0s",
+          "table": "s4",
+          "tableLoading": false
         }
       ],
       "thresholds": [
@@ -1599,6 +1635,8 @@
         "x": 12,
         "y": 40
       },
+      "heatmap": false,
+      "heatmapField": "S4",
       "id": 11,
       "interval": null,
       "legend": {
@@ -1662,6 +1700,8 @@
         "x": 0,
         "y": 56
       },
+      "heatmap": false,
+      "heatmapField": "S4",
       "id": 19,
       "interval": null,
       "legend": {
@@ -2198,5 +2238,5 @@
   "timezone": "",
   "title": "ClickHouse New",
   "uid": "0F2yyfCWz",
-  "version": 9
+  "version": 10
 }
