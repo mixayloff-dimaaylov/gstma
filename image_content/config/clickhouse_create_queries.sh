@@ -31,6 +31,58 @@ SETTINGS index_granularity=8192
 EOL123
 
 clickhouse-client <<EOL123
+CREATE TABLE IF NOT EXISTS rawdata.ismredobs (
+  time UInt64,
+  totals4 Float64,
+  sat String,
+  system String,
+  freq String,
+  glofreq Int32,
+  prn Int32,
+  d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = MergeTree()
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
+TTL d + INTERVAL 2 WEEK DELETE
+SETTINGS index_granularity=8192
+EOL123
+
+clickhouse-client <<EOL123
+CREATE TABLE IF NOT EXISTS rawdata.ismdetobs (
+  time UInt64,
+  power Float64,
+  sat String,
+  system String,
+  freq String,
+  glofreq Int32,
+  prn Int32,
+  d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = MergeTree()
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
+TTL d + INTERVAL 2 WEEK DELETE
+SETTINGS index_granularity=8192
+EOL123
+
+clickhouse-client <<EOL123
+CREATE TABLE IF NOT EXISTS rawdata.ismrawtec (
+  time UInt64,
+  tec Float64,
+  sat String,
+  system String,
+  primaryfreq String,
+  secondaryfreq String,
+  glofreq Int32,
+  prn Int32,
+  d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = MergeTree()
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, primaryfreq, secondaryfreq)
+TTL d + INTERVAL 2 WEEK DELETE
+SETTINGS index_granularity=8192
+EOL123
+
+clickhouse-client <<EOL123
 CREATE TABLE IF NOT EXISTS rawdata.satxyz2 (
   time UInt64,
   geopoint UInt64,

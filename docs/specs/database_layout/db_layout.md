@@ -1,4 +1,4 @@
-v6 clickhouse database layout
+v8 clickhouse database layout
 =============================
 
 ### Таблицы для входных данных
@@ -25,6 +25,73 @@ CREATE TABLE rawdata.range (
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree(d, (time, sat, freq), 8192)
 TTL d + INVERVAL 2 WEEK DELETE
+```
+
+#### rawdata.ismredobs
+
+Источник: `logreader`  
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE TABLE IF NOT EXISTS rawdata.ismredobs (
+  time UInt64,
+  totals4 Float64,
+  sat String,
+  system String,
+  freq String,
+  glofreq Int32,
+  prn Int32,
+  d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = MergeTree()
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
+TTL d + INTERVAL 2 WEEK DELETE
+SETTINGS index_granularity=8192
+```
+
+#### rawdata.ismdetobs
+
+Источник: `logreader`  
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE TABLE IF NOT EXISTS rawdata.ismdetobs (
+  time UInt64,
+  power Float64,
+  sat String,
+  system String,
+  freq String,
+  glofreq Int32,
+  prn Int32,
+  d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = MergeTree()
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
+TTL d + INTERVAL 2 WEEK DELETE
+SETTINGS index_granularity=8192
+```
+
+#### rawdata.ismrawtec
+
+Источник: `logreader`  
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE TABLE IF NOT EXISTS rawdata.ismrawtec (
+  time UInt64,
+  tec Float64,
+  sat String,
+  system String,
+  primaryfreq String,
+  secondaryfreq String,
+  glofreq Int32,
+  prn Int32,
+  d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = MergeTree()
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, primaryfreq, secondaryfreq)
+TTL d + INTERVAL 2 WEEK DELETE
+SETTINGS index_granularity=8192
 ```
 
 #### rawdata.satxyz2
