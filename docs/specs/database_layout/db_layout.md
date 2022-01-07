@@ -1,4 +1,4 @@
-v8 clickhouse database layout
+v9 clickhouse database layout
 =============================
 
 ### Таблицы для входных данных
@@ -203,4 +203,21 @@ CREATE TABLE computed.Tc (
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
 TTL d + INTERVAL 2 Week DELETE
+```
+
+### Таблицы для прочего
+
+#### misc.dcb
+
+Спутниковые поправки TEC (DCB)
+
+```sql
+CREATE TABLE IF NOT EXISTS misc.dcb (
+    sat String COMMENT 'Спутник',
+    system String COMMENT 'Навигационная система',
+    freq String COMMENT 'Частота передатчика',
+    dcb Float64 COMMENT 'Поправка TEC DCB'
+) ENGINE = ReplacingMergeTree()
+ORDER BY (system, sat, freq)
+SETTINGS index_granularity=8192
 ```
