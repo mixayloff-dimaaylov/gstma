@@ -1,4 +1,4 @@
-v9 clickhouse database layout
+v10 clickhouse database layout
 =============================
 
 ### Таблицы для входных данных
@@ -215,9 +215,9 @@ TTL d + INTERVAL 2 Week DELETE
 CREATE TABLE IF NOT EXISTS misc.dcb (
     sat String COMMENT 'Спутник',
     system String COMMENT 'Навигационная система',
-    freq String COMMENT 'Частота передатчика',
+    sigcomb String COMMENT 'Частота передатчика',
     dcb Float64 COMMENT 'Поправка TEC DCB'
 ) ENGINE = ReplacingMergeTree()
-ORDER BY (system, sat, freq)
+ORDER BY (system, sat, sigcomb)
 SETTINGS index_granularity=8192
 ```

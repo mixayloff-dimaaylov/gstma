@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# v9
+# v10
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
@@ -188,9 +188,9 @@ clickhouse-client <<EOL123
 CREATE TABLE IF NOT EXISTS misc.dcb (
     sat String COMMENT 'Спутник',
     system String COMMENT 'Навигационная система',
-    freq String COMMENT 'Частота передатчика',
+    sigcomb String COMMENT 'Частота передатчика',
     dcb Float64 COMMENT 'Поправка TEC DCB'
 ) ENGINE = ReplacingMergeTree()
-ORDER BY (system, sat, freq)
+ORDER BY (system, sat, sigcomb)
 SETTINGS index_granularity=8192
 EOL123
