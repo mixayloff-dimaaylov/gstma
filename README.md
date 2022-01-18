@@ -28,7 +28,7 @@ docker-compose build
 ```sh
 # Физический адрес необходим NovAtelLogReader при обращении к Kafka
 # если NovAtelLogReader расположен на другом хосте
-echo "KAFKA_CFG_ADVERTISED_LISTENERS='PLAINTEXT://<ip_адрес>:9092'" >> .env
+echo "KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://<ip_адрес>:9092" >> .env
 ```
 
 3. Запустить кластер 
