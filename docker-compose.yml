@@ -48,6 +48,9 @@ services:
       options:
         max-size: "1g"
         compress: "true"
+    ports:
+      # DEBUG Spark UI
+      - 4040:4040
     environment:
       KAFKA_HOST: 'ionosphere-iif-kafka'
       CH_HOST: 'ionosphere-iif-clickhouse'
@@ -69,6 +72,9 @@ services:
       options:
         max-size: "1g"
         compress: "true"
+    ports:
+      # DEBUG Spark UI
+      - 4040:4041
     environment:
       CH_HOST: 'ionosphere-iif-clickhouse'
     volumes:
