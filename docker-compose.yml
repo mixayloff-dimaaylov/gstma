@@ -38,6 +38,21 @@ services:
     depends_on:
       - zookeeper
 
+  spark-master:
+    container_name: ionosphere-iif-spark-master
+    image: bde2020/spark-master:2.2.1-hadoop2.7
+    ports:
+      # DEBUG Spark UI
+      - 4040:4040
+      - 8080:8080
+      - 7077:7077
+    environment:
+      - INIT_DAEMON_STEP=setup_spark
+    volumes:
+      - type: bind
+        source: ./image_content/config/spark/opt/spark/conf/log4j.properties
+        target: /spark/conf/log4j.properties
+
   spark-streamer-1:
     container_name: ionosphere-iif-spark-streamer-1
     build:
@@ -48,10 +63,8 @@ services:
       options:
         max-size: "1g"
         compress: "true"
-    ports:
-      # DEBUG Spark UI
-      - 4040:4040
     environment:
+      SPARK_MASTER: 'spark://ionosphere-iif-spark-master:7077'
       KAFKA_HOST: 'ionosphere-iif-kafka'
       CH_HOST: 'ionosphere-iif-clickhouse'
     volumes:
@@ -59,6 +72,7 @@ services:
         source: ./image_content/config/spark/opt/spark/conf/log4j.properties
         target: /spark/conf/log4j.properties
     depends_on:
+      - spark-master
       - kafka
       - clickhouse
 
@@ -72,16 +86,15 @@ services:
       options:
         max-size: "1g"
         compress: "true"
-    ports:
-      # DEBUG Spark UI
-      - 4040:4041
     environment:
+      SPARK_MASTER: 'spark://ionosphere-iif-spark-master:7077'
       CH_HOST: 'ionosphere-iif-clickhouse'
     volumes:
       - type: bind
         source: ./image_content/config/spark/opt/spark/conf/log4j.properties
         target: /spark/conf/log4j.properties
     depends_on:
+      - spark-master
       - kafka
       - clickhouse
 
