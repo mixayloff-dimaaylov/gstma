@@ -74,7 +74,7 @@ services:
         compress: "true"
     ports:
       # DEBUG Spark UI
-      - 4040:4041
+      - 4041:4040
     environment:
       CH_HOST: 'ionosphere-iif-clickhouse'
     volumes:
