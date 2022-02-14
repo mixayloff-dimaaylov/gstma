@@ -21,15 +21,28 @@ print_help() {
 # $2 -- from
 # $3 -- to
 dump_range() {
-    docker-compose exec "${_cont_name}" 'clickhouse-client' '--query' \
-" SELECT"\
-"     time,"\
+    if [[ "${1}" =~ ^GPS ]] ; then
+        _cols=\
 "     anyIf(psr, freq = 'L1CA') AS P1,"\
 "     anyIf(psr, freq = 'L2C') AS P2,"\
 "     anyIf(psr, freq = 'L5Q') AS P5,"\
 "     anyIf(adr, freq = 'L1CA') AS L1,"\
 "     anyIf(adr, freq = 'L2C') AS L2,"\
-"     anyIf(adr, freq = 'L5Q') AS L5,"\
+"     anyIf(adr, freq = 'L5Q') AS L5,"
+    elif [[ "${1}" =~ ^GLONASS ]] ; then
+        _cols=\
+"     anyIf(psr, freq = 'L1CA') AS P1,"\
+"     anyIf(psr, freq = 'L2CA') AS P2,"\
+"     anyIf(adr, freq = 'L1CA') AS L1,"\
+"     anyIf(adr, freq = 'L2CA') AS L2,"
+    else
+        errexit "Unsupported system.\n" '1'
+    fi
+
+    docker-compose exec "${_cont_name}" 'clickhouse-client' '--query' \
+" SELECT"\
+"     time,"\
+"${_cols}"\
 "     sat"\
 " FROM"\
 "     rawdata.range"\
