@@ -33,8 +33,10 @@ dump_range() {
         _cols=\
 "     anyIf(psr, freq = 'L1CA') AS P1,"\
 "     anyIf(psr, freq = 'L2CA') AS P2,"\
+"     anyIf(psr, freq = 'L2P') AS P2P,"\
 "     anyIf(adr, freq = 'L1CA') AS L1,"\
-"     anyIf(adr, freq = 'L2CA') AS L2,"
+"     anyIf(adr, freq = 'L2CA') AS L2,"\
+"     anyIf(adr, freq = 'L2P') AS L2P,"
     else
         errexit "Unsupported system.\n" '1'
     fi
