@@ -56,7 +56,7 @@ dump_range() {
 " ORDER BY"\
 "     time ASC"\
 " FORMAT CSV" \
-    '--format' 'CSV' > "${_dump_path}/range_${1}.csv"
+    '--format' 'CSV' > "${_dump_path}/range_${1}_${2}_${3}.csv"
 }
 
 # $1 -- sat
@@ -76,7 +76,7 @@ dump_satxyz2() {
 " ORDER BY"\
 "     time ASC"\
 " FORMAT CSV" \
-    '--format' 'CSV' > "${_dump_path}/satxyz2_${1}.csv"
+    '--format' 'CSV' > "${_dump_path}/satxyz2_${1}_${2}_${3}.csv"
 }
 
 # $1 -- sat
@@ -100,7 +100,7 @@ dump_ismrawtec() {
 " ORDER BY"\
 "     time ASC"\
 " FORMAT CSV" \
-    '--format' 'CSV' > "${_dump_path}/ismrawtec_${1}.csv"
+    '--format' 'CSV' > "${_dump_path}/ismrawtec_${1}_${2}_${3}_${4}.csv"
 }
 
 # $1 -- sat
