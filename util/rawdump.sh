@@ -14,7 +14,8 @@ print_help() {
 		"${_script} [-h | -i]" \
 		"${_script} <sat> <from> <to> <secondaryfreq>" \
 		"  -h - print this help" \
-		"  -i - interactive mode to input dump parameters"
+		"  -i - interactive mode to input dump parameters"\
+		"  -n - don't recreate the dumps folder"
 }
 
 # $1 -- sat
@@ -129,6 +130,9 @@ while getopts ':hi' _opt ; do
 		i)
 			_sw_interactive='true'
 			;;
+		n)
+			_sw_noclobber='true'
+			;;
 		*)
 			errexit 'No such switch. Exiting...\n' '1'
 			;;
@@ -143,8 +147,11 @@ else
 	[ "${#}" -ne '4' ] && errexit "Not exact number of arguments.\n" '1'
 fi
 
-printf 'Removing old dumps...\n'
-rm -rfv -- "${_dump_path}"
+if [[ "${_sw_noclobber}" != 'true' ]] ; then
+	printf 'Removing old dumps...\n'
+	rm -rfv -- "${_dump_path}"
+fi
+
 mkdir -p -- "${_dump_path}"
 
 if [[ "${_sw_interactive}" == 'true' ]] ; then
