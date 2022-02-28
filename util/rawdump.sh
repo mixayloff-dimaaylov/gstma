@@ -156,7 +156,7 @@ mkdir -p -- "${_dump_path}"
 
 if [[ "${_sw_interactive}" == 'true' ]] ; then
 	while true; do
-		printf 'Input parameters:\n'
+		printf 'Input parameters (or ^D to quit):\n'
 
 		read -ep "sat > "           _sat           &&
 		read -ep "from > "          _from          && 
