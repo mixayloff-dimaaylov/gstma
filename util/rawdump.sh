@@ -11,11 +11,13 @@ print_help() {
 	printf '%s\n' \
 		"${_script} -- dump observations for satellite " \
 		"" \
-		"${_script} [-h | -i]" \
-		"${_script} <sat> <from> <to> <secondaryfreq>" \
-		"  -h - print this help" \
-		"  -i - interactive mode to input dump parameters"\
-		"  -n - don't recreate the dumps folder"
+		"Usage:" \
+		"" \
+		" ${_script} -i [-h] [-n]" \
+		" ${_script} [-h] [-n] <sat> <from> <to> <secondaryfreq>" \
+		"   -h - print this help and exit" \
+		"   -i - input dump parameters in interactive mode" \
+		"   -n - don't recreate the dumps folder"
 }
 
 # $1 -- sat
