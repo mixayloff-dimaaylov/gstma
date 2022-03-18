@@ -125,6 +125,7 @@ CREATE TABLE IF NOT EXISTS computed.NT (
   f1 Float64,
   f2 Float64,
   nt Float64,
+  psrNt Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree()
 PARTITION BY toYYYYMM(d)

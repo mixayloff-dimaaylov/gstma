@@ -146,6 +146,7 @@ CREATE TABLE computed.NT (
     f1 Float64 COMMENT 'Частота 1',
     f2 Float64 COMMENT 'Частота 2',
     nt Float64 COMMENT 'ПЭС',
+    psrNt Float64 COMMENT 'ПЭС псевдодальностный',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
 TTL d + INTERVAL 2 Week DELETE;
