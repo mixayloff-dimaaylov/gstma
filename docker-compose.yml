@@ -48,6 +48,7 @@ services:
       options:
         max-size: "1g"
         compress: "true"
+    restart: on-failure
     ports:
       # DEBUG Spark UI
       - 4040:4040
@@ -72,6 +73,7 @@ services:
       options:
         max-size: "1g"
         compress: "true"
+    restart: on-failure
     ports:
       # DEBUG Spark UI
       - 4041:4040

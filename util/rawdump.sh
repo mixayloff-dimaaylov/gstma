@@ -11,25 +11,43 @@ print_help() {
 	printf '%s\n' \
 		"${_script} -- dump observations for satellite " \
 		"" \
-		"${_script} [-h | -i]" \
-		"${_script} <sat> <from> <to> <secondaryfreq>" \
-		"  -h - print this help" \
-		"  -i - interactive mode to input dump parameters"
+		"Usage:" \
+		"" \
+		" ${_script} -i [-h] [-n]" \
+		" ${_script} [-h] [-n] <sat> <from> <to> <secondaryfreq>" \
+		"   -h - print this help and exit" \
+		"   -i - input dump parameters in interactive mode" \
+		"   -n - don't recreate the dumps folder"
 }
 
 # $1 -- sat
 # $2 -- from
 # $3 -- to
 dump_range() {
-    docker-compose exec "${_cont_name}" 'clickhouse-client' '--query' \
-" SELECT"\
-"     time,"\
+    if [[ "${1}" =~ ^GPS ]] ; then
+        _cols=\
 "     anyIf(psr, freq = 'L1CA') AS P1,"\
 "     anyIf(psr, freq = 'L2C') AS P2,"\
 "     anyIf(psr, freq = 'L5Q') AS P5,"\
 "     anyIf(adr, freq = 'L1CA') AS L1,"\
 "     anyIf(adr, freq = 'L2C') AS L2,"\
-"     anyIf(adr, freq = 'L5Q') AS L5,"\
+"     anyIf(adr, freq = 'L5Q') AS L5,"
+    elif [[ "${1}" =~ ^GLONASS ]] ; then
+        _cols=\
+"     anyIf(psr, freq = 'L1CA') AS P1,"\
+"     anyIf(psr, freq = 'L2CA') AS P2,"\
+"     anyIf(psr, freq = 'L2P') AS P2P,"\
+"     anyIf(adr, freq = 'L1CA') AS L1,"\
+"     anyIf(adr, freq = 'L2CA') AS L2,"\
+"     anyIf(adr, freq = 'L2P') AS L2P,"
+    else
+        errexit "Unsupported system.\n" '1'
+    fi
+
+    docker-compose exec "${_cont_name}" 'clickhouse-client' '--query' \
+" SELECT"\
+"     time,"\
+"${_cols}"\
 "     sat"\
 " FROM"\
 "     rawdata.range"\
@@ -41,7 +59,7 @@ dump_range() {
 " ORDER BY"\
 "     time ASC"\
 " FORMAT CSV" \
-    '--format' 'CSV' > "${_dump_path}/range_${1}.csv"
+    '--format' 'CSV' > "${_dump_path}/range_${1}_${2}_${3}.csv"
 }
 
 # $1 -- sat
@@ -61,7 +79,7 @@ dump_satxyz2() {
 " ORDER BY"\
 "     time ASC"\
 " FORMAT CSV" \
-    '--format' 'CSV' > "${_dump_path}/satxyz2_${1}.csv"
+    '--format' 'CSV' > "${_dump_path}/satxyz2_${1}_${2}_${3}.csv"
 }
 
 # $1 -- sat
@@ -85,7 +103,7 @@ dump_ismrawtec() {
 " ORDER BY"\
 "     time ASC"\
 " FORMAT CSV" \
-    '--format' 'CSV' > "${_dump_path}/ismrawtec_${1}.csv"
+    '--format' 'CSV' > "${_dump_path}/ismrawtec_${1}_${2}_${3}_${4}.csv"
 }
 
 # $1 -- sat
@@ -114,6 +132,9 @@ while getopts ':hi' _opt ; do
 		i)
 			_sw_interactive='true'
 			;;
+		n)
+			_sw_noclobber='true'
+			;;
 		*)
 			errexit 'No such switch. Exiting...\n' '1'
 			;;
@@ -128,13 +149,16 @@ else
 	[ "${#}" -ne '4' ] && errexit "Not exact number of arguments.\n" '1'
 fi
 
-printf 'Removing old dumps...\n'
-rm -rfv -- "${_dump_path}"
+if [[ "${_sw_noclobber}" != 'true' ]] ; then
+	printf 'Removing old dumps...\n'
+	rm -rfv -- "${_dump_path}"
+fi
+
 mkdir -p -- "${_dump_path}"
 
 if [[ "${_sw_interactive}" == 'true' ]] ; then
 	while true; do
-		printf 'Input parameters:\n'
+		printf 'Input parameters (or ^D to quit):\n'
 
 		read -ep "sat > "           _sat           &&
 		read -ep "from > "          _from          && 
