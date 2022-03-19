@@ -185,11 +185,11 @@ SETTINGS index_granularity=8192
 EOL123
 
 clickhouse-client <<EOL123
-CREATE TABLE IF NOT EXISTS misc.dcb (
+CREATE TABLE IF NOT EXISTS misc.sdcb (
     sat String COMMENT 'Спутник',
     system String COMMENT 'Навигационная система',
     sigcomb String COMMENT 'Частота передатчика',
-    dcb Float64 COMMENT 'Поправка TEC DCB'
+    sdcb Float64 COMMENT 'Поправка TEC SDCB'
 ) ENGINE = ReplacingMergeTree()
 ORDER BY (system, sat, sigcomb)
 SETTINGS index_granularity=8192
