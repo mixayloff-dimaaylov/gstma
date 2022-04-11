@@ -24,7 +24,7 @@ CREATE TABLE rawdata.range (
   prn Int32,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree(d, (time, sat, freq), 8192)
-TTL d + INVERVAL 2 WEEK DELETE
+TTL d + INVERVAL 1 WEEK DELETE
 ```
 
 #### rawdata.ismredobs
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismredobs (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 2 WEEK DELETE
+TTL d + INTERVAL 1 WEEK DELETE
 SETTINGS index_granularity=8192
 ```
 
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismdetobs (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 2 WEEK DELETE
+TTL d + INTERVAL 1 WEEK DELETE
 SETTINGS index_granularity=8192
 ```
 
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismrawtec (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, primaryfreq, secondaryfreq)
-TTL d + INTERVAL 2 WEEK DELETE
+TTL d + INTERVAL 1 WEEK DELETE
 SETTINGS index_granularity=8192
 ```
 
@@ -110,7 +110,7 @@ CREATE TABLE rawdata.satxyz2 (
   prn Int32,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree(d, (time, sat), 8192)
-TTL d + INVERVAL 2 WEEK DELETE
+TTL d + INVERVAL 1 WEEK DELETE
 ```
 
 ### Таблицы для расчетных данных
@@ -122,6 +122,8 @@ TTL d + INVERVAL 2 WEEK DELETE
 Источник: *rawdata.range*  
 *Примечание:* s4 считается для частот, а не для их комбинаций.  
 
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
 ```sql
 CREATE TABLE computed.s4 (
     time UInt64 COMMENT 'Метка времени (timestamp в ms)',
@@ -130,7 +132,7 @@ CREATE TABLE computed.s4 (
     s4 Float64 COMMENT 'S4',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
-TTL d + INTERVAL 2 Week DELETE
+TTL d + INTERVAL 1 Week DELETE
 ```
 
 #### Обычные таблицы
@@ -149,7 +151,7 @@ CREATE TABLE computed.NT (
     psrNt Float64 COMMENT 'ПЭС псевдодальностный',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
-TTL d + INTERVAL 2 Week DELETE;
+TTL d + INTERVAL 1 Week DELETE;
 ```
 
 Источник: *computed.NT*
@@ -166,7 +168,7 @@ CREATE TABLE computed.NTDerivatives (
     delNT Float64 COMMENT 'Значение флуктуаций ПЭС',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 
-TTL d + INTERVAL 2 Week DELETE;
+TTL d + INTERVAL 1 Week DELETE;
 ```
 
 #### Односекундные таблицы
@@ -188,12 +190,13 @@ CREATE TABLE computed.xz1 (
     Pc Float64 COMMENT 'Значение интервала пространственной корреляции',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 
-TTL d + INTERVAL 2 Week DELETE;
+TTL d + INTERVAL 1 Week DELETE;
 ```
 
 #### N - секундные таблицы
 
 Источник: *computed.NTDerivatives*
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
 CREATE TABLE computed.Tc (
@@ -203,7 +206,7 @@ CREATE TABLE computed.Tc (
     Tc Float64 COMMENT 'Значение интервала временной корреляции',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
-TTL d + INTERVAL 2 Week DELETE
+TTL d + INTERVAL 1 Week DELETE
 ```
 
 ### Таблицы для прочего
