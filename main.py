@@ -64,6 +64,8 @@ def F_k(f_0, sigma_d_nt, z, z_e, l_s):
 
 
 def plot_sigma_phi(fig, ax):
+    fname = r"$\sigma_{\phi}(f_0)$, $Рад$.png"
+
     for s in np.nditer(sigma_d_nts):
         sigma_phis = sigma_phi(f_0s, s * len(f_0s))
 
@@ -76,11 +78,12 @@ def plot_sigma_phi(fig, ax):
     ax.legend()
 
     fig.set_size_inches(10, 10)
-
-    plt.savefig(r"$\sigma_{\phi}(f_0)$, $Рад$")
+    plt.savefig(fname)
 
 
 def plot_d1_2(fig, ax):
+    fname = r"$d_1^2(f_0)$.png"
+
     for l_s in np.nditer(l_ss):
         d1_2s = d1_2(f_0s, z1, z_e, l_s)
 
@@ -92,11 +95,12 @@ def plot_d1_2(fig, ax):
     ax.legend()
 
     fig.set_size_inches(10, 10)
-
-    plt.savefig(r"$d_1^2(f_0)$")
+    plt.savefig(fname)
 
 
 def plot_F_k0(fig, ax):
+    fname = r"$F_{k_0}(f_0)$.png"
+
     # TODO:
     l_s = 380
     for s in np.nditer(sigma_d_nts):
@@ -111,11 +115,12 @@ def plot_F_k0(fig, ax):
     ax.legend()
 
     fig.set_size_inches(10, 10)
-
-    plt.savefig(r"$F_{k_0}(f_0)$")
+    plt.savefig(fname)
 
 
 def plot_dF_k0(fig, ax):
+    fname = r"$\delta F_{k_0}(f_0)$.png"
+
     # TODO
     for s in np.nditer(sigma_d_nts):
         dF_k0s = dF_k0(f_0s, s)
@@ -129,11 +134,12 @@ def plot_dF_k0(fig, ax):
     ax.legend()
 
     fig.set_size_inches(10, 10)
-
-    plt.savefig(r"$\delta F_{k_0}(f_0)$")
+    plt.savefig(fname)
 
 
 def plot_F_k(fig, ax):
+    fname = r"$F_k(f_0)$, $Гц$.png"
+
     # TODO:
     l_s = 380
     for s in np.nditer(sigma_d_nts):
@@ -148,11 +154,12 @@ def plot_F_k(fig, ax):
     ax.legend()
 
     fig.set_size_inches(10, 10)
-
-    plt.savefig(r"$F_k(f_0)$, $Гц$")
+    plt.savefig(fname)
 
 
 def plot_F_k_F_k_0(fig, ax):
+    fname = r"$F_k(f_0)$, $F_{k_0}$, $Гц$.png"
+
     f_m = (15 * 1e6)
     f_0s = np.linspace(0.2, 1.0, 20) * f_m
     f_0m = f_0s / f_m
@@ -171,8 +178,7 @@ def plot_F_k_F_k_0(fig, ax):
     ax.legend()
 
     fig.set_size_inches(10, 10)
-
-    plt.savefig(r"$F_k(f_0)$, $F_{k_0}$, $Гц$")
+    plt.savefig(fname)
 
 
 if __name__ == '__main__':
@@ -199,7 +205,7 @@ if __name__ == '__main__':
 
     # Sigma Phi
     fig, ax = plt.subplots()
-    lol = plot_sigma_phi(fig, ax)
+    plot_sigma_phi(fig, ax)
 
     # d1^2
     fig, ax = plt.subplots()
