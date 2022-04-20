@@ -77,7 +77,7 @@ def plot_sigma_phi(fig, ax):
 
     fig.set_size_inches(10, 10)
 
-    return plt.savefig(r"$\sigma_{\phi}(f_0)$, $Рад$")
+    plt.savefig(r"$\sigma_{\phi}(f_0)$, $Рад$")
 
 
 def plot_d1_2(fig, ax):
@@ -93,7 +93,7 @@ def plot_d1_2(fig, ax):
 
     fig.set_size_inches(10, 10)
 
-    return plt.savefig(r"$d_1^2(f_0)$")
+    plt.savefig(r"$d_1^2(f_0)$")
 
 
 def plot_F_k0(fig, ax):
@@ -112,7 +112,7 @@ def plot_F_k0(fig, ax):
 
     fig.set_size_inches(10, 10)
 
-    return plt.savefig(r"$F_{k_0}(f_0)$")
+    plt.savefig(r"$F_{k_0}(f_0)$")
 
 
 def plot_dF_k0(fig, ax):
@@ -130,7 +130,7 @@ def plot_dF_k0(fig, ax):
 
     fig.set_size_inches(10, 10)
 
-    return plt.savefig(r"$\delta F_{k_0}(f_0)$")
+    plt.savefig(r"$\delta F_{k_0}(f_0)$")
 
 
 def plot_F_k(fig, ax):
@@ -149,7 +149,7 @@ def plot_F_k(fig, ax):
 
     fig.set_size_inches(10, 10)
 
-    return plt.savefig(r"$F_k(f_0)$, $Гц$")
+    plt.savefig(r"$F_k(f_0)$, $Гц$")
 
 
 def plot_F_k_F_k_0(fig, ax):
@@ -172,7 +172,7 @@ def plot_F_k_F_k_0(fig, ax):
 
     fig.set_size_inches(10, 10)
 
-    return plt.savefig(r"$F_k(f_0)$, $F_{k_0}$, $Гц$")
+    plt.savefig(r"$F_k(f_0)$, $F_{k_0}$, $Гц$")
 
 
 if __name__ == '__main__':
