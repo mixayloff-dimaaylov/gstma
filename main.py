@@ -64,7 +64,7 @@ def F_k(f_0, sigma_d_nt, z, z_e, l_s):
 
 
 def plot_sigma_phi(fig, ax):
-    fname = r"static/$\sigma_{\phi}(f_0)$, $Рад$.png"
+    fname = r"static/sigma_phi.png"
 
     for s in np.nditer(sigma_d_nts):
         sigma_phis = sigma_phi(f_0s, s * len(f_0s))
@@ -82,7 +82,7 @@ def plot_sigma_phi(fig, ax):
 
 
 def plot_d1_2(fig, ax):
-    fname = r"static/$d_1^2(f_0)$.png"
+    fname = r"static/d_1-2.png"
 
     for l_s in np.nditer(l_ss):
         d1_2s = d1_2(f_0s, z1, z_e, l_s)
@@ -99,7 +99,7 @@ def plot_d1_2(fig, ax):
 
 
 def plot_F_k0(fig, ax):
-    fname = r"static/$F_{k_0}(f_0)$.png"
+    fname = r"static/F_k_0.png"
 
     # TODO:
     l_s = 380
@@ -119,7 +119,7 @@ def plot_F_k0(fig, ax):
 
 
 def plot_dF_k0(fig, ax):
-    fname = r"static/$\delta F_{k_0}(f_0)$.png"
+    fname = r"static/delta_F_k_0.png"
 
     # TODO
     for s in np.nditer(sigma_d_nts):
@@ -138,7 +138,7 @@ def plot_dF_k0(fig, ax):
 
 
 def plot_F_k(fig, ax):
-    fname = r"static/$F_k(f_0)$, $Гц$.png"
+    fname = r"static/F_k.png"
 
     # TODO:
     l_s = 380
@@ -158,7 +158,7 @@ def plot_F_k(fig, ax):
 
 
 def plot_F_k_F_k_0(fig, ax):
-    fname = r"static/$F_k(f_0)$, $F_{k_0}$, $Гц$.png"
+    fname = r"static/F_k-F_k_0.png"
 
     f_m = (15 * 1e6)
     f_0s = np.linspace(0.2, 1.0, 20) * f_m
