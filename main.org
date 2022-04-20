@@ -1,17 +1,17 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-20 Ср 12:19]
+#+last_modified: [2022-04-20 Ср 12:29]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
   :CREATED:               [2022-04-20 Ср 09:07]
-  :HASH:                  1828847961060152632
-  :LAST_MODIFIED:         [2022-04-20 Ср 12:10]
+  :HASH:                  467535386401319062
+  :LAST_MODIFIED:         [2022-04-20 Ср 12:23]
   :header-args:python:    :exports none
   :END:
 
 #+name: defs
-#+begin_src python
+#+begin_src python :session
   from math import pi
   import numpy as np
 
@@ -222,8 +222,16 @@
       plt.show()
 #+end_src
 
+* То, что будет в статье
+  :PROPERTIES:
+  :CREATED:               [2022-04-19 Вт 16:44]
+  :HASH:                  -458629324908271963
+  :LAST_MODIFIED:         [2022-04-20 Ср 12:29]
+  :header-args:python:    :noweb yes :exports results :results file graphics :session
+  :END:
+
 #+name: main-input
-#+begin_src python
+#+begin_src python :export none :results none
   # Марк:
   # - 10^13 .. 10^14 эл/м^2 для нормальной ионосферы без возмущений
   # - 10^14 .. 10^15 эл/м^2 для нормальной ионосферы со слабыми естественными
@@ -245,129 +253,68 @@
 #+end_src
 
 #+name: main-1
-#+begin_src python
+#+begin_src python :file "static/sigma_phi.png"
   # Sigma Phi
   fig, ax = plt.subplots()
   plot_sigma_phi(fig, ax)
 #+end_src
 
+#+attr_org: :width 500px
+#+RESULTS: main-1
+[[file:static/sigma_phi.png]]
+
 #+name: main-2
-#+begin_src python
+#+begin_src python :file "static/d_1-2.png"
   # d1^2
   fig, ax = plt.subplots()
   plot_d1_2(fig, ax)
 #+end_src
 
+#+attr_org: :width 500px
+#+RESULTS: main-2
+[[file:static/d_1-2.png]]
+
 #+name: main-3
-#+begin_src python
+#+begin_src python :file "static/F_k_0.png"
   # F_k0
   fig, ax = plt.subplots()
   plot_F_k0(fig, ax)
 #+end_src
 
+#+attr_org: :width 500px
+#+RESULTS: main-3
+[[file:static/F_k_0.png]]
+
 #+name: main-4
-#+begin_src python
+#+begin_src python :file "static/delta_F_k_0.png"
   # dF_k0
   fig, ax = plt.subplots()
   plot_dF_k0(fig, ax)
 #+end_src
 
+#+attr_org: :width 500px
+#+RESULTS: main-4
+[[file:static/delta_F_k_0.png]]
+
 #+name: main-5
-#+begin_src python
+#+begin_src python :file "static/F_k.png"
   # F_k
   fig, ax = plt.subplots()
   plot_F_k(fig, ax)
 #+end_src
 
+#+attr_org: :width 500px
+#+RESULTS: main-5
+[[file:static/F_k.png]]
+
 #+name: main-6
-#+begin_src python
+#+begin_src python :file "static/F_k-F_k_0.png"
   # F_k_F_k_0
   fig, ax = plt.subplots()
   plot_F_k_F_k_0(fig, ax)
 #+end_src
 
-* То, что будет в статье
-  :PROPERTIES:
-  :CREATED:               [2022-04-19 Вт 16:44]
-  :HASH:                  1674957604666388807
-  :LAST_MODIFIED:         [2022-04-20 Ср 12:19]
-  :header-args:python:    :noweb yes :exports results :results file graphics
-  :END:
-
-#+name: main-1-result
-#+begin_src python :file "static/sigma_phi.png"
-  <<defs>>
-
-  <<main-input>>
-
-  <<main-1>>
-#+end_src
-
 #+attr_org: :width 500px
-#+RESULTS: main-1-result
-[[file:static/sigma_phi.png]]
-
-#+name: main-2-result
-#+begin_src python :file "static/d_1-2.png"
-  <<defs>>
-
-  <<main-input>>
-
-  <<main-2>>
-#+end_src
-
-#+attr_org: :width 500px
-#+RESULTS: main-2-result
-[[file:static/d_1-2.png]]
-
-#+name: main-3-result
-#+begin_src python :file "static/F_k_0.png"
-  <<defs>>
-
-  <<main-input>>
-
-  <<main-3>>
-#+end_src
-
-#+attr_org: :width 500px
-#+RESULTS: main-3-result
-[[file:static/F_k_0.png]]
-
-#+name: main-4-result
-#+begin_src python :file "static/delta_F_k_0.png"
-  <<defs>>
-
-  <<main-input>>
-
-  <<main-4>>
-#+end_src
-
-#+attr_org: :width 500px
-#+RESULTS: main-4-result
-[[file:static/delta_F_k_0.png]]
-
-#+name: main-5-result
-#+begin_src python :file "static/F_k.png"
-  <<defs>>
-
-  <<main-input>>
-
-  <<main-5>>
-#+end_src
-
-#+attr_org: :width 500px
-#+RESULTS: main-5-result
-[[file:static/F_k.png]]
-
-#+name: main-6-result
-#+begin_src python :file "static/F_k-F_k_0.png"
-  <<defs>>
-
-  <<main-input>>
-
-  <<main-6>>
-#+end_src
-
-#+attr_org: :width 500px
-#+RESULTS: main-6-result
+#+RESULTS: main-6
 [[file:static/F_k-F_k_0.png]]
+
