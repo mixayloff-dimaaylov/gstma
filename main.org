@@ -1,16 +1,17 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-20 Ср 11:53]
+#+last_modified: [2022-04-20 Ср 12:19]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
   :CREATED:               [2022-04-20 Ср 09:07]
-  :HASH:                  -689672546680233886
-  :LAST_MODIFIED:         [2022-04-20 Ср 11:14]
+  :HASH:                  1828847961060152632
+  :LAST_MODIFIED:         [2022-04-20 Ср 12:10]
+  :header-args:python:    :exports none
   :END:
 
 #+name: defs
-#+begin_src python :exports none 
+#+begin_src python
   from math import pi
   import numpy as np
 
@@ -222,7 +223,7 @@
 #+end_src
 
 #+name: main-input
-#+begin_src python :exports none
+#+begin_src python
   # Марк:
   # - 10^13 .. 10^14 эл/м^2 для нормальной ионосферы без возмущений
   # - 10^14 .. 10^15 эл/м^2 для нормальной ионосферы со слабыми естественными
@@ -244,42 +245,42 @@
 #+end_src
 
 #+name: main-1
-#+begin_src python :exports none 
+#+begin_src python
   # Sigma Phi
   fig, ax = plt.subplots()
   plot_sigma_phi(fig, ax)
 #+end_src
 
 #+name: main-2
-#+begin_src python :exports none 
+#+begin_src python
   # d1^2
   fig, ax = plt.subplots()
   plot_d1_2(fig, ax)
 #+end_src
 
 #+name: main-3
-#+begin_src python :exports none 
+#+begin_src python
   # F_k0
   fig, ax = plt.subplots()
   plot_F_k0(fig, ax)
 #+end_src
 
 #+name: main-4
-#+begin_src python :exports none 
+#+begin_src python
   # dF_k0
   fig, ax = plt.subplots()
   plot_dF_k0(fig, ax)
 #+end_src
 
 #+name: main-5
-#+begin_src python :exports none 
+#+begin_src python
   # F_k
   fig, ax = plt.subplots()
   plot_F_k(fig, ax)
 #+end_src
 
 #+name: main-6
-#+begin_src python :exports none 
+#+begin_src python
   # F_k_F_k_0
   fig, ax = plt.subplots()
   plot_F_k_F_k_0(fig, ax)
@@ -288,12 +289,13 @@
 * То, что будет в статье
   :PROPERTIES:
   :CREATED:               [2022-04-19 Вт 16:44]
-  :HASH:                  -179187886445121314
-  :LAST_MODIFIED:         [2022-04-20 Ср 11:34]
+  :HASH:                  1674957604666388807
+  :LAST_MODIFIED:         [2022-04-20 Ср 12:19]
+  :header-args:python:    :noweb yes :exports results :results file graphics
   :END:
 
 #+name: main-1-result
-#+begin_src python :exports results :results file graphics :file "static/sigma_phi.png" :noweb yes 
+#+begin_src python :file "static/sigma_phi.png"
   <<defs>>
 
   <<main-input>>
@@ -306,7 +308,7 @@
 [[file:static/sigma_phi.png]]
 
 #+name: main-2-result
-#+begin_src python :exports results :results file graphics :file "static/d_1-2.png" :noweb yes 
+#+begin_src python :file "static/d_1-2.png"
   <<defs>>
 
   <<main-input>>
@@ -319,7 +321,7 @@
 [[file:static/d_1-2.png]]
 
 #+name: main-3-result
-#+begin_src python :exports results :results file graphics :file "static/F_k_0.png" :noweb yes 
+#+begin_src python :file "static/F_k_0.png"
   <<defs>>
 
   <<main-input>>
@@ -332,7 +334,7 @@
 [[file:static/F_k_0.png]]
 
 #+name: main-4-result
-#+begin_src python :exports results :results file graphics :file "static/delta_F_k_0.png" :noweb yes 
+#+begin_src python :file "static/delta_F_k_0.png"
   <<defs>>
 
   <<main-input>>
@@ -345,7 +347,7 @@
 [[file:static/delta_F_k_0.png]]
 
 #+name: main-5-result
-#+begin_src python :exports results :results file graphics :file "static/F_k.png" :noweb yes 
+#+begin_src python :file "static/F_k.png"
   <<defs>>
 
   <<main-input>>
@@ -358,7 +360,7 @@
 [[file:static/F_k.png]]
 
 #+name: main-6-result
-#+begin_src python :exports results :results file graphics :file "static/F_k-F_k_0.png" :noweb yes 
+#+begin_src python :file "static/F_k-F_k_0.png"
   <<defs>>
 
   <<main-input>>
