@@ -1,6 +1,6 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-20 Ср 12:29]
+#+last_modified: [2022-04-20 Ср 15:16]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
@@ -225,10 +225,17 @@
 * То, что будет в статье
   :PROPERTIES:
   :CREATED:               [2022-04-19 Вт 16:44]
-  :HASH:                  -458629324908271963
-  :LAST_MODIFIED:         [2022-04-20 Ср 12:29]
+  :HASH:                  -369368021447011623
+  :LAST_MODIFIED:         [2022-04-20 Ср 14:54]
   :header-args:python:    :noweb yes :exports results :results file graphics :session
   :END:
+
+** Исходные данные
+   :PROPERTIES:
+   :CREATED:               [2022-04-20 Ср 14:53]
+   :HASH:                  -2112864494034205402
+   :LAST_MODIFIED:         [2022-04-20 Ср 14:54]
+   :END:
 
 #+name: main-input
 #+begin_src python :export none :results none
@@ -252,6 +259,13 @@
   z = z1 + z_e
 #+end_src
 
+** СКО флуктуаций фазового фронта волны \sigma_\phi
+   :PROPERTIES:
+   :CREATED:               [2022-04-20 Ср 14:53]
+   :HASH:                  430798606483629158
+   :LAST_MODIFIED:         [2022-04-20 Ср 15:15]
+   :END:
+
 #+name: main-1
 #+begin_src python :file "static/sigma_phi.png"
   # Sigma Phi
@@ -262,6 +276,13 @@
 #+attr_org: :width 500px
 #+RESULTS: main-1
 [[file:static/sigma_phi.png]]
+
+** Коэффициент нарастания дифракционных эффектов во фронте волны внутри ионосферы и за ней до точки приёма d_1^2
+   :PROPERTIES:
+   :CREATED:               [2022-04-20 Ср 14:59]
+   :HASH:                  -1221729787298253373
+   :LAST_MODIFIED:         [2022-04-20 Ср 15:15]
+   :END:
 
 #+name: main-2
 #+begin_src python :file "static/d_1-2.png"
@@ -274,6 +295,13 @@
 #+RESULTS: main-2
 [[file:static/d_1-2.png]]
 
+** Традиционный интервал частотной корреляции замираний в однолучевой ДКМ радиолинии F_{k_0}
+   :PROPERTIES:
+   :CREATED:               [2022-04-20 Ср 15:01]
+   :HASH:                  448221553628104629
+   :LAST_MODIFIED:         [2022-04-20 Ср 15:15]
+   :END:
+
 #+name: main-3
 #+begin_src python :file "static/F_k_0.png"
   # F_k0
@@ -284,6 +312,13 @@
 #+attr_org: :width 500px
 #+RESULTS: main-3
 [[file:static/F_k_0.png]]
+
+** Понижающий коэффициент \delta F_{k_0}
+   :PROPERTIES:
+   :CREATED:               [2022-04-20 Ср 15:03]
+   :HASH:                  -891330281549894989
+   :LAST_MODIFIED:         [2022-04-20 Ср 15:15]
+   :END:
 
 #+name: main-4
 #+begin_src python :file "static/delta_F_k_0.png"
@@ -296,6 +331,13 @@
 #+RESULTS: main-4
 [[file:static/delta_F_k_0.png]]
 
+** Интервал частотной корреляции замираний в однолучевой ДКМ радиолинии F_k
+   :PROPERTIES:
+   :CREATED:               [2022-04-20 Ср 15:04]
+   :HASH:                  -1717170113472911950
+   :LAST_MODIFIED:         [2022-04-20 Ср 15:15]
+   :END:
+
 #+name: main-5
 #+begin_src python :file "static/F_k.png"
   # F_k
@@ -306,6 +348,13 @@
 #+attr_org: :width 500px
 #+RESULTS: main-5
 [[file:static/F_k.png]]
+
+** Зависимость интервала частотной корреляции F_k замираний и понижающего коэффициента \delta F_{k_0} от отношения f_0 / f_m при \beta_и =
+   :PROPERTIES:
+   :CREATED:               [2022-04-20 Ср 15:05]
+   :HASH:                  111811588766750623
+   :LAST_MODIFIED:         [2022-04-20 Ср 15:19]
+   :END:
 
 #+name: main-6
 #+begin_src python :file "static/F_k-F_k_0.png"
@@ -318,3 +367,18 @@
 #+RESULTS: main-6
 [[file:static/F_k-F_k_0.png]]
 
+* COMMENT Local variables
+  :PROPERTIES:
+  :CREATED:               [2022-04-20 Ср 14:50]
+  :HASH:                  147875477266868114
+  :LAST_MODIFIED:         [2022-04-20 Ср 14:52]
+  :END:
+
+#+name: startup
+#+begin_src emacs-lisp :eval never-export :results none :exports none :tange no :no-expand
+  (setq-local org-adapt-indentation 'headline-data)
+#+end_src
+
+# Local Variables:
+# eval: (progn (org-babel-goto-named-src-block "startup") (org-babel-execute-src-block))
+# End:
