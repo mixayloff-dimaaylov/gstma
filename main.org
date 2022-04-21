@@ -1,12 +1,12 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-20 Ср 15:16]
+#+last_modified: [2022-04-21 Чт 18:54]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
   :CREATED:               [2022-04-20 Ср 09:07]
-  :HASH:                  467535386401319062
-  :LAST_MODIFIED:         [2022-04-20 Ср 12:23]
+  :HASH:                  435035771482940755
+  :LAST_MODIFIED:         [2022-04-21 Чт 18:54]
   :header-args:python:    :exports none
   :END:
 
@@ -21,8 +21,8 @@
   C = 299792458.0
 
 
-  def sigma_phi(f_0, sigma_d_nt):
-      return (80.8 * pi / C) * (sigma_d_nt / f_0)
+  def sigma_phi(f_0, sigma_d_nt, theta_0):
+      return (80.8 * pi / C) * (sigma_d_nt / f_0) * np.sqrt(1.0 / np.cos(theta_0))
 
 
   def d1_2(f_0, z, z_e, l_s):
@@ -30,15 +30,15 @@
                (6 * pow(2 * pi * f_0 / C, 2)) * 32 * (l_s ** (-4))
 
 
-  def F_k0(f_0, sigma_d_nt, z, z_e, l_s):
+  def F_k0(f_0, sigma_d_nt, theta_0, z, z_e, l_s):
       sqr = np.sqrt(2 + d1_2(f_0, z, z_e, l_s))
-      s = sigma_phi(f_0, sigma_d_nt)
+      s = sigma_phi(f_0, sigma_d_nt, theta_0)
 
       return f_0 / (s * sqr)
 
 
-  def dF_k0(f_0, sigma_d_nt):
-      s = sigma_phi(f_0, sigma_d_nt) ** 2
+  def dF_k0(f_0, sigma_d_nt, theta_0):
+      s = sigma_phi(f_0, sigma_d_nt, theta_0) ** 2
       s2 = s ** 2
       v = 1 - np.exp(-s2) + np.exp(1 - s2)
       lg = np.log(v)
@@ -46,9 +46,9 @@
       return np.sqrt(1 - lg)
 
 
-  def F_k(f_0, sigma_d_nt, z, z_e, l_s):
-      _F_k0 = F_k0(f_0, sigma_d_nt, z, z_e, l_s)
-      _dF_k0 = dF_k0(f_0, sigma_d_nt)
+  def F_k(f_0, sigma_d_nt, theta_0, z, z_e, l_s):
+      _F_k0 = F_k0(f_0, sigma_d_nt, theta_0, z, z_e, l_s)
+      _dF_k0 = dF_k0(f_0, sigma_d_nt, theta_0)
 
       return _F_k0 * _dF_k0
 
@@ -77,9 +77,10 @@
 
   def plot_sigma_phi(fig, ax):
       fname = r"static/sigma_phi.png"
+      theta_0 = np.radians(90.0)
 
       for s in np.nditer(sigma_d_nts):
-          sigma_phis = sigma_phi(f_0s, s * len(f_0s))
+          sigma_phis = sigma_phi(f_0s, s * len(f_0s), theta_0)
 
           ax.plot(f_0s, sigma_phis,
                   label="при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
@@ -112,11 +113,12 @@
 
   def plot_F_k0(fig, ax):
       fname = r"static/F_k_0.png"
+      theta_0 = np.radians(90.0)
 
       # TODO:
       l_s = 380
       for s in np.nditer(sigma_d_nts):
-          F_k0s = F_k0(f_0s, s, z, z_e, l_s)
+          F_k0s = F_k0(f_0s, s, theta_0, z, z_e, l_s)
 
           ax.plot(f_0s, F_k0s,
                   label="при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
@@ -132,10 +134,11 @@
 
   def plot_dF_k0(fig, ax):
       fname = r"static/delta_F_k_0.png"
+      theta_0 = np.radians(90.0)
 
       # TODO
       for s in np.nditer(sigma_d_nts):
-          dF_k0s = dF_k0(f_0s, s)
+          dF_k0s = dF_k0(f_0s, s, theta_0)
 
           ax.plot(f_0s, dF_k0s,
                   label="при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
@@ -151,11 +154,12 @@
 
   def plot_F_k(fig, ax):
       fname = r"static/F_k.png"
+      theta_0 = np.radians(90.0)
 
       # TODO:
       l_s = 380
       for s in np.nditer(sigma_d_nts):
-          F_ks = F_k(f_0s, s, z, z_e, l_s)
+          F_ks = F_k(f_0s, s, theta_0, z, z_e, l_s)
 
           ax.plot(f_0s, F_ks,
                   label="при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
@@ -171,6 +175,7 @@
 
   def plot_F_k_F_k_0(fig, ax):
       fname = r"static/F_k-F_k_0.png"
+      theta_0 = np.radians(90.0)
 
       f_m = (15 * 1e6)
       f_0s = np.linspace(0.2, 1.0, 20) * f_m
@@ -180,9 +185,9 @@
       l_s = 380
       s = 1e13 # sigma_d_nt
 
-      ax.plot(f_0m, F_k(f_0s, s, z, z_e, l_s), label=r"$F_k$")
-      ax.plot(f_0m, F_k0(f_0s, s, z, z_e, l_s), label=r"$F_{k_0}$")
-      ax.plot(f_0m, dF_k0(f_0s, s), label=r"$F_{k_0}$")
+      ax.plot(f_0m, F_k(f_0s, s, theta_0, z, z_e, l_s), label=r"$F_k$")
+      ax.plot(f_0m, F_k0(f_0s, s, theta_0, z, z_e, l_s), label=r"$F_{k_0}$")
+      ax.plot(f_0m, dF_k0(f_0s, s, theta_0), label=r"$F_{k_0}$")
 
       ax.set_title(r"$F_k(f_0)$, $F_{k_0}$, $Гц$")
       ax.set_xlabel(r"$f_0 / f_m$, $n$")
