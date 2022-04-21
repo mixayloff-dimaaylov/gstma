@@ -1,12 +1,12 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-21 Чт 19:26]
+#+last_modified: [2022-04-21 Чт 19:50]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
   :CREATED:               [2022-04-20 Ср 09:07]
-  :HASH:                  1588115070652778962
-  :LAST_MODIFIED:         [2022-04-21 Чт 19:26]
+  :HASH:                  2293145014075239109
+  :LAST_MODIFIED:         [2022-04-21 Чт 19:50]
   :header-args:python:    :exports none
   :END:
 
@@ -25,18 +25,21 @@
       return (80.8 * pi / C) * (sigma_d_nt / f_0) * np.sqrt(1.0 / np.cos(theta_0))
 
 
-  def d1_2(f_0, z, z_e, l_s):
+  # modified
+  def d1_2_modified(f_0, z, z_e, l_s):
       return (3 * (z ** 2) - 3 * z * z_e + (z_e ** 2)) / \
                (6 * pow(2 * pi * f_0 / C, 2)) * 32 * (l_s ** (-4))
 
 
-  def F_k0(f_0, sigma_d_nt, theta_0, z, z_e, l_s):
-      sqr = np.sqrt(2 + d1_2(f_0, z, z_e, l_s))
+  # modified
+  def F_k0_modified(f_0, sigma_d_nt, theta_0, z, z_e, l_s):
+      sqr = np.sqrt(2 + d1_2_modified(f_0, z, z_e, l_s))
       s = sigma_phi(f_0, sigma_d_nt, theta_0)
 
       return f_0 / (s * sqr)
 
 
+  # new
   def dF_k0(f_0, sigma_d_nt, theta_0):
       s = sigma_phi(f_0, sigma_d_nt, theta_0)
       s2 = s ** 2
@@ -46,8 +49,9 @@
       return np.sqrt(1 - lg)
 
 
-  def F_k(f_0, sigma_d_nt, theta_0, z, z_e, l_s):
-      _F_k0 = F_k0(f_0, sigma_d_nt, theta_0, z, z_e, l_s)
+  # modified
+  def F_k_modified(f_0, sigma_d_nt, theta_0, z, z_e, l_s):
+      _F_k0 = F_k0_modified(f_0, sigma_d_nt, theta_0, z, z_e, l_s)
       _dF_k0 = dF_k0(f_0, sigma_d_nt, theta_0)
 
       return _F_k0 * _dF_k0
@@ -94,13 +98,13 @@
       plt.savefig(fname)
 
 
-  def plot_d1_2(fig, ax):
+  def plot_d1_2_modified(fig, ax):
       fname = r"static/d_1-2.png"
 
       for l_s in np.nditer(l_ss):
-          d1_2s = d1_2(f_0s, z1, z_e, l_s)
+          d1_2s = d1_2_modified(f_0s, z1, z_e, l_s)
 
-          ax.plot(f_0s, d1_2s, label="при $l_s$ = %s, $м$" % l_s)
+          ax.plot(f_0s, d1_2s, label="мод., при $l_s$ = %s, $м$" % l_s)
 
       ax.set_title(r"$d_1^2(f_0)$")
       ax.set_xlabel(r"$f_0$, $Гц$")
@@ -111,17 +115,17 @@
       plt.savefig(fname)
 
 
-  def plot_F_k0(fig, ax):
+  def plot_F_k0_modified(fig, ax):
       fname = r"static/F_k_0.png"
       theta_0 = np.radians(90.0)
 
       # TODO:
       l_s = 380
       for s in np.nditer(sigma_d_nts):
-          F_k0s = F_k0(f_0s, s, theta_0, z, z_e, l_s)
+          F_k0s = F_k0_modified(f_0s, s, theta_0, z, z_e, l_s)
 
           ax.plot(f_0s, F_k0s,
-                  label="при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
+                  label="мод., при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
 
       ax.set_title(r"$F_{k_0}(f_0)$, $Гц$")
       ax.set_xlabel(r"$f_0$, $Гц$")
@@ -152,17 +156,17 @@
       plt.savefig(fname)
 
 
-  def plot_F_k(fig, ax):
+  def plot_F_k_modified(fig, ax):
       fname = r"static/F_k.png"
       theta_0 = np.radians(90.0)
 
       # TODO:
       l_s = 380
       for s in np.nditer(sigma_d_nts):
-          F_ks = F_k(f_0s, s, theta_0, z, z_e, l_s)
+          F_ks = F_k_modified(f_0s, s, theta_0, z, z_e, l_s)
 
           ax.plot(f_0s, F_ks,
-                  label="при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
+                  label="мод., при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
 
       ax.set_title(r"$F_k(f_0)$, $Гц$")
       ax.set_xlabel(r"$f_0$, $Гц$")
@@ -173,7 +177,7 @@
       plt.savefig(fname)
 
 
-  def plot_F_k_F_k_0(fig, ax):
+  def plot_F_k_F_k_0_modified(fig, ax):
       fname = r"static/F_k-F_k_0.png"
       theta_0 = np.radians(90.0)
 
@@ -185,8 +189,8 @@
       l_s = 380
       s = 1e13 # sigma_d_nt
 
-      ax.plot(f_0m, F_k(f_0s, s, theta_0, z, z_e, l_s), label=r"$F_k$")
-      ax.plot(f_0m, F_k0(f_0s, s, theta_0, z, z_e, l_s), label=r"$F_{k_0}$")
+      ax.plot(f_0m, F_k_modified(f_0s, s, theta_0, z, z_e, l_s), label=r"мод. $F_k$")
+      ax.plot(f_0m, F_k0_modified(f_0s, s, theta_0, z, z_e, l_s), label=r"мод. $F_{k_0}$")
       ax.plot(f_0m, dF_k0(f_0s, s, theta_0), label=r"$F_{k_0}$")
 
       ax.set_title(r"$F_k(f_0)$, $F_{k_0}$, $Гц$")
@@ -285,15 +289,15 @@
 ** Коэффициент нарастания дифракционных эффектов во фронте волны внутри ионосферы и за ней до точки приёма d_1^2
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 14:59]
-   :HASH:                  -1221729787298253373
-   :LAST_MODIFIED:         [2022-04-20 Ср 15:15]
+   :HASH:                  -1703166220654633320
+   :LAST_MODIFIED:         [2022-04-21 Чт 19:37]
    :END:
 
 #+name: main-2
 #+begin_src python :file "static/d_1-2.png"
-  # d1^2
+  # d1^2 (модифицированная)
   fig, ax = plt.subplots()
-  plot_d1_2(fig, ax)
+  plot_d1_2_modified(fig, ax)
 #+end_src
 
 #+attr_org: :width 500px
@@ -303,15 +307,15 @@
 ** Традиционный интервал частотной корреляции замираний в однолучевой ДКМ радиолинии F_{k_0}
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:01]
-   :HASH:                  448221553628104629
-   :LAST_MODIFIED:         [2022-04-20 Ср 15:15]
+   :HASH:                  952510336692146249
+   :LAST_MODIFIED:         [2022-04-21 Чт 19:37]
    :END:
 
 #+name: main-3
 #+begin_src python :file "static/F_k_0.png"
-  # F_k0
+  # F_k0 (модифицированная)
   fig, ax = plt.subplots()
-  plot_F_k0(fig, ax)
+  plot_F_k0_modified(fig, ax)
 #+end_src
 
 #+attr_org: :width 500px
@@ -339,15 +343,15 @@
 ** Интервал частотной корреляции замираний в однолучевой ДКМ радиолинии F_k
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:04]
-   :HASH:                  -1717170113472911950
-   :LAST_MODIFIED:         [2022-04-20 Ср 15:15]
+   :HASH:                  -1814798540238569783
+   :LAST_MODIFIED:         [2022-04-21 Чт 19:37]
    :END:
 
 #+name: main-5
 #+begin_src python :file "static/F_k.png"
-  # F_k
+  # F_k (модифицированная)
   fig, ax = plt.subplots()
-  plot_F_k(fig, ax)
+  plot_F_k_modified(fig, ax)
 #+end_src
 
 #+attr_org: :width 500px
@@ -357,15 +361,15 @@
 ** Зависимость интервала частотной корреляции F_k замираний и понижающего коэффициента \delta F_{k_0} от отношения f_0 / f_m при \beta_и =
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:05]
-   :HASH:                  111811588766750623
-   :LAST_MODIFIED:         [2022-04-20 Ср 15:19]
+   :HASH:                  -1216543019261792771
+   :LAST_MODIFIED:         [2022-04-21 Чт 19:37]
    :END:
 
 #+name: main-6
 #+begin_src python :file "static/F_k-F_k_0.png"
-  # F_k_F_k_0
+  # F_k_F_k_0 (модифицированная)
   fig, ax = plt.subplots()
-  plot_F_k_F_k_0(fig, ax)
+  plot_F_k_F_k_0_modified(fig, ax)
 #+end_src
 
 #+attr_org: :width 500px
