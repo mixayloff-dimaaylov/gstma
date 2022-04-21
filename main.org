@@ -1,12 +1,12 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-21 Чт 19:50]
+#+last_modified: [2022-04-21 Чт 20:15]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
   :CREATED:               [2022-04-20 Ср 09:07]
-  :HASH:                  2293145014075239109
-  :LAST_MODIFIED:         [2022-04-21 Чт 19:50]
+  :HASH:                  -1255583378641640873
+  :LAST_MODIFIED:         [2022-04-21 Чт 20:03]
   :header-args:python:    :exports none
   :END:
 
@@ -25,10 +25,24 @@
       return (80.8 * pi / C) * (sigma_d_nt / f_0) * np.sqrt(1.0 / np.cos(theta_0))
 
 
+  # old
+  def d1_2_old(f_0, z, z_e, l_s):
+      return (3 * (z ** 2) - 3 * z * z_e + (z_e ** 2)) / \
+               (6 * pow(2 * pi * f_0 / C, 2)) * (l_s ** (-4) / 8)
+
+
   # modified
   def d1_2_modified(f_0, z, z_e, l_s):
       return (3 * (z ** 2) - 3 * z * z_e + (z_e ** 2)) / \
                (6 * pow(2 * pi * f_0 / C, 2)) * 32 * (l_s ** (-4))
+
+
+  # old
+  def F_k0_old(f_0, sigma_d_nt, theta_0, z, z_e, l_s):
+      sqr = np.sqrt(2 + d1_2_old(f_0, z, z_e, l_s))
+      s = sigma_phi(f_0, sigma_d_nt, theta_0)
+
+      return f_0 / (s * sqr)
 
 
   # modified
@@ -47,6 +61,13 @@
       lg = np.log(v)
 
       return np.sqrt(1 - lg)
+
+
+  # old
+  def F_k_old(f_0, sigma_d_nt, theta_0, z, z_e, l_s):
+      _F_k0 = F_k0_old(f_0, sigma_d_nt, theta_0, z, z_e, l_s)
+
+      return _F_k0
 
 
   # modified
