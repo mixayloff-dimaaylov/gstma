@@ -1,12 +1,12 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-20 Ср 15:16]
+#+last_modified: [2022-04-23 Сб 00:14]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
   :CREATED:               [2022-04-20 Ср 09:07]
-  :HASH:                  467535386401319062
-  :LAST_MODIFIED:         [2022-04-20 Ср 12:23]
+  :HASH:                  -585695971760555873
+  :LAST_MODIFIED:         [2022-04-23 Сб 00:14]
   :header-args:python:    :exports none
   :END:
 
@@ -86,7 +86,7 @@
 
       ax.set_title(r"$\sigma_{\phi}(f_0)$, $Рад$")
       ax.set_xlabel(r"$f_0$, $Гц$")
-      ax.set_ylabel(r"$\sigma_{\phi}$, $эл/м^2$")
+      ax.set_ylabel(r"$\sigma_{\phi}$, $Рад$")
       ax.legend()
 
       fig.set_size_inches(10, 10)
@@ -234,11 +234,11 @@
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 14:53]
    :HASH:                  -2112864494034205402
-   :LAST_MODIFIED:         [2022-04-20 Ср 14:54]
+   :LAST_MODIFIED:         [2022-04-22 Пт 23:58]
    :END:
 
 #+name: main-input
-#+begin_src python :export none :results none
+#+begin_src python :exports none :results none
   # Марк:
   # - 10^13 .. 10^14 эл/м^2 для нормальной ионосферы без возмущений
   # - 10^14 .. 10^15 эл/м^2 для нормальной ионосферы со слабыми естественными
