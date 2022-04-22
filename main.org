@@ -1,18 +1,19 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-21 Чт 20:15]
+#+last_modified: [2022-04-22 Пт 16:22]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
   :CREATED:               [2022-04-20 Ср 09:07]
-  :HASH:                  -1255583378641640873
-  :LAST_MODIFIED:         [2022-04-21 Чт 20:03]
+  :HASH:                  404822534877688111
+  :LAST_MODIFIED:         [2022-04-22 Пт 16:22]
   :header-args:python:    :exports none
   :END:
 
 #+name: defs
 #+begin_src python :session
   from math import pi
+  from scipy.special import erf, fresnel
   import numpy as np
 
   import matplotlib.pyplot as plt
@@ -25,6 +26,7 @@
       return (80.8 * pi / C) * (sigma_d_nt / f_0) * np.sqrt(1.0 / np.cos(theta_0))
 
 
+  # TODO
   # old
   def d1_2_old(f_0, z, z_e, l_s):
       return (3 * (z ** 2) - 3 * z * z_e + (z_e ** 2)) / \
@@ -78,26 +80,60 @@
       return _F_k0 * _dF_k0
 
 
-  # def gamma2(sigma_phi):
-  #     return 1.0 / (np.exp(np.pow(sigma_phi, 2)) - 1)
-  #
-  #
-  # def eta_ч():
-  #     _F_0 = F_0() # TODO: что такое
-  #     _F_k = F_k()
-  #     _v = pi * _F_k / _F_0
-  #
-  #     return (1 + (1 / 2 * pi ** 2) * np.pow(_F_0 / _F_k, 2)) \
-  #              * np.erf(_v) \
-  #              - 1 / (pi * sqrt(pi)) * (_F_0 / _F_k) \
-  #              * (2 - np.exp(-np.pow(_v, 2)))
-  #
-  #
-  # def eta_м():
-  #     _T_s =
-  #     _F_k = F_k()
-  #
-  #     return 1 / (2 pi * pi) *
+  def F_d(f_0, N_m, z_e, theta_0):
+      return np.sqrt(C * np.power(f_0, 3) / (80.8 * pi * N_m * z_e * (1.0 / np.cos(theta_0))))
+
+
+  def gamma2(sigma_phi):
+      return 1.0 / (np.exp(np.power(sigma_phi, 2)) - 1)
+
+
+  # Зависит от F_0, F_k, но это тоже функции
+  def eta_ch(_F_0, _F_k):
+      _v = pi * _F_k / _F_0
+
+      return (1 + (1 / 2 * pi ** 2) * np.power(_F_0 / _F_k, 2)) \
+               ,* erf(_v) \
+               - 1 / (pi * np.sqrt(pi)) * (_F_0 / _F_k) \
+               ,* (2 - np.exp(-np.power(_v, 2)))
+
+
+  # Зависи от 1 / T_s F_k
+  def eta_m(_T_S, _F_K):
+      _v = 1.0 / (_T_S * _F_K)
+      _t = pi * _T_S * _F_K
+      return 1.0 / (2 * pi * pi) * np.power(_v, 2) \
+               ,* erf(_t) \
+             - 1.0 / (pi * np.sqrt(pi)) * _v * np.exp(-1.0 * _t ** 2)
+
+
+  # TODO
+  # зависит от F_0, F_d
+  def eta_d(_F_0, _F_d):
+      _v = (_F_0 / _F_d) ** 2
+      _C_2 = fresnel(_v)[1]
+      return (pi * np.power(_C_2, 2)) / (2.0 * _v)
+
+
+  # Зависит от h2, gamma2, eta_ч, eta_м, eta_d
+  # Либо Зависит от h2, f_0, F_0, T_s, N_m, sigma_delta_nt
+  # TODO:
+  def P_err(_h2s, _gamma2, _eta_ms, _eta_chs, _eta_ds):
+      _g = _gamma2
+      _g_1 = _g + 1
+      _p = lambda _w: (_g_1) / (_w + 2.0 * _g_1) * np.exp(-1.0 * _g * _w / (_w + 2.0 * _g_1))
+
+      W111 = _h2s * _eta_ds * _eta_chs
+      W110 = (_h2s * _eta_ds * _eta_chs - _h2s * _eta_ds * _eta_ms) / (1.0 + _h2s * _eta_ds * _eta_ms)
+      W011 = W110
+      W010 = (_h2s * _eta_ds * _eta_chs - 2 * _h2s * _eta_ds * _eta_ms) / (1.0 + 2.0 * _h2s * _eta_ds * _eta_ms)
+
+      P111 = _p(W111)
+      P110 = _p(W110)
+      P011 = _p(W011)
+      P010 = _p(W010)
+
+      return 0.25 * (P111 + P110 + P011 + P010)
 
 
   def plot_sigma_phi(fig, ax):
