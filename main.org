@@ -1,6 +1,6 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-23 Сб 00:14]
+#+last_modified: [2022-04-23 Сб 00:22]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
@@ -238,7 +238,7 @@
    :END:
 
 #+name: main-input
-#+begin_src python :exports none :results none
+#+begin_src python :exports code :results none
   # Марк:
   # - 10^13 .. 10^14 эл/м^2 для нормальной ионосферы без возмущений
   # - 10^14 .. 10^15 эл/м^2 для нормальной ионосферы со слабыми естественными
