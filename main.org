@@ -1,13 +1,13 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-22 Пт 23:58]
+#+last_modified: [2022-04-23 Сб 00:29]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
   :CREATED:               [2022-04-20 Ср 09:07]
-  :HASH:                  404822534877688111
-  :LAST_MODIFIED:         [2022-04-22 Пт 16:22]
-  :header-args:python:    :exports none
+  :HASH:                  -585695971760555873
+  :LAST_MODIFIED:         [2022-04-23 Сб 00:14]
+  :header-args:python:    :exports none :results none
   :END:
 
 #+name: defs
@@ -148,7 +148,7 @@
 
       ax.set_title(r"$\sigma_{\phi}(f_0)$, $Рад$")
       ax.set_xlabel(r"$f_0$, $Гц$")
-      ax.set_ylabel(r"$\sigma_{\phi}$, $эл/м^2$")
+      ax.set_ylabel(r"$\sigma_{\phi}$, $Рад$")
       ax.legend()
 
       fig.set_size_inches(10, 10)
@@ -262,7 +262,7 @@
 ; Для тангла скрипта в исходном виде
 
 #+name: main-sceleton
-#+begin_src python :exports code :tangle yes :noweb tangle :tangle-mode (identity #o755)
+#+begin_src python :tangle yes :noweb tangle :tangle-mode (identity #o755)
   #!/usr/bin/env python
 
   <<defs>>
@@ -300,11 +300,11 @@
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 14:53]
    :HASH:                  -2112864494034205402
-   :LAST_MODIFIED:         [2022-04-20 Ср 14:54]
+   :LAST_MODIFIED:         [2022-04-22 Пт 23:58]
    :END:
 
 #+name: main-input
-#+begin_src python :export none :results none
+#+begin_src python :exports code :results none
   # Марк:
   # - 10^13 .. 10^14 эл/м^2 для нормальной ионосферы без возмущений
   # - 10^14 .. 10^15 эл/м^2 для нормальной ионосферы со слабыми естественными
