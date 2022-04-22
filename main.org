@@ -1,13 +1,13 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-23 Сб 00:22]
+#+last_modified: [2022-04-23 Сб 00:29]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
   :CREATED:               [2022-04-20 Ср 09:07]
   :HASH:                  -585695971760555873
   :LAST_MODIFIED:         [2022-04-23 Сб 00:14]
-  :header-args:python:    :exports none
+  :header-args:python:    :exports none :results none
   :END:
 
 #+name: defs
@@ -196,7 +196,7 @@
 ; Для тангла скрипта в исходном виде
 
 #+name: main-sceleton
-#+begin_src python :exports code :tangle yes :noweb tangle :tangle-mode (identity #o755)
+#+begin_src python :tangle yes :noweb tangle :tangle-mode (identity #o755)
   #!/usr/bin/env python
 
   <<defs>>
