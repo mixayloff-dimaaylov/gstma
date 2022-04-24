@@ -1,6 +1,6 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-26 Вт 14:14]
+#+last_modified: [2022-04-26 Вт 14:28]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
@@ -430,6 +430,71 @@
 #+attr_org: :width 500px
 #+RESULTS: main-6
 [[file:static/F_k-F_k_0.png]]
+
+* TODO Какой интеграл Френеля взять               :noexport:ARCHIVE:noexport:
+  :PROPERTIES:
+  :CREATED:               [2022-04-23 Сб 15:22]
+  :HASH:                  1879332544822738790
+  :LAST_MODIFIED:         [2022-04-26 Вт 14:28]
+  :header-args:python:    :noweb yes :exports results :results file graphics :session session3
+  :END:
+
+Интеграл Френеля в книге отличается от того, что предлагает Scipy.
+
+#+begin_src python :results none
+  import numpy as np
+
+  from math import pi
+  from math import cos, sqrt
+
+  from scipy.special import fresnel
+  from scipy.integrate import quad
+
+  import matplotlib.pyplot as plt
+
+
+  def Fp(x):
+      def fp(_x):
+          return cos(_x) / sqrt(_x)
+
+      results = []
+
+      for i in x:
+          _v = quad(fp, 0.0, i)[0]
+          results.append((1.0 / (2.0 * pi)) * _v)
+
+      return np.array(results)
+
+
+  xs = np.linspace(0.1, 10.0, 1000)
+
+  S, C = fresnel(xs)
+  Cp = Fp(xs)
+  Cpm = 2.5 * Fp(xs * pi)
+
+  fig, ax = plt.subplots()
+  ax.plot(xs, C, label=r"Из Scipy")
+  ax.plot(xs, Cp, label=r"Из книги")
+  ax.plot(xs, Cpm, label=r"Из книги (модифицированная)")
+
+  plt.xscale("log")
+  # plt.yscale("log")
+  fig.show()
+
+  FF = np.linspace(0.1, 6.0, 1000)
+
+  eta_d = (pi / (2.0 * FF ** 2)) * np.power(fresnel(FF ** 2)[1] ** 2, 2.0)
+  eta_dp = (pi / (2.0 * FF ** 2)) * np.power(Fp(FF ** 2), 2.0)
+
+  fig, ax = plt.subplots()
+  ax.plot(FF, eta_d, label=r"Из Scipy")
+  ax.plot(FF, eta_dp, label=r"Из книги")
+  # ax.plot(FF, eta_d, label=r"Из книги (модифицированная)")
+
+  plt.xscale("log")
+  # plt.yscale("log")
+  fig.show()
+#+end_src
 
 * Оценка помехоусточивости
   :PROPERTIES:
