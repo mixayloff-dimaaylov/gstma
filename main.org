@@ -1,6 +1,6 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-23 Сб 00:29]
+#+last_modified: [2022-04-24 Вс 18:39]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
@@ -714,23 +714,23 @@
 ** eta_д
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:23]
-   :HASH:                  -1689717583839076399
-   :LAST_MODIFIED:         [2022-04-22 Пт 17:47]
+   :HASH:                  2291464486756442065
+   :LAST_MODIFIED:         [2022-04-23 Сб 13:25]
    :END:
 
 #+name: P_err-9
 #+begin_src python
-  eta_ds = eta_d(F_0, F_ks)
+  eta_ds = eta_d(F_0, F_ds)
 
   fig, ax = plt.subplots()
-  ax.plot(F_ks, eta_ds)
+  ax.plot(F_ds, eta_ds)
 
-  ax.set_title(r"$\eta_{d}(F_k)$")
-  ax.set_xlabel(r"$F_k$, $Гц$")
+  ax.set_title(r"$\eta_{d}(F_d)$")
+  ax.set_xlabel(r"$F_d$, $Гц$")
   ax.set_ylabel(r"$\eta_{d}$")
   ax.legend()
 
-  fname = 'static/eta_ds_of_F_ks.png'
+  fname = 'static/eta_ds_of_F_ds.png'
   fig.set_size_inches(10, 10)
   plt.savefig(fname)
   fname
@@ -738,7 +738,7 @@
 
 #+attr_org: :width 500px
 #+RESULTS: P_err-9
-[[file:static/eta_ds_of_F_ks.png]]
+[[file:static/eta_ds_of_F_ds.png]]
 
 ** Построение графиков вероятности ошибки
    :PROPERTIES:
