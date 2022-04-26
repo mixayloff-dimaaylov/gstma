@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# v9
+# v10
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
@@ -8,6 +8,10 @@ EOL123
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS computed
+EOL123
+
+clickhouse-client <<EOL123
+CREATE DATABASE IF NOT EXISTS misc
 EOL123
 
 clickhouse-client <<EOL123
@@ -121,6 +125,7 @@ CREATE TABLE IF NOT EXISTS computed.NT (
   f1 Float64,
   f2 Float64,
   nt Float64,
+  psrNt Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree()
 PARTITION BY toYYYYMM(d)
@@ -177,5 +182,16 @@ CREATE TABLE IF NOT EXISTS computed.Tc (
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, sigcomb)
 TTL d + INTERVAL 1 WEEK DELETE
+SETTINGS index_granularity=8192
+EOL123
+
+clickhouse-client <<EOL123
+CREATE TABLE IF NOT EXISTS misc.sdcb (
+    sat String COMMENT 'Спутник',
+    system String COMMENT 'Навигационная система',
+    sigcomb String COMMENT 'Частота передатчика',
+    sdcb Float64 COMMENT 'Поправка TEC SDCB'
+) ENGINE = ReplacingMergeTree()
+ORDER BY (system, sat, sigcomb)
 SETTINGS index_granularity=8192
 EOL123

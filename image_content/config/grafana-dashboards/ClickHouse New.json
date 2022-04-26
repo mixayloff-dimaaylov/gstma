@@ -221,6 +221,28 @@
           "round": "0s",
           "table": "NT",
           "tableLoading": false
+        },
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'TEC псевдодальностный %sat %sigcomb',\n    avg(psrNt) psrNnt)\nFROM $table final\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
+          "rawQuery": "SELECT t, groupArray((concat('TEC псевдодальностный ', sat, ' ', sigcomb), psrNnt)) as groupArr FROM ( SELECT intDiv(time, 60000) * 60000 as t, sat, sigcomb, avg(psrNt) psrNnt FROM computed.NT final WHERE d >= toDate(1647632171192/1000) AND time >= 1647632171192 AND      sat = 'GPS32'     and sigcomb in ('L1CA+L5Q','L1CA+L2C') GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "B",
+          "round": "0s",
+          "table": "NT",
+          "tableLoading": false
         }
       ],
       "thresholds": [],

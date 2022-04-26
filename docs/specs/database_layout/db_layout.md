@@ -1,4 +1,4 @@
-v9 clickhouse database layout
+v10 clickhouse database layout
 =============================
 
 ### Таблицы для входных данных
@@ -148,6 +148,7 @@ CREATE TABLE computed.NT (
     f1 Float64 COMMENT 'Частота 1',
     f2 Float64 COMMENT 'Частота 2',
     nt Float64 COMMENT 'ПЭС',
+    psrNt Float64 COMMENT 'ПЭС псевдодальностный',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
 TTL d + INTERVAL 1 Week DELETE;
@@ -206,4 +207,21 @@ CREATE TABLE computed.Tc (
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
 TTL d + INTERVAL 1 Week DELETE
+```
+
+### Таблицы для прочего
+
+#### misc.dcb
+
+Спутниковые поправки TEC (DCB)
+
+```sql
+CREATE TABLE IF NOT EXISTS misc.dcb (
+    sat String COMMENT 'Спутник',
+    system String COMMENT 'Навигационная система',
+    sigcomb String COMMENT 'Частота передатчика',
+    dcb Float64 COMMENT 'Поправка TEC DCB'
+) ENGINE = ReplacingMergeTree()
+ORDER BY (system, sat, sigcomb)
+SETTINGS index_granularity=8192
 ```
