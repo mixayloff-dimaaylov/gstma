@@ -1,12 +1,12 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-25 Пн 18:16]
+#+last_modified: [2022-04-26 Вт 14:09]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
   :CREATED:               [2022-04-20 Ср 09:07]
-  :HASH:                  -1698298491441435774
-  :LAST_MODIFIED:         [2022-04-24 Вс 18:37]
+  :HASH:                  -1195187200423221723
+  :LAST_MODIFIED:         [2022-04-26 Вт 14:09]
   :header-args:python:    :exports none :results none
   :END:
 
@@ -26,7 +26,6 @@
       return (80.8 * pi / C) * (sigma_d_nt / f_0) * np.sqrt(1.0 / np.cos(theta_0))
 
 
-  # TODO
   # old
   def d1_2_old(f_0, z, z_e, l_s):
       return (3 * (z ** 2) - 3 * z * z_e + (z_e ** 2)) / \
@@ -107,7 +106,7 @@
              - 1.0 / (pi * np.sqrt(pi)) * _v * np.exp(-1.0 * _t ** 2)
 
 
-  # TODO
+  # TODO: fix eta_d
   # зависит от F_0, F_d
   def eta_d(_F_0, _F_d):
       _v = (_F_0 / _F_d)
@@ -117,7 +116,6 @@
 
   # Зависит от h2, gamma2, eta_ч, eta_м, eta_d
   # Либо Зависит от h2, f_0, F_0, T_s, N_m, sigma_delta_nt
-  # TODO:
   def P_err(_h2s, _gamma2, _eta_ms, _eta_chs, _eta_ds):
       _g = _gamma2
       _g_1 = _g + 1
@@ -743,8 +741,8 @@
 ** Построение графиков вероятности ошибки
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 13:56]
-   :HASH:                  1121178779814991258
-   :LAST_MODIFIED:         [2022-04-25 Пн 18:16]
+   :HASH:                  -954050220507236503
+   :LAST_MODIFIED:         [2022-04-26 Вт 14:09]
    :END:
 
 #+name: P_err-10
@@ -783,7 +781,7 @@
                  sim_params[1].reshape(-1, 1),
                  sim_params[6].reshape(-1, 1),
                  sim_params[7].reshape(-1, 1),
-                 np.array([1.0] * 5).reshape(-1, 1))
+                 np.array([1.0] * 5).reshape(-1, 1)) # TODO: fix eta_d
 
   fig, ax = plt.subplots()
 
