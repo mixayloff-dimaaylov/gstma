@@ -1,4 +1,4 @@
-v10 clickhouse database layout
+v11 clickhouse database layout
 =============================
 
 ### Таблицы для входных данных
@@ -24,7 +24,7 @@ CREATE TABLE rawdata.range (
   prn Int32,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree(d, (time, sat, freq), 8192)
-TTL d + INVERVAL 1 WEEK DELETE
+TTL d + INVERVAL 1 HOUR DELETE
 ```
 
 #### rawdata.ismredobs
@@ -168,7 +168,7 @@ CREATE TABLE computed.NTDerivatives (
     delNT Float64 COMMENT 'Значение флуктуаций ПЭС',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 
-TTL d + INTERVAL 1 Week DELETE;
+TTL d + INTERVAL 2 MONTH DELETE;
 ```
 
 #### Односекундные таблицы
@@ -190,7 +190,7 @@ CREATE TABLE computed.xz1 (
     Pc Float64 COMMENT 'Значение интервала пространственной корреляции',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 
-TTL d + INTERVAL 1 Week DELETE;
+TTL d + INTERVAL 2 MONTH DELETE;
 ```
 
 #### N - секундные таблицы
@@ -206,7 +206,7 @@ CREATE TABLE computed.Tc (
     Tc Float64 COMMENT 'Значение интервала временной корреляции',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
-TTL d + INTERVAL 1 Week DELETE
+TTL d + INTERVAL 2 MONTH DELETE
 ```
 
 ### Таблицы для прочего
