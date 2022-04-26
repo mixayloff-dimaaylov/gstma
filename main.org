@@ -1,18 +1,19 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-23 Сб 00:29]
+#+last_modified: [2022-04-26 Вт 14:28]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
   :CREATED:               [2022-04-20 Ср 09:07]
-  :HASH:                  -585695971760555873
-  :LAST_MODIFIED:         [2022-04-23 Сб 00:14]
+  :HASH:                  -1195187200423221723
+  :LAST_MODIFIED:         [2022-04-26 Вт 14:14]
   :header-args:python:    :exports none :results none
   :END:
 
 #+name: defs
 #+begin_src python :session
   from math import pi
+  from scipy.special import erf, fresnel
   import numpy as np
 
   import matplotlib.pyplot as plt
@@ -21,24 +22,41 @@
   C = 299792458.0
 
 
-  def sigma_phi(f_0, sigma_d_nt):
-      return (80.8 * pi / C) * (sigma_d_nt / f_0)
+  def sigma_phi(f_0, sigma_d_nt, theta_0):
+      return (80.8 * pi / C) * (sigma_d_nt / f_0) * np.sqrt(1.0 / np.cos(theta_0))
 
 
-  def d1_2(f_0, z, z_e, l_s):
+  # old
+  def d1_2_old(f_0, z, z_e, l_s):
+      return (3 * (z ** 2) - 3 * z * z_e + (z_e ** 2)) / \
+               (6 * pow(2 * pi * f_0 / C, 2)) * (l_s ** (-4) / 8)
+
+
+  # modified
+  def d1_2_modified(f_0, z, z_e, l_s):
       return (3 * (z ** 2) - 3 * z * z_e + (z_e ** 2)) / \
                (6 * pow(2 * pi * f_0 / C, 2)) * 32 * (l_s ** (-4))
 
 
-  def F_k0(f_0, sigma_d_nt, z, z_e, l_s):
-      sqr = np.sqrt(2 + d1_2(f_0, z, z_e, l_s))
-      s = sigma_phi(f_0, sigma_d_nt)
+  # old
+  def F_k0_old(f_0, sigma_d_nt, theta_0, z, z_e, l_s):
+      sqr = np.sqrt(2 + d1_2_old(f_0, z, z_e, l_s))
+      s = sigma_phi(f_0, sigma_d_nt, theta_0)
 
       return f_0 / (s * sqr)
 
 
-  def dF_k0(f_0, sigma_d_nt):
-      s = sigma_phi(f_0, sigma_d_nt) ** 2
+  # modified
+  def F_k0_modified(f_0, sigma_d_nt, theta_0, z, z_e, l_s):
+      sqr = np.sqrt(2 + d1_2_modified(f_0, z, z_e, l_s))
+      s = sigma_phi(f_0, sigma_d_nt, theta_0)
+
+      return f_0 / (s * sqr)
+
+
+  # new
+  def dF_k0(f_0, sigma_d_nt, theta_0):
+      s = sigma_phi(f_0, sigma_d_nt, theta_0)
       s2 = s ** 2
       v = 1 - np.exp(-s2) + np.exp(1 - s2)
       lg = np.log(v)
@@ -46,40 +64,82 @@
       return np.sqrt(1 - lg)
 
 
-  def F_k(f_0, sigma_d_nt, z, z_e, l_s):
-      _F_k0 = F_k0(f_0, sigma_d_nt, z, z_e, l_s)
-      _dF_k0 = dF_k0(f_0, sigma_d_nt)
+  # old
+  def F_k_old(f_0, sigma_d_nt, theta_0, z, z_e, l_s):
+      _F_k0 = F_k0_old(f_0, sigma_d_nt, theta_0, z, z_e, l_s)
+
+      return _F_k0
+
+
+  # modified
+  def F_k_modified(f_0, sigma_d_nt, theta_0, z, z_e, l_s):
+      _F_k0 = F_k0_modified(f_0, sigma_d_nt, theta_0, z, z_e, l_s)
+      _dF_k0 = dF_k0(f_0, sigma_d_nt, theta_0)
 
       return _F_k0 * _dF_k0
 
 
-  # def gamma2(sigma_phi):
-  #     return 1.0 / (np.exp(np.pow(sigma_phi, 2)) - 1)
-  #
-  #
-  # def eta_ч():
-  #     _F_0 = F_0() # TODO: что такое
-  #     _F_k = F_k()
-  #     _v = pi * _F_k / _F_0
-  #
-  #     return (1 + (1 / 2 * pi ** 2) * np.pow(_F_0 / _F_k, 2)) \
-  #              * np.erf(_v) \
-  #              - 1 / (pi * sqrt(pi)) * (_F_0 / _F_k) \
-  #              * (2 - np.exp(-np.pow(_v, 2)))
-  #
-  #
-  # def eta_м():
-  #     _T_s =
-  #     _F_k = F_k()
-  #
-  #     return 1 / (2 pi * pi) *
+  def F_d(f_0, N_m, z_e, theta_0):
+      return np.sqrt(C * np.power(f_0, 3) / (80.8 * pi * N_m * z_e * (1.0 / np.cos(theta_0))))
+
+
+  def gamma2(sigma_phi):
+      return 1.0 / (np.exp(np.power(sigma_phi, 2)) - 1)
+
+
+  # Зависит от F_0, F_k, но это тоже функции
+  def eta_ch(_F_0, _F_k):
+      _v = pi * _F_k / _F_0
+
+      return (1.0 + (1 / 2 * pi ** 2) * np.power(_F_0 / _F_k, 2)) \
+               ,* erf(_v) \
+               - 1.0 / (pi * np.sqrt(pi)) * (_F_0 / _F_k) \
+               ,* (2.0 - np.exp(-np.power(_v, 2)))
+
+
+  # Зависи от 1 / T_s F_k
+  def eta_m(_T_S, _F_K):
+      _v = 1.0 / (_T_S * _F_K)
+      _t = pi * _T_S * _F_K
+      return 1.0 / (2 * pi * pi) * np.power(_v, 2) \
+               ,* erf(_t) \
+             - 1.0 / (pi * np.sqrt(pi)) * _v * np.exp(-1.0 * _t ** 2)
+
+
+  # TODO: fix eta_d
+  # зависит от F_0, F_d
+  def eta_d(_F_0, _F_d):
+      _v = (_F_0 / _F_d)
+      _C_2 = fresnel(_v)[1]
+      return (pi * np.power(_C_2, 2)) / (2.0 * _v)
+
+
+  # Зависит от h2, gamma2, eta_ч, eta_м, eta_d
+  # Либо Зависит от h2, f_0, F_0, T_s, N_m, sigma_delta_nt
+  def P_err(_h2s, _gamma2, _eta_ms, _eta_chs, _eta_ds):
+      _g = _gamma2
+      _g_1 = _g + 1
+      _p = lambda _w: (_g_1) / (_w + 2.0 * _g_1) * np.exp(-1.0 * _g * _w / (_w + 2.0 * _g_1))
+
+      W111 = _h2s * _eta_ds * _eta_chs
+      W110 = (_h2s * _eta_ds * _eta_chs - _h2s * _eta_ds * _eta_ms) / (1.0 + _h2s * _eta_ds * _eta_ms)
+      W011 = W110
+      W010 = (_h2s * _eta_ds * _eta_chs - 2 * _h2s * _eta_ds * _eta_ms) / (1.0 + 2.0 * _h2s * _eta_ds * _eta_ms)
+
+      P111 = _p(W111)
+      P110 = _p(W110)
+      P011 = _p(W011)
+      P010 = _p(W010)
+
+      return 0.25 * (P111 + P110 + P011 + P010)
 
 
   def plot_sigma_phi(fig, ax):
       fname = r"static/sigma_phi.png"
+      theta_0 = np.radians(90.0)
 
       for s in np.nditer(sigma_d_nts):
-          sigma_phis = sigma_phi(f_0s, s * len(f_0s))
+          sigma_phis = sigma_phi(f_0s, s * len(f_0s), theta_0)
 
           ax.plot(f_0s, sigma_phis,
                   label="при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
@@ -93,13 +153,13 @@
       plt.savefig(fname)
 
 
-  def plot_d1_2(fig, ax):
+  def plot_d1_2_modified(fig, ax):
       fname = r"static/d_1-2.png"
 
       for l_s in np.nditer(l_ss):
-          d1_2s = d1_2(f_0s, z1, z_e, l_s)
+          d1_2s = d1_2_modified(f_0s, z1, z_e, l_s)
 
-          ax.plot(f_0s, d1_2s, label="при $l_s$ = %s, $м$" % l_s)
+          ax.plot(f_0s, d1_2s, label="мод., при $l_s$ = %s, $м$" % l_s)
 
       ax.set_title(r"$d_1^2(f_0)$")
       ax.set_xlabel(r"$f_0$, $Гц$")
@@ -110,16 +170,17 @@
       plt.savefig(fname)
 
 
-  def plot_F_k0(fig, ax):
+  def plot_F_k0_modified(fig, ax):
       fname = r"static/F_k_0.png"
+      theta_0 = np.radians(90.0)
 
       # TODO:
       l_s = 380
       for s in np.nditer(sigma_d_nts):
-          F_k0s = F_k0(f_0s, s, z, z_e, l_s)
+          F_k0s = F_k0_modified(f_0s, s, theta_0, z, z_e, l_s)
 
           ax.plot(f_0s, F_k0s,
-                  label="при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
+                  label="мод., при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
 
       ax.set_title(r"$F_{k_0}(f_0)$, $Гц$")
       ax.set_xlabel(r"$f_0$, $Гц$")
@@ -132,10 +193,11 @@
 
   def plot_dF_k0(fig, ax):
       fname = r"static/delta_F_k_0.png"
+      theta_0 = np.radians(90.0)
 
       # TODO
       for s in np.nditer(sigma_d_nts):
-          dF_k0s = dF_k0(f_0s, s)
+          dF_k0s = dF_k0(f_0s, s, theta_0)
 
           ax.plot(f_0s, dF_k0s,
                   label="при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
@@ -149,16 +211,17 @@
       plt.savefig(fname)
 
 
-  def plot_F_k(fig, ax):
+  def plot_F_k_modified(fig, ax):
       fname = r"static/F_k.png"
+      theta_0 = np.radians(90.0)
 
       # TODO:
       l_s = 380
       for s in np.nditer(sigma_d_nts):
-          F_ks = F_k(f_0s, s, z, z_e, l_s)
+          F_ks = F_k_modified(f_0s, s, theta_0, z, z_e, l_s)
 
           ax.plot(f_0s, F_ks,
-                  label="при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
+                  label="мод., при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
 
       ax.set_title(r"$F_k(f_0)$, $Гц$")
       ax.set_xlabel(r"$f_0$, $Гц$")
@@ -169,8 +232,9 @@
       plt.savefig(fname)
 
 
-  def plot_F_k_F_k_0(fig, ax):
+  def plot_F_k_F_k_0_modified(fig, ax):
       fname = r"static/F_k-F_k_0.png"
+      theta_0 = np.radians(90.0)
 
       f_m = (15 * 1e6)
       f_0s = np.linspace(0.2, 1.0, 20) * f_m
@@ -180,9 +244,9 @@
       l_s = 380
       s = 1e13 # sigma_d_nt
 
-      ax.plot(f_0m, F_k(f_0s, s, z, z_e, l_s), label=r"$F_k$")
-      ax.plot(f_0m, F_k0(f_0s, s, z, z_e, l_s), label=r"$F_{k_0}$")
-      ax.plot(f_0m, dF_k0(f_0s, s), label=r"$F_{k_0}$")
+      ax.plot(f_0m, F_k_modified(f_0s, s, theta_0, z, z_e, l_s), label=r"мод. $F_k$")
+      ax.plot(f_0m, F_k0_modified(f_0s, s, theta_0, z, z_e, l_s), label=r"мод. $F_{k_0}$")
+      ax.plot(f_0m, dF_k0(f_0s, s, theta_0), label=r"$F_{k_0}$")
 
       ax.set_title(r"$F_k(f_0)$, $F_{k_0}$, $Гц$")
       ax.set_xlabel(r"$f_0 / f_m$, $n$")
@@ -280,15 +344,15 @@
 ** Коэффициент нарастания дифракционных эффектов во фронте волны внутри ионосферы и за ней до точки приёма d_1^2
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 14:59]
-   :HASH:                  -1221729787298253373
-   :LAST_MODIFIED:         [2022-04-20 Ср 15:15]
+   :HASH:                  -1703166220654633320
+   :LAST_MODIFIED:         [2022-04-21 Чт 19:37]
    :END:
 
 #+name: main-2
 #+begin_src python :file "static/d_1-2.png"
-  # d1^2
+  # d1^2 (модифицированная)
   fig, ax = plt.subplots()
-  plot_d1_2(fig, ax)
+  plot_d1_2_modified(fig, ax)
 #+end_src
 
 #+attr_org: :width 500px
@@ -298,15 +362,15 @@
 ** Традиционный интервал частотной корреляции замираний в однолучевой ДКМ радиолинии F_{k_0}
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:01]
-   :HASH:                  448221553628104629
-   :LAST_MODIFIED:         [2022-04-20 Ср 15:15]
+   :HASH:                  952510336692146249
+   :LAST_MODIFIED:         [2022-04-21 Чт 19:37]
    :END:
 
 #+name: main-3
 #+begin_src python :file "static/F_k_0.png"
-  # F_k0
+  # F_k0 (модифицированная)
   fig, ax = plt.subplots()
-  plot_F_k0(fig, ax)
+  plot_F_k0_modified(fig, ax)
 #+end_src
 
 #+attr_org: :width 500px
@@ -334,15 +398,15 @@
 ** Интервал частотной корреляции замираний в однолучевой ДКМ радиолинии F_k
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:04]
-   :HASH:                  -1717170113472911950
-   :LAST_MODIFIED:         [2022-04-20 Ср 15:15]
+   :HASH:                  -1814798540238569783
+   :LAST_MODIFIED:         [2022-04-21 Чт 19:37]
    :END:
 
 #+name: main-5
 #+begin_src python :file "static/F_k.png"
-  # F_k
+  # F_k (модифицированная)
   fig, ax = plt.subplots()
-  plot_F_k(fig, ax)
+  plot_F_k_modified(fig, ax)
 #+end_src
 
 #+attr_org: :width 500px
@@ -352,20 +416,463 @@
 ** Зависимость интервала частотной корреляции F_k замираний и понижающего коэффициента \delta F_{k_0} от отношения f_0 / f_m при \beta_и =
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:05]
-   :HASH:                  111811588766750623
-   :LAST_MODIFIED:         [2022-04-20 Ср 15:19]
+   :HASH:                  -1216543019261792771
+   :LAST_MODIFIED:         [2022-04-21 Чт 19:37]
    :END:
 
 #+name: main-6
 #+begin_src python :file "static/F_k-F_k_0.png"
-  # F_k_F_k_0
+  # F_k_F_k_0 (модифицированная)
   fig, ax = plt.subplots()
-  plot_F_k_F_k_0(fig, ax)
+  plot_F_k_F_k_0_modified(fig, ax)
 #+end_src
 
 #+attr_org: :width 500px
 #+RESULTS: main-6
 [[file:static/F_k-F_k_0.png]]
+
+* TODO Какой интеграл Френеля взять               :noexport:ARCHIVE:noexport:
+  :PROPERTIES:
+  :CREATED:               [2022-04-23 Сб 15:22]
+  :HASH:                  1879332544822738790
+  :LAST_MODIFIED:         [2022-04-26 Вт 14:28]
+  :header-args:python:    :noweb yes :exports results :results file graphics :session session3
+  :END:
+
+Интеграл Френеля в книге отличается от того, что предлагает Scipy.
+
+#+begin_src python :results none
+  import numpy as np
+
+  from math import pi
+  from math import cos, sqrt
+
+  from scipy.special import fresnel
+  from scipy.integrate import quad
+
+  import matplotlib.pyplot as plt
+
+
+  def Fp(x):
+      def fp(_x):
+          return cos(_x) / sqrt(_x)
+
+      results = []
+
+      for i in x:
+          _v = quad(fp, 0.0, i)[0]
+          results.append((1.0 / (2.0 * pi)) * _v)
+
+      return np.array(results)
+
+
+  xs = np.linspace(0.1, 10.0, 1000)
+
+  S, C = fresnel(xs)
+  Cp = Fp(xs)
+  Cpm = 2.5 * Fp(xs * pi)
+
+  fig, ax = plt.subplots()
+  ax.plot(xs, C, label=r"Из Scipy")
+  ax.plot(xs, Cp, label=r"Из книги")
+  ax.plot(xs, Cpm, label=r"Из книги (модифицированная)")
+
+  plt.xscale("log")
+  # plt.yscale("log")
+  fig.show()
+
+  FF = np.linspace(0.1, 6.0, 1000)
+
+  eta_d = (pi / (2.0 * FF ** 2)) * np.power(fresnel(FF ** 2)[1] ** 2, 2.0)
+  eta_dp = (pi / (2.0 * FF ** 2)) * np.power(Fp(FF ** 2), 2.0)
+
+  fig, ax = plt.subplots()
+  ax.plot(FF, eta_d, label=r"Из Scipy")
+  ax.plot(FF, eta_dp, label=r"Из книги")
+  # ax.plot(FF, eta_d, label=r"Из книги (модифицированная)")
+
+  plt.xscale("log")
+  # plt.yscale("log")
+  fig.show()
+#+end_src
+
+* Оценка помехоусточивости
+  :PROPERTIES:
+  :CREATED:               [2022-04-20 Ср 15:36]
+  :HASH:                  -1661016367120344096
+  :LAST_MODIFIED:         [2022-04-21 Чт 18:21]
+  :header-args:python:    :noweb yes :exports results :results file graphics :session session2
+  :END:
+
+** Исходные данные
+   :PROPERTIES:
+   :CREATED:               [2022-04-20 Ср 15:36]
+   :HASH:                  1723289129372074078
+   :LAST_MODIFIED:         [2022-04-22 Пт 17:36]
+   :END:
+
+*Параметры ионосферы:*
+
+- ${ \bar{ N_m } }$, $эл / м^3$;
+- Интенсивность неоднородностей $\beta$;
+- ${ \sigma_{ \Delta N } }$, $эл / м^3$.
+
+#+name: P_err-input-1
+#+begin_src python :results table replace value :noweb yes
+  <<defs>>
+
+  <<main-input>>
+
+  #              N_m, эл/м^3, betta,      sigma_delta_N = betta * N_m, эл/м^3
+  params_nigth = [2.4 * 1e11, 1e-2,       2.4 * 1e9]
+  params_day   = [1.4 * 1e12, 3 * 1e-3,   4.2 * 1e9]
+  params_evi   = [1.4 * 1e12, 3.6 * 1e-2, 5.0 * 1e10]
+  params_ivil  = [1.0 * 1e13, 5.0 * 1e-1, 5.0 * 1e12]
+  params_ivib  = [5.0 * 1e13, 1.0,        5.0 * 1e13]
+
+  params = np.vstack((params_nigth,
+                      params_day,
+                      params_evi,
+                      params_ivil,
+                      params_ivib))
+
+  l_s = 200
+
+  def calc_sigma_d_nt(l_s, z_e, sigma_d_n):
+      return np.sqrt(np.sqrt(pi) * l_s * z_e) * sigma_d_n
+
+  sigma_d_nts = calc_sigma_d_nt(l_s, z_e, params[:, 2]).reshape(5, 1)
+
+  params = np.hstack((params, sigma_d_nts))
+
+  params
+#+end_src
+
+#+RESULTS: P_err-input-1
+|   240000000000.0 |  0.01 |     2400000000.0 |  31952048700000.0 |
+|  1400000000000.0 | 0.003 |     4200000000.0 |  55916085300000.0 |
+|  1400000000000.0 | 0.036 |    50000000000.0 | 665667682000000.0 |
+| 10000000000000.0 |   0.5 |  5000000000000.0 |    6.65667682e+16 |
+| 50000000000000.0 |   1.0 | 50000000000000.0 |    6.65667682e+17 |
+
+*Параметры сигналов:*
+
+- Несущая частота $f_0$, $Гц$;
+- Скорость передачи $R_T = 1 / T_S$, $бит/с$;
+- $T_S$;
+- Ширина спектра $F_0 = B_S / T_S$, $Гц$;
+- Угол возвышения $\theta_0$, $градусы$.
+
+#+name: P_err-input-2
+#+begin_src python :results none
+  f_0 = 400 * 1e6 # Гц
+  R_T = 2.7 * 1e3 # бит/с
+  T_S = 1.0 / R_T # c/бит
+  theta_0 = 60.0  # градусов
+  theta_0 = np.radians(theta_0) # NumPy использует радианы по-умолчанию
+
+  B_S = 1.0       # простые сигналы
+  F_0 = B_S / T_S
+#+end_src
+
+** sigma_phi
+   :PROPERTIES:
+   :CREATED:               [2022-04-20 Ср 17:27]
+   :HASH:                  25697939044697473
+   :LAST_MODIFIED:         [2022-04-22 Пт 17:47]
+   :END:
+
+#+name: P_err-1
+#+begin_src python
+  sigma_d_nts = params[:, 3]
+  sigma_phis = sigma_phi(f_0, sigma_d_nts, theta_0)
+  fig, ax = plt.subplots()
+
+  ax.plot(sigma_d_nts, sigma_phis)
+  ax.set_title(r"$\sigma_{\phi}(\sigma_{\Delta N_t})$, $Рад$")
+  ax.set_xlabel(r"$\sigma_{\Delta N_t}$, $эл/м^2$")
+  ax.set_ylabel(r"$\sigma_{\phi}$, $Рад$")
+  ax.legend()
+
+  fname = 'static/sigma_phi_of_sigma_d_nt.png'
+  fig.set_size_inches(10, 10)
+  plt.savefig(fname)
+  fname
+#+end_src
+
+#+attr_org: :width 500px
+#+RESULTS: P_err-1
+[[file:static/sigma_phi_of_sigma_d_nt.png]]
+
+** gamma^2
+   :PROPERTIES:
+   :CREATED:               [2022-04-21 Чт 13:55]
+   :HASH:                  -1455044508039222113
+   :LAST_MODIFIED:         [2022-04-22 Пт 17:47]
+   :END:
+
+#+name: P_err-2
+#+begin_src python
+  gamma_2s = gamma2(sigma_phis)
+
+  fig, ax = plt.subplots()
+  ax.plot(sigma_phis, gamma_2s)
+
+  ax.set_title(r"$\gamma^2(\sigma_{\phi})$")
+  ax.set_xlabel(r"$\sigma_{\phi}$, $Рад$")
+  ax.set_ylabel(r"$\gamma^2$")
+  ax.legend()
+
+  fname = 'static/gamma_2_of_sigma_phi.png'
+  fig.set_size_inches(10, 10)
+  plt.savefig(fname)
+  fname
+#+end_src
+
+#+attr_org: :width 500px
+#+RESULTS: P_err-2
+[[file:static/gamma_2_of_sigma_phi.png]]
+
+** F_k
+   :PROPERTIES:
+   :CREATED:               [2022-04-21 Чт 13:56]
+   :HASH:                  1583896943038019282
+   :LAST_MODIFIED:         [2022-04-22 Пт 17:47]
+   :END:
+
+#+name: P_err-3
+#+begin_src python
+  F_ks = F_k_old(f_0, sigma_d_nts, theta_0, z, z_e, l_s)
+
+  fig, ax = plt.subplots()
+  ax.plot(sigma_d_nts, F_ks)
+
+  ax.set_title(r"$F_k(\sigma_{\Delta N_t})$, $Гц$")
+  ax.set_xlabel(r"$\sigma_{\Delta N_t}$, $эл/м^2$")
+  ax.set_ylabel(r"$F_k$, $Гц$")
+  ax.legend()
+
+  fname = 'static/F_ks_of_sigma_d_nts.png'
+  fig.set_size_inches(10, 10)
+  plt.savefig(fname)
+  fname
+#+end_src
+
+#+attr_org: :width 500px
+#+RESULTS: P_err-3
+[[file:static/F_ks_of_sigma_d_nts.png]]
+
+** F_д
+   :PROPERTIES:
+   :CREATED:               [2022-04-21 Чт 14:07]
+   :HASH:                  -494311349938340387
+   :LAST_MODIFIED:         [2022-04-22 Пт 17:47]
+   :END:
+
+#+name: P_err-4
+#+begin_src python
+  N_ms = params[:, 0]
+  F_ds = F_d(f_0, N_ms, z_e, theta_0)
+
+  fig, ax = plt.subplots()
+  ax.plot(N_ms, F_ds)
+
+  ax.set_title(r"$F_d(N_m)$, $Гц$")
+  ax.set_xlabel(r"$N_m$")
+  ax.set_ylabel(r"$F_d$, $Гц$")
+  ax.legend()
+
+  fname = 'static/F_ds_of_N_m.png'
+  fig.set_size_inches(10, 10)
+  plt.savefig(fname)
+  fname
+#+end_src
+
+#+attr_org: :width 500px
+#+RESULTS: P_err-4
+[[file:static/F_ds_of_N_m.png]]
+
+** F_0 / F_k
+   :PROPERTIES:
+   :CREATED:               [2022-04-21 Чт 14:19]
+   :HASH:                  2304499151682735994
+   :LAST_MODIFIED:         [2022-04-22 Пт 17:36]
+   :END:
+
+#+name: P_err-5
+#+begin_src python :results none
+  F_0_over_F_k = F_0 / F_ks
+#+end_src
+
+** F_0 / F_d
+   :PROPERTIES:
+   :CREATED:               [2022-04-21 Чт 14:19]
+   :HASH:                  -115026768040912681
+   :LAST_MODIFIED:         [2022-04-22 Пт 17:36]
+   :END:
+
+#+name: P_err-6
+#+begin_src python :results none
+  F_0_over_F_d = F_0 / F_ds
+#+end_src
+
+** eta_м
+   :PROPERTIES:
+   :CREATED:               [2022-04-21 Чт 14:23]
+   :HASH:                  -1689717609810206767
+   :LAST_MODIFIED:         [2022-04-22 Пт 17:47]
+   :END:
+
+#+name: P_err-7
+#+begin_src python
+  eta_ms = eta_m(T_S, F_ks)
+
+  fig, ax = plt.subplots()
+  ax.plot(F_ks, eta_ms)
+
+  ax.set_title(r"$\eta_{m}(F_k)$")
+  ax.set_xlabel(r"$F_k$, $Гц$")
+  ax.set_ylabel(r"$\eta_{m}$")
+  ax.legend()
+
+  fname = 'static/eta_ms_of_F_ks.png'
+  fig.set_size_inches(10, 10)
+  plt.savefig(fname)
+  fname
+#+end_src
+
+#+attr_org: :width 500px
+#+RESULTS: P_err-7
+[[file:static/eta_ms_of_F_ks.png]]
+
+** eta_ч
+   :PROPERTIES:
+   :CREATED:               [2022-04-21 Чт 14:23]
+   :HASH:                  -368710690095418271
+   :LAST_MODIFIED:         [2022-04-22 Пт 17:47]
+   :END:
+
+#+name: P_err-8
+#+begin_src python
+  eta_chs = eta_ch(F_0, F_ks)
+
+  fig, ax = plt.subplots()
+  ax.plot(F_ks, eta_chs)
+
+  ax.set_title(r"$\eta_{ch}(F_k)$")
+  ax.set_xlabel(r"$F_k$, $Гц$")
+  ax.set_ylabel(r"$\eta_{ch}$")
+  ax.legend()
+
+  fname = 'static/eta_chs_of_F_ks.png'
+  fig.set_size_inches(10, 10)
+  plt.savefig(fname)
+  fname
+#+end_src
+
+#+attr_org: :width 500px
+#+RESULTS: P_err-8
+[[file:static/eta_chs_of_F_ks.png]]
+
+** eta_д
+   :PROPERTIES:
+   :CREATED:               [2022-04-21 Чт 14:23]
+   :HASH:                  2291464486756442065
+   :LAST_MODIFIED:         [2022-04-23 Сб 13:25]
+   :END:
+
+#+name: P_err-9
+#+begin_src python
+  eta_ds = eta_d(F_0, F_ds)
+
+  fig, ax = plt.subplots()
+  ax.plot(F_ds, eta_ds)
+
+  ax.set_title(r"$\eta_{d}(F_d)$")
+  ax.set_xlabel(r"$F_d$, $Гц$")
+  ax.set_ylabel(r"$\eta_{d}$")
+  ax.legend()
+
+  fname = 'static/eta_ds_of_F_ds.png'
+  fig.set_size_inches(10, 10)
+  plt.savefig(fname)
+  fname
+#+end_src
+
+#+attr_org: :width 500px
+#+RESULTS: P_err-9
+[[file:static/eta_ds_of_F_ds.png]]
+
+** Построение графиков вероятности ошибки
+   :PROPERTIES:
+   :CREATED:               [2022-04-21 Чт 13:56]
+   :HASH:                  -954050220507236503
+   :LAST_MODIFIED:         [2022-04-26 Вт 14:09]
+   :END:
+
+#+name: P_err-10
+#+begin_src python :results table replace value org
+  sim_params = np.vstack((
+      sigma_phis.reshape(1, 5),
+      gamma_2s.reshape(1, 5),
+      F_ks.reshape(1, 5),
+      F_ds.reshape(1, 5),
+      F_0_over_F_k.reshape(1, 5),
+      F_0_over_F_d.reshape(1, 5),
+      eta_ms.reshape(1, 5),
+      eta_chs.reshape(1, 5),
+      eta_ds.reshape(1, 5)))
+
+  sim_params
+#+end_src
+
+#+RESULTS: P_err-10
+#+begin_src org
+|   0.0956520422 |    0.167391074 |     1.99275088 |     199.275088 |     1992.75088 |
+|     108.798584 |     35.1914196 |   0.0192157973 |            0.0 |            0.0 |
+|   2912482810.0 |   1664275890.0 |    139799175.0 |     1397991.75 |     139799.175 |
+|     17746556.7 |     7347772.54 |     7347772.54 |     2749284.74 |     1229517.51 |
+| 9.27044097e-07 | 1.62232717e-06 | 1.93134187e-05 |  0.00193134187 |   0.0193134187 |
+|  0.00015214219 | 0.000367458299 | 0.000367458299 | 0.000982073613 |  0.00219598336 |
+| 4.35382576e-14 | 1.33335914e-13 | 1.88968132e-11 | 1.88968132e-07 | 1.88968132e-05 |
+|    0.999999667 |    0.999999417 |    0.999993065 |    0.999324719 |    0.994903839 |
+| 0.000238984393 | 0.000577202146 | 0.000577202146 |  0.00154263762 |  0.00344944259 |
+#+end_src
+
+#+name: P_err-11
+#+begin_src python
+  h2s = np.linspace(1.0, 1e6, 1000000)
+  P_errs = P_err(h2s.reshape(-1, 1).T,
+                 sim_params[1].reshape(-1, 1),
+                 sim_params[6].reshape(-1, 1),
+                 sim_params[7].reshape(-1, 1),
+                 np.array([1.0] * 5).reshape(-1, 1)) # TODO: fix eta_d
+
+  fig, ax = plt.subplots()
+
+  for i in P_errs:
+      print("---\n")
+      print(i)
+      ax.plot(h2s, i)
+
+  fname = 'static/P_err.png'
+  plt.xscale("log")
+  plt.yscale("log")
+  plt.ylim(top=1e0, bottom=1e-6)
+
+  ax.set_title(r"$P_{err}(h^2)$")
+  ax.set_xlabel(r"$h^2$")
+  ax.set_ylabel(r"$P_{err}$")
+  ax.legend()
+
+  fig.set_size_inches(10, 10)
+  plt.savefig(fname)
+  fname
+#+end_src
+
+#+attr_org: :width 500px
+#+RESULTS: P_err-11
+[[file:static/P_err.png]]
 
 * COMMENT Local variables
   :PROPERTIES:
