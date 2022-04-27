@@ -24,7 +24,7 @@ CREATE TABLE rawdata.range (
   prn Int32,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree(d, (time, sat, freq), 8192)
-TTL d + INVERVAL 1 HOUR DELETE
+TTL d + INVERVAL 1 DAY DELETE
 ```
 
 #### rawdata.ismredobs

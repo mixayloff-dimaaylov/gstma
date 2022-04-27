@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS rawdata.range (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 HOUR DELETE
+TTL d + INTERVAL 1 DAY DELETE
 SETTINGS index_granularity=8192
 EOL123
 
