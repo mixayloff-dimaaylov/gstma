@@ -1,12 +1,12 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-26 Вт 14:28]
+#+last_modified: [2022-04-30 Сб 10:40]
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
   :CREATED:               [2022-04-20 Ср 09:07]
-  :HASH:                  -1195187200423221723
-  :LAST_MODIFIED:         [2022-04-26 Вт 14:14]
+  :HASH:                  2235269796785454559
+  :LAST_MODIFIED:         [2022-04-26 Вт 15:45]
   :header-args:python:    :exports none :results none
   :END:
 
@@ -157,16 +157,19 @@
       fname = r"static/d_1-2.png"
 
       for l_s in np.nditer(l_ss):
-          d1_2s = d1_2_modified(f_0s, z1, z_e, l_s)
+          d1_2s_old = d1_2_old(f_0s, z1, z_e, l_s)
+          d1_2s_modified = d1_2_modified(f_0s, z1, z_e, l_s)
 
-          ax.plot(f_0s, d1_2s, label="мод., при $l_s$ = %s, $м$" % l_s)
+          ax[0].plot(f_0s, d1_2s_old, label="при $l_s$ = %s, $м$" % l_s)
+          ax[1].plot(f_0s, d1_2s_modified, label="мод., при $l_s$ = %s, $м$" % l_s)
 
-      ax.set_title(r"$d_1^2(f_0)$")
-      ax.set_xlabel(r"$f_0$, $Гц$")
-      ax.set_ylabel(r"$l_s$, $м$")
-      ax.legend()
+      for axes in ax:
+          axes.set_title(r"$d_1^2(f_0)$")
+          axes.set_xlabel(r"$f_0$, $Гц$")
+          axes.set_ylabel(r"$l_s$, $м$")
+          axes.legend()
 
-      fig.set_size_inches(10, 10)
+      fig.set_size_inches(25, 10)
       plt.savefig(fname)
 
 
@@ -177,17 +180,21 @@
       # TODO:
       l_s = 380
       for s in np.nditer(sigma_d_nts):
-          F_k0s = F_k0_modified(f_0s, s, theta_0, z, z_e, l_s)
+          F_k0s_old = F_k0_old(f_0s, s, theta_0, z, z_e, l_s)
+          F_k0s_modified = F_k0_modified(f_0s, s, theta_0, z, z_e, l_s)
 
-          ax.plot(f_0s, F_k0s,
+          ax[0].plot(f_0s, F_k0s_old,
+                  label="при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
+          ax[1].plot(f_0s, F_k0s_modified,
                   label="мод., при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
 
-      ax.set_title(r"$F_{k_0}(f_0)$, $Гц$")
-      ax.set_xlabel(r"$f_0$, $Гц$")
-      ax.set_ylabel(r"$F_{k_0}$, $Гц$")
-      ax.legend()
+      for axes in ax:
+          axes.set_title(r"$F_{k_0}(f_0)$, $Гц$")
+          axes.set_xlabel(r"$f_0$, $Гц$")
+          axes.set_ylabel(r"$F_{k_0}$, $Гц$")
+          axes.legend()
 
-      fig.set_size_inches(10, 10)
+      fig.set_size_inches(25, 10)
       plt.savefig(fname)
 
 
@@ -218,17 +225,21 @@
       # TODO:
       l_s = 380
       for s in np.nditer(sigma_d_nts):
-          F_ks = F_k_modified(f_0s, s, theta_0, z, z_e, l_s)
+          F_ks_old = F_k_old(f_0s, s, theta_0, z, z_e, l_s)
+          F_ks_modified = F_k_modified(f_0s, s, theta_0, z, z_e, l_s)
 
-          ax.plot(f_0s, F_ks,
+          ax[0].plot(f_0s, F_ks_old,
+                  label=", при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
+          ax[1].plot(f_0s, F_ks_modified,
                   label="мод., при $\\sigma_{\\Delta N_t}$ = %s, $Рад$" % s)
 
-      ax.set_title(r"$F_k(f_0)$, $Гц$")
-      ax.set_xlabel(r"$f_0$, $Гц$")
-      ax.set_ylabel(r"$F_k$, $Гц$")
-      ax.legend()
+      for axes in ax:
+          axes.set_title(r"$F_k(f_0)$, $Гц$")
+          axes.set_xlabel(r"$f_0$, $Гц$")
+          axes.set_ylabel(r"$F_k$, $Гц$")
+          axes.legend()
 
-      fig.set_size_inches(10, 10)
+      fig.set_size_inches(25, 10)
       plt.savefig(fname)
 
 
@@ -297,8 +308,8 @@
 ** Исходные данные
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 14:53]
-   :HASH:                  -2112864494034205402
-   :LAST_MODIFIED:         [2022-04-22 Пт 23:58]
+   :HASH:                  -369368021447011623
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: main-input
@@ -312,7 +323,7 @@
 
   # Марк: 0.44 Ггц, но больший диапазон интереснее
   # f_0s = np.array([0.44, 0.5, 0.55, 0.6, 0.7]) * 1e9
-  f_0s = np.linspace(0.2, 5.0) * 1e9
+  f_0s = np.linspace(0.002, 0.2) * 1e9
 
   l_ss = np.array([200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0])
 
@@ -326,8 +337,8 @@
 ** СКО флуктуаций фазового фронта волны \sigma_\phi
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 14:53]
-   :HASH:                  430798606483629158
-   :LAST_MODIFIED:         [2022-04-20 Ср 15:15]
+   :HASH:                  -369368021447011623
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: main-1
@@ -344,14 +355,14 @@
 ** Коэффициент нарастания дифракционных эффектов во фронте волны внутри ионосферы и за ней до точки приёма d_1^2
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 14:59]
-   :HASH:                  -1703166220654633320
-   :LAST_MODIFIED:         [2022-04-21 Чт 19:37]
+   :HASH:                  -369368021447011623
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: main-2
 #+begin_src python :file "static/d_1-2.png"
   # d1^2 (модифицированная)
-  fig, ax = plt.subplots()
+  fig, ax = plt.subplots(1, 2)
   plot_d1_2_modified(fig, ax)
 #+end_src
 
@@ -362,14 +373,14 @@
 ** Традиционный интервал частотной корреляции замираний в однолучевой ДКМ радиолинии F_{k_0}
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:01]
-   :HASH:                  952510336692146249
-   :LAST_MODIFIED:         [2022-04-21 Чт 19:37]
+   :HASH:                  -369368021447011623
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: main-3
 #+begin_src python :file "static/F_k_0.png"
   # F_k0 (модифицированная)
-  fig, ax = plt.subplots()
+  fig, ax = plt.subplots(1, 2)
   plot_F_k0_modified(fig, ax)
 #+end_src
 
@@ -380,8 +391,8 @@
 ** Понижающий коэффициент \delta F_{k_0}
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:03]
-   :HASH:                  -891330281549894989
-   :LAST_MODIFIED:         [2022-04-20 Ср 15:15]
+   :HASH:                  -369368021447011623
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: main-4
@@ -398,14 +409,14 @@
 ** Интервал частотной корреляции замираний в однолучевой ДКМ радиолинии F_k
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:04]
-   :HASH:                  -1814798540238569783
-   :LAST_MODIFIED:         [2022-04-21 Чт 19:37]
+   :HASH:                  -369368021447011623
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: main-5
 #+begin_src python :file "static/F_k.png"
   # F_k (модифицированная)
-  fig, ax = plt.subplots()
+  fig, ax = plt.subplots(1, 2)
   plot_F_k_modified(fig, ax)
 #+end_src
 
@@ -416,8 +427,8 @@
 ** Зависимость интервала частотной корреляции F_k замираний и понижающего коэффициента \delta F_{k_0} от отношения f_0 / f_m при \beta_и =
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:05]
-   :HASH:                  -1216543019261792771
-   :LAST_MODIFIED:         [2022-04-21 Чт 19:37]
+   :HASH:                  -369368021447011623
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: main-6
@@ -507,13 +518,13 @@
 ** Исходные данные
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:36]
-   :HASH:                  1723289129372074078
-   :LAST_MODIFIED:         [2022-04-22 Пт 17:36]
+   :HASH:                  -1965364129455683891
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:40]
    :END:
 
 *Параметры ионосферы:*
 
-- ${ \bar{ N_m } }$, $эл / м^3$;
+- $${\bar{ N_m}}$$, $эл / м^3$;
 - Интенсивность неоднородностей $\beta$;
 - ${ \sigma_{ \Delta N } }$, $эл / м^3$.
 
@@ -579,7 +590,7 @@
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 17:27]
    :HASH:                  25697939044697473
-   :LAST_MODIFIED:         [2022-04-22 Пт 17:47]
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: P_err-1
@@ -608,7 +619,7 @@
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 13:55]
    :HASH:                  -1455044508039222113
-   :LAST_MODIFIED:         [2022-04-22 Пт 17:47]
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: P_err-2
@@ -637,7 +648,7 @@
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 13:56]
    :HASH:                  1583896943038019282
-   :LAST_MODIFIED:         [2022-04-22 Пт 17:47]
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: P_err-3
@@ -666,7 +677,7 @@
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:07]
    :HASH:                  -494311349938340387
-   :LAST_MODIFIED:         [2022-04-22 Пт 17:47]
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: P_err-4
@@ -695,8 +706,8 @@
 ** F_0 / F_k
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:19]
-   :HASH:                  2304499151682735994
-   :LAST_MODIFIED:         [2022-04-22 Пт 17:36]
+   :HASH:                  -115026739049883433
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: P_err-5
@@ -708,7 +719,7 @@
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:19]
    :HASH:                  -115026768040912681
-   :LAST_MODIFIED:         [2022-04-22 Пт 17:36]
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: P_err-6
@@ -720,7 +731,7 @@
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:23]
    :HASH:                  -1689717609810206767
-   :LAST_MODIFIED:         [2022-04-22 Пт 17:47]
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: P_err-7
@@ -749,7 +760,7 @@
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:23]
    :HASH:                  -368710690095418271
-   :LAST_MODIFIED:         [2022-04-22 Пт 17:47]
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: P_err-8
@@ -778,7 +789,7 @@
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:23]
    :HASH:                  2291464486756442065
-   :LAST_MODIFIED:         [2022-04-23 Сб 13:25]
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: P_err-9
@@ -807,7 +818,7 @@
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 13:56]
    :HASH:                  -954050220507236503
-   :LAST_MODIFIED:         [2022-04-26 Вт 14:09]
+   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
 #+name: P_err-10
