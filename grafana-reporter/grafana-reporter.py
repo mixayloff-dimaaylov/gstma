@@ -3,6 +3,8 @@
 import sys
 
 from datetime import datetime as dt
+from datetime import timedelta as tdel
+from datetime import timezone as tz
 from time import sleep
 
 import requests as requests
@@ -41,7 +43,7 @@ WD_PORT = "4444"
 ## Other
 ARCH_ROOT = "./archives"
 DUMP_ROOT = "./dump"
-PERIOD = 6 * 60 * 60  # in seconds
+PERIOD = 6  # in hours
 
 
 def cur_sats(t_from, t_to):
@@ -112,8 +114,10 @@ def sat_shot(browser, dashboard_url, sat, t_from, t_to):
         browser.quit()
         sys.exit(1)
 
-    print(f"Screenshot {sat} {dt.fromtimestamp(int(t_from)/1000)} " +
-          f"{dt.fromtimestamp(int(t_from)/1000)}")
+    dt_from = dt.fromtimestamp(int(t_from)/1000, tz=tz.utc)
+    dt_to = dt.fromtimestamp(int(t_to)/1000, tz=tz.utc)
+    print(f"Screenshot {sat} {dt_from.astimezone()} " +
+          f"{dt_to.astimezone()}")
 
 
 def sat_zip(arch_name):
@@ -128,14 +132,15 @@ def sat_zip(arch_name):
 def main(dashboard_url):
     sh.os.makedirs(ARCH_ROOT, exist_ok=True)
 
-    t_to = int(dt.now().timestamp() * 1000)
-    t_from = t_to - PERIOD * 1000
+    t_to = dt.now(tz=tz.utc)
+    t_from = t_to + tdel(hours=-PERIOD)
 
     # цикл с таймером
     while True:
-        print(f"Making report on {dt.fromtimestamp(int(t_to)/1000)}...")
+        print(f"Making report on {t_to.astimezone()}...")
 
-        sats = cur_sats(t_from, t_to)
+        sats = cur_sats(int(t_from.timestamp() * 1000),
+                        int(t_to.timestamp() * 1000))
 
         # Set up selenium
         browser_options = webdriver.FirefoxOptions()
@@ -175,14 +180,16 @@ def main(dashboard_url):
 
         # make screenshots
         for sat in sats:
-            sat_shot(browser, dashboard_url, sat, t_from, t_to)
+            sat_shot(browser, dashboard_url, sat,
+                     int(t_from.timestamp() * 1000),
+                     int(t_to.timestamp() * 1000))
 
         # Сжатие -- не очень помогло
         # https://pillow.readthedocs.io/en/stable/handbook/tutorial.html#batch-processing
 
         sat_zip(ARCH_ROOT + "/" +
-                f"{dt.fromtimestamp(int(t_from)/1000)}" +
-                f"-{dt.fromtimestamp(int(t_to)/1000)}.zip")
+                f"{t_from.astimezone()}" +
+                f"-{t_to.astimezone()}.zip")
 
         sh.rmtree(DUMP_ROOT, ignore_errors=True)
 
@@ -190,12 +197,12 @@ def main(dashboard_url):
 
         print("Making report -- Compleate")
 
-        t_to += PERIOD * 1000
-        t_from = t_to - PERIOD * 1000
+        t_to += tdel(hours=PERIOD)
+        t_from = t_to - tdel(hours=PERIOD)
 
-        print(f"Next report on {dt.fromtimestamp(int(t_to)/1000)}")
+        print(f"Next report on {t_to}")
 
-        sleep(PERIOD)
+        sleep(PERIOD * 60 * 60)
 
 
 if __name__ == "__main__":
