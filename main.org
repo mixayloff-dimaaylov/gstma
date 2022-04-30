@@ -1,6 +1,9 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-30 Сб 10:40]
+#+last_modified: [2022-04-30 Сб 12:18]
+
+#+options: user:nil tex:t
+#+language: ru
 
 * Исходники                                                        :noexport:
   :PROPERTIES:
@@ -341,6 +344,8 @@
    :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
    :END:
 
+; TODO: в радианах?
+
 #+name: main-1
 #+begin_src python :file "static/sigma_phi.png"
   # Sigma Phi
@@ -518,15 +523,15 @@
 ** Исходные данные
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:36]
-   :HASH:                  -1965364129455683891
-   :LAST_MODIFIED:         [2022-04-30 Сб 10:40]
+   :HASH:                  76833033462439575
+   :LAST_MODIFIED:         [2022-04-30 Сб 11:57]
    :END:
 
 *Параметры ионосферы:*
 
-- $${\bar{ N_m}}$$, $эл / м^3$;
+- ${\bar{N_m}}$, $эл/м^3$;
 - Интенсивность неоднородностей $\beta$;
-- ${ \sigma_{ \Delta N } }$, $эл / м^3$.
+- ${\sigma_{\Delta N}}$, $эл/м^3$.
 
 #+name: P_err-input-1
 #+begin_src python :results table replace value :noweb yes
@@ -888,13 +893,15 @@
 * COMMENT Local variables
   :PROPERTIES:
   :CREATED:               [2022-04-20 Ср 14:50]
-  :HASH:                  147875477266868114
-  :LAST_MODIFIED:         [2022-04-20 Ср 14:52]
+  :HASH:                  99806746346513286
+  :LAST_MODIFIED:         [2022-04-30 Сб 12:18]
   :END:
 
 #+name: startup
 #+begin_src emacs-lisp :eval never-export :results none :exports none :tange no :no-expand
   (setq-local org-adapt-indentation 'headline-data)
+  (setq org-latex-to-mathml-convert-command
+      "latexmlmath '%i' --presentationmathml=%o")
 #+end_src
 
 # Local Variables:
