@@ -18,6 +18,8 @@ from selenium.common.exceptions import NoSuchElementException
 
 import shutil as sh
 
+from urllib3.exceptions import MaxRetryError
+
 import pathlib
 from zipfile import ZipFile, ZIP_DEFLATED
 
@@ -129,6 +131,18 @@ def sat_zip(arch_name):
             archive.write(file, sh.os.path.basename(file))
 
 
+def set_webdriver():
+    # Set up selenium
+    browser_options = webdriver.FirefoxOptions()
+    browser_options.headless = True
+
+    browser = webdriver.Remote(
+        command_executor=f"http://{WD_HOST}:{WD_PORT}",
+        options=browser_options
+    )
+
+    return browser
+
 def main(dashboard_url):
     sh.os.makedirs(ARCH_ROOT, exist_ok=True)
 
@@ -142,14 +156,21 @@ def main(dashboard_url):
         sats = cur_sats(int(t_from.timestamp() * 1000),
                         int(t_to.timestamp() * 1000))
 
-        # Set up selenium
-        browser_options = webdriver.FirefoxOptions()
-        browser_options.headless = True
+        retry = 5
+        while True:
+            if retry == 0:
+                break
 
-        browser = webdriver.Remote(
-            command_executor=f"http://{WD_HOST}:{WD_PORT}",
-            options=browser_options
-        )
+            retry -= 1
+
+            try:
+                browser = set_webdriver()
+            except MaxRetryError:
+                print("Failed to connect to WebDriver. Trying...")
+                sleep(5)
+            finally:
+                break
+
         browser.set_window_size(1920, 1080)
         browser.implicitly_wait(10)
 
