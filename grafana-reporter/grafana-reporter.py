@@ -221,7 +221,7 @@ def main(dashboard_url):
         t_to += tdel(hours=PERIOD)
         t_from = t_to - tdel(hours=PERIOD)
 
-        print(f"Next report on {t_to}")
+        print(f"Next report on {t_to.astimezone()}")
 
         sleep(PERIOD * 60 * 60)
 
