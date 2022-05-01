@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# v10
+# v11
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS rawdata.range (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 1 DAY DELETE
 SETTINGS index_granularity=8192
 EOL123
 
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS computed.NTDerivatives (
 ) ENGINE = ReplacingMergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, sigcomb)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 2 MONTH DELETE
 SETTINGS index_granularity=8192
 EOL123
 
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS computed.xz1 (
 ) ENGINE = ReplacingMergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, sigcomb)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 2 MONTH DELETE
 SETTINGS index_granularity=8192
 EOL123
 
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS computed.Tc (
 ) ENGINE = ReplacingMergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, sigcomb)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 2 MONTH DELETE
 SETTINGS index_granularity=8192
 EOL123
 
