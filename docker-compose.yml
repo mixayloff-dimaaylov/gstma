@@ -115,6 +115,8 @@ services:
     profiles: ["reporter"]
     build:
       context: ./grafana-reporter/
+    environment:
+      - TZ=${REPORTER_TZ:-UTC}
     volumes:
       - './grafana-reporter/archives/:/usr/src/app/archives'
     depends_on:
