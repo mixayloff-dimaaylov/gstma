@@ -95,7 +95,7 @@ services:
     volumes:
       - './image_content/config/clickhouse/etc/clickhouse-server/:/etc/clickhouse-server/'
       - './image_content/config/clickhouse_create_queries.sh:/docker-entrypoint-initdb.d/clickhouse_create_queries.sh'
-      - clickhouse_db:/var/lib/clickhouse/
+      - clickhouse_db:/data/ch/
 
   grafana:
     container_name: ionosphere-iif-grafana
