@@ -158,18 +158,18 @@ def main(dashboard_url):
 
         retry = 5
         while True:
-            if retry == 0:
-                break
-
-            retry -= 1
-
             try:
                 browser = set_webdriver()
             except MaxRetryError:
-                print("Failed to connect to WebDriver. Trying...")
-                sleep(5)
+                if retry == 0:
+                    print("Failed to connect to WebDriver.")
+                    sys.exit(1)
+                else:
+                    print("Failed to connect to WebDriver. Trying...")
+                    sleep(5)
             finally:
                 break
+            retry -= 1
 
         browser.set_window_size(1920, 1080)
         browser.implicitly_wait(10)
@@ -221,7 +221,7 @@ def main(dashboard_url):
         t_to += tdel(hours=PERIOD)
         t_from = t_to - tdel(hours=PERIOD)
 
-        print(f"Next report on {t_to}")
+        print(f"Next report on {t_to.astimezone()}")
 
         sleep(PERIOD * 60 * 60)
 
