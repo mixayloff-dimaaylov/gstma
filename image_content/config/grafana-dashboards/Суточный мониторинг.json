@@ -1034,11 +1034,11 @@
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "query": "$columns(\n    'TEC deviation %sat %sigcomb',\n    avg(delNT) delNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
+          "query": "$columns(\n    'TEC deviation STD %sat %sigcomb',\n    avg(sigNT) sigNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
           "rawQuery": "SELECT t, groupArray((concat('TEC deviation ', sat, ' ', sigcomb), delNT)) as groupArr FROM ( SELECT intDiv(time, 2000) * 2000 as t, sat, sigcomb, avg(delNT) delNT FROM computed.NTDerivatives WHERE d >= toDate(1650994878242/1000) AND time >= 1650994878242 AND      sat = 'GPS22'     and sigcomb in () GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
-          "table": "NTDerivatives",
+          "table": "xz1",
           "tableLoading": false
         }
       ],
