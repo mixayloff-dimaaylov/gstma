@@ -1,4 +1,4 @@
-v11 clickhouse database layout
+v12 clickhouse database layout
 =============================
 
 ### Таблицы для входных данных
@@ -116,6 +116,38 @@ TTL d + INVERVAL 1 WEEK DELETE
 ### Таблицы для расчетных данных
 
 #### Односекундные таблицы
+
+##### computed.range
+
+Источник: *rawdata.range*  
+
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE MATERIALIZED VIEW computed.range
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    avg(adr) AS adr,
+    avg(psr) AS psr,
+    avg(cno) AS cno,
+    any(locktime) AS locktime,
+    sat,
+    any(system) AS system,
+    freq,
+    any(glofreq) AS glofreq,
+    any(prn) AS prn,
+    any(d) AS d
+FROM rawdata.range
+GROUP BY
+    (intDiv(time, 1000) * 1000) AS time,
+    sat,
+    freq
+```
 
 ##### computed.s4
 

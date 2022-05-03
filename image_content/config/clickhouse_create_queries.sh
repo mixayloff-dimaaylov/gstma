@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# v11
+# v12
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
@@ -101,6 +101,32 @@ PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat)
 TTL d + INTERVAL 1 WEEK DELETE
 SETTINGS index_granularity=8192
+EOL123
+
+clickhouse-client <<EOL123
+CREATE MATERIALIZED VIEW IF NOT EXISTS computed.range
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    avg(adr) AS adr,
+    avg(psr) AS psr,
+    avg(cno) AS cno,
+    any(locktime) AS locktime,
+    sat,
+    any(system) AS system,
+    freq,
+    any(glofreq) AS glofreq,
+    any(prn) AS prn,
+    any(d) AS d
+FROM rawdata.range
+GROUP BY
+    (intDiv(time, 1000) * 1000) AS time,
+    sat,
+    freq
 EOL123
 
 clickhouse-client <<EOL123
