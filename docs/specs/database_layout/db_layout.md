@@ -24,7 +24,7 @@ CREATE TABLE rawdata.range (
   prn Int32,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree(d, (time, sat, freq), 8192)
-TTL d + INVERVAL 1 DAY DELETE
+TTL d + INVERVAL 24 HOUR DELETE
 ```
 
 #### rawdata.ismredobs
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismredobs (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 DAY DELETE
+TTL d + INTERVAL 24 HOUR DELETE
 SETTINGS index_granularity=8192
 ```
 
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismdetobs (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 DAY DELETE
+TTL d + INTERVAL 24 HOUR DELETE
 SETTINGS index_granularity=8192
 ```
 
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismrawtec (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, primaryfreq, secondaryfreq)
-TTL d + INTERVAL 1 DAY DELETE
+TTL d + INTERVAL 24 HOUR DELETE
 SETTINGS index_granularity=8192
 ```
 
@@ -110,7 +110,7 @@ CREATE TABLE rawdata.satxyz2 (
   prn Int32,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree(d, (time, sat), 8192)
-TTL d + INVERVAL 1 DAY DELETE
+TTL d + INVERVAL 24 HOUR DELETE
 ```
 
 ### Таблицы для расчетных данных
