@@ -130,6 +130,83 @@ GROUP BY
 EOL123
 
 clickhouse-client <<EOL123
+CREATE MATERIALIZED VIEW IF NOT EXISTS computed.ismredobs
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    totals4,
+    sat,
+    system,
+    freq,
+    glofreq,
+    prn,
+    d
+FROM rawdata.ismredobs
+EOL123
+
+clickhouse-client <<EOL123
+CREATE MATERIALIZED VIEW IF NOT EXISTS computed.ismdetobs
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    power,
+    sat,
+    system,
+    freq,
+    glofreq,
+    prn,
+    d
+FROM rawdata.ismdetobs
+EOL123
+
+clickhouse-client <<EOL123
+CREATE MATERIALIZED VIEW IF NOT EXISTS computed.ismrawtec
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, primaryfreq, secondaryfreq)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    tec,
+    sat,
+    system,
+    primaryfreq,
+    secondaryfreq,
+    glofreq,
+    prn,
+    d
+FROM rawdata.ismrawtec
+EOL123
+
+clickhouse-client <<EOL123
+CREATE MATERIALIZED VIEW IF NOT EXISTS computed.satxyz2
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    geopoint,
+    ionpoint,
+    elevation,
+    sat,
+    system,
+    prn,
+    d
+FROM rawdata.satxyz2
+EOL123
+
+clickhouse-client <<EOL123
 CREATE TABLE IF NOT EXISTS computed.s4 (
   time UInt64,
   sat String,

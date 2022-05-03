@@ -149,6 +149,106 @@ GROUP BY
     freq
 ```
 
+##### computed.ismredobs
+
+Источник: *rawdata.ismredobs*  
+
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE MATERIALIZED VIEW computed.ismredobs
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
+TTL d + INTERVAL 2 MONTH DELETE
+SELECT
+    time,
+    totals4,
+    sat,
+    system,
+    freq,
+    glofreq,
+    prn,
+    d
+FROM rawdata.ismredobs
+```
+
+##### computed.ismdetobs
+
+Источник: *rawdata.ismdetobs*  
+
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE MATERIALIZED VIEW computed.ismdetobs
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    power,
+    sat,
+    system,
+    freq,
+    glofreq,
+    prn,
+    d
+FROM rawdata.ismdetobs
+```
+
+##### computed.ismrawtec
+
+Источник: *rawdata.ismrawtec*  
+
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE MATERIALIZED VIEW computed.ismrawtec
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, primaryfreq, secondaryfreq)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    tec,
+    sat,
+    system,
+    primaryfreq,
+    secondaryfreq,
+    glofreq,
+    prn,
+    d
+FROM rawdata.ismrawtec
+```
+
+##### computed.satxyz2
+
+Источник: *rawdata.satxyz2*  
+
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE MATERIALIZED VIEW computed.satxyz2
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    geopoint,
+    ionpoint,
+    elevation,
+    sat,
+    system,
+    prn,
+    d
+FROM rawdata.satxyz2
+```
+
 ##### computed.s4
 
 Источник: *rawdata.range*  
