@@ -253,7 +253,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "database": "rawdata",
+          "database": "computed",
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -270,7 +270,7 @@
           "tableLoading": false
         },
         {
-          "database": "rawdata",
+          "database": "computed",
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -611,7 +611,7 @@
       "targets": [
         {
           "aggregator": "sum",
-          "database": "rawdata",
+          "database": "computed",
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -726,7 +726,7 @@
       "targets": [
         {
           "aggregator": "sum",
-          "database": "rawdata",
+          "database": "computed",
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -941,7 +941,7 @@
       "satTag": "sat",
       "targets": [
         {
-          "database": "rawdata",
+          "database": "computed",
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -1097,14 +1097,14 @@
           "value": "GLONASS5"
         },
         "datasource": "ClickHouse",
-        "definition": "",
+        "definition": "select distinct(sat) from computed.satxyz2 where time between $from and $to",
         "hide": 0,
         "includeAll": false,
         "label": "",
         "multi": true,
         "name": "satvis",
         "options": [],
-        "query": "select distinct(sat) from rawdata.satxyz2 where time between $from and $to",
+        "query": "select distinct(sat) from computed.satxyz2 where time between $from and $to",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
@@ -1123,14 +1123,14 @@
           "value": "GPS22"
         },
         "datasource": "ClickHouse",
-        "definition": "",
+        "definition": "select distinct(sat) from computed.satxyz2 where time between $from and $to",
         "hide": 0,
         "includeAll": false,
         "label": "",
         "multi": false,
         "name": "satgraph",
         "options": [],
-        "query": "select distinct(sat) from rawdata.satxyz2 where time between $from and $to",
+        "query": "select distinct(sat) from computed.satxyz2 where time between $from and $to",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
@@ -1148,14 +1148,14 @@
           "value": "L1CA"
         },
         "datasource": "ClickHouse",
-        "definition": "select distinct(freq) from rawdata.range where sat='$satgraph' and time between $from and $to",
+        "definition": "select distinct(freq) from computed.range where sat='$satgraph' and time between $from and $to",
         "hide": 0,
         "includeAll": false,
         "label": null,
         "multi": true,
         "name": "freq",
         "options": [],
-        "query": "select distinct(freq) from rawdata.range where sat='$satgraph' and time between $from and $to",
+        "query": "select distinct(freq) from computed.range where sat='$satgraph' and time between $from and $to",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
@@ -1198,14 +1198,14 @@
           "value": "$__all"
         },
         "datasource": "ClickHouse",
-        "definition": "select distinct(secondaryfreq) from rawdata.ismrawtec where sat='$satgraph' and time between $from and $to",
+        "definition": "select distinct(secondaryfreq) from computed.ismrawtec where sat='$satgraph' and time between $from and $to",
         "hide": 0,
         "includeAll": true,
         "label": null,
         "multi": true,
         "name": "TEC_secondaryfreq",
         "options": [],
-        "query": "select distinct(secondaryfreq) from rawdata.ismrawtec where sat='$satgraph' and time between $from and $to",
+        "query": "select distinct(secondaryfreq) from computed.ismrawtec where sat='$satgraph' and time between $from and $to",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,

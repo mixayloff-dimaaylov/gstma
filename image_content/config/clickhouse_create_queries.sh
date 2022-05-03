@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# v11
+# v12
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS rawdata.range (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 DAY DELETE
+TTL d + INTERVAL 24 HOUR DELETE
 SETTINGS index_granularity=8192
 EOL123
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismredobs (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 24 HOUR DELETE
 SETTINGS index_granularity=8192
 EOL123
 
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismdetobs (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 24 HOUR DELETE
 SETTINGS index_granularity=8192
 EOL123
 
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismrawtec (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, primaryfreq, secondaryfreq)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 24 HOUR DELETE
 SETTINGS index_granularity=8192
 EOL123
 
@@ -99,8 +99,111 @@ CREATE TABLE IF NOT EXISTS rawdata.satxyz2 (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 24 HOUR DELETE
 SETTINGS index_granularity=8192
+EOL123
+
+clickhouse-client <<EOL123
+CREATE MATERIALIZED VIEW IF NOT EXISTS computed.range
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    avg(adr) AS adr,
+    avg(psr) AS psr,
+    avg(cno) AS cno,
+    any(locktime) AS locktime,
+    sat,
+    any(system) AS system,
+    freq,
+    any(glofreq) AS glofreq,
+    any(prn) AS prn,
+    any(d) AS d
+FROM rawdata.range
+GROUP BY
+    (intDiv(time, 1000) * 1000) AS time,
+    sat,
+    freq
+EOL123
+
+clickhouse-client <<EOL123
+CREATE MATERIALIZED VIEW IF NOT EXISTS computed.ismredobs
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    totals4,
+    sat,
+    system,
+    freq,
+    glofreq,
+    prn,
+    d
+FROM rawdata.ismredobs
+EOL123
+
+clickhouse-client <<EOL123
+CREATE MATERIALIZED VIEW IF NOT EXISTS computed.ismdetobs
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    power,
+    sat,
+    system,
+    freq,
+    glofreq,
+    prn,
+    d
+FROM rawdata.ismdetobs
+EOL123
+
+clickhouse-client <<EOL123
+CREATE MATERIALIZED VIEW IF NOT EXISTS computed.ismrawtec
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, primaryfreq, secondaryfreq)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    tec,
+    sat,
+    system,
+    primaryfreq,
+    secondaryfreq,
+    glofreq,
+    prn,
+    d
+FROM rawdata.ismrawtec
+EOL123
+
+clickhouse-client <<EOL123
+CREATE MATERIALIZED VIEW IF NOT EXISTS computed.satxyz2
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat)
+TTL d + INTERVAL 2 MONTH DELETE
+POPULATE AS
+SELECT
+    time,
+    geopoint,
+    ionpoint,
+    elevation,
+    sat,
+    system,
+    prn,
+    d
+FROM rawdata.satxyz2
 EOL123
 
 clickhouse-client <<EOL123
@@ -113,7 +216,7 @@ CREATE TABLE IF NOT EXISTS computed.s4 (
 ) ENGINE = ReplacingMergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 2 MONTH DELETE
 SETTINGS index_granularity=8192
 EOL123
 
@@ -130,7 +233,7 @@ CREATE TABLE IF NOT EXISTS computed.NT (
 ) ENGINE = ReplacingMergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, sigcomb)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 2 MONTH DELETE
 SETTINGS index_granularity=8192
 EOL123
 

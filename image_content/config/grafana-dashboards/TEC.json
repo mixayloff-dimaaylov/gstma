@@ -79,7 +79,7 @@
           "tableLoading": false
         },
         {
-          "database": "rawdata",
+          "database": "computed",
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -96,7 +96,7 @@
           "tableLoading": false
         },
         {
-          "database": "rawdata",
+          "database": "computed",
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
