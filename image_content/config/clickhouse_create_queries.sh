@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismredobs (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 1 DAY DELETE
 SETTINGS index_granularity=8192
 EOL123
 
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismdetobs (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 1 DAY DELETE
 SETTINGS index_granularity=8192
 EOL123
 
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismrawtec (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, primaryfreq, secondaryfreq)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 1 DAY DELETE
 SETTINGS index_granularity=8192
 EOL123
 
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS rawdata.satxyz2 (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 1 DAY DELETE
 SETTINGS index_granularity=8192
 EOL123
 
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS computed.s4 (
 ) ENGINE = ReplacingMergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 2 MONTH DELETE
 SETTINGS index_granularity=8192
 EOL123
 
@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS computed.NT (
 ) ENGINE = ReplacingMergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, sigcomb)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 2 MONTH DELETE
 SETTINGS index_granularity=8192
 EOL123
 

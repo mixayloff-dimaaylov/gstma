@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismredobs (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 1 DAY DELETE
 SETTINGS index_granularity=8192
 ```
 
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismdetobs (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 1 DAY DELETE
 SETTINGS index_granularity=8192
 ```
 
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS rawdata.ismrawtec (
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, primaryfreq, secondaryfreq)
-TTL d + INTERVAL 1 WEEK DELETE
+TTL d + INTERVAL 1 DAY DELETE
 SETTINGS index_granularity=8192
 ```
 
@@ -110,7 +110,7 @@ CREATE TABLE rawdata.satxyz2 (
   prn Int32,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree(d, (time, sat), 8192)
-TTL d + INVERVAL 1 WEEK DELETE
+TTL d + INVERVAL 1 DAY DELETE
 ```
 
 ### Таблицы для расчетных данных
@@ -164,7 +164,7 @@ CREATE TABLE computed.s4 (
     s4 Float64 COMMENT 'S4',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
-TTL d + INTERVAL 1 Week DELETE
+TTL d + INTERVAL 2 MONTH DELETE
 ```
 
 #### Обычные таблицы
@@ -183,7 +183,7 @@ CREATE TABLE computed.NT (
     psrNt Float64 COMMENT 'ПЭС псевдодальностный',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
-TTL d + INTERVAL 1 Week DELETE;
+TTL d + INTERVAL 2 MONTH DELETE;
 ```
 
 Источник: *computed.NT*
