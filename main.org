@@ -1,6 +1,6 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-05-06 Пт 01:43]
+#+last_modified: [2022-05-06 Пт 02:44]
 
 #+options: user:nil tex:t
 #+language: ru
@@ -523,8 +523,8 @@
 ** Исходные данные
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:36]
-   :HASH:                  1925968050565708229
-   :LAST_MODIFIED:         [2022-05-05 Чт 14:51]
+   :HASH:                  -1963961183677347268
+   :LAST_MODIFIED:         [2022-05-06 Пт 02:44]
    :END:
 
 *Параметры ионосферы:*
@@ -539,29 +539,29 @@
 
   <<main-input>>
 
-  #              N_m, эл/м^3, betta,      sigma_delta_N = betta * N_m, эл/м^3
-  params_nigth = [2.4 * 1e11, 1e-2,       2.4 * 1e9]
-  params_day   = [1.4 * 1e12, 3 * 1e-3,   4.2 * 1e9]
-  params_evi   = [1.4 * 1e12, 3.6 * 1e-2, 5.0 * 1e10]
-  params_ivil  = [1.0 * 1e13, 5.0 * 1e-1, 5.0 * 1e12]
-  params_ivib  = [5.0 * 1e13, 1.0,        5.0 * 1e13]
+  #                  N_m, эл/м^3, betta,      sigma_delta_N = betta * N_m, эл/м^3
+  ion_params_nigth = [2.4 * 1e11, 1e-2,       2.4 * 1e9]
+  ion_params_day   = [1.4 * 1e12, 3 * 1e-3,   4.2 * 1e9]
+  ion_params_evi   = [1.4 * 1e12, 3.6 * 1e-2, 5.0 * 1e10]
+  ion_params_ivil  = [1.0 * 1e13, 5.0 * 1e-1, 5.0 * 1e12]
+  ion_params_ivib  = [5.0 * 1e13, 1.0,        5.0 * 1e13]
 
-  params = np.vstack((params_nigth,
-                      params_day,
-                      params_evi,
-                      params_ivil,
-                      params_ivib))
+  ion_params = np.vstack((ion_params_nigth,
+                          ion_params_day,
+                          ion_params_evi,
+                          ion_params_ivil,
+                          ion_params_ivib))
 
   l_s = 200
 
   def calc_sigma_d_nt(l_s, z_e, sigma_d_n):
       return np.sqrt(np.sqrt(pi) * l_s * z_e) * sigma_d_n
 
-  sigma_d_nts = calc_sigma_d_nt(l_s, z_e, params[:, 2]).reshape(5, 1)
+  sigma_d_nts = calc_sigma_d_nt(l_s, z_e, ion_params[:, 2]).reshape(5, 1)
 
-  params = np.hstack((params, sigma_d_nts))
+  ion_params = np.hstack((ion_params, sigma_d_nts))
 
-  params
+  ion_params
 #+end_src
 
 #+RESULTS: P_err-input-1
@@ -594,8 +594,8 @@
 ** СКО флуктуаций фазового фронта волны на выходе неоднородного слоя \sigma_\phi
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 17:27]
-   :HASH:                  2278285889053276975
-   :LAST_MODIFIED:         [2022-05-06 Пт 00:40]
+   :HASH:                  -930509957712330017
+   :LAST_MODIFIED:         [2022-05-06 Пт 02:41]
    :END:
 
 $\sigma_{\phi} = {
@@ -623,7 +623,7 @@ $\sigma_{\phi} = {
 
 #+name: P_err-1
 #+begin_src python
-  sigma_d_nts = params[:, 3]
+  sigma_d_nts = ion_params[:, 3]
   sigma_phis = sigma_phi(f_0, sigma_d_nts, theta_0)
   fig, ax = plt.subplots()
 
@@ -755,8 +755,8 @@ $d_1^2 = {
 ** Полоса диспертности F_Д
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:07]
-   :HASH:                  489943098168764122
-   :LAST_MODIFIED:         [2022-05-06 Пт 00:40]
+   :HASH:                  -193795019730327841
+   :LAST_MODIFIED:         [2022-05-06 Пт 02:41]
    :END:
 
 $F_{д} = {
@@ -785,7 +785,7 @@ $F_{Д} = {
 
 #+name: P_err-4
 #+begin_src python
-  N_ms = params[:, 0]
+  N_ms = ion_params[:, 0]
   F_ds = F_d(f_0, N_ms, z_e, theta_0)
 
   fig, ax = plt.subplots()
