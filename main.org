@@ -1,6 +1,6 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-04-30 Сб 12:18]
+#+last_modified: [2022-05-06 Пт 01:43]
 
 #+options: user:nil tex:t
 #+language: ru
@@ -523,15 +523,15 @@
 ** Исходные данные
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:36]
-   :HASH:                  76833033462439575
-   :LAST_MODIFIED:         [2022-04-30 Сб 11:57]
+   :HASH:                  1925968050565708229
+   :LAST_MODIFIED:         [2022-05-05 Чт 14:51]
    :END:
 
 *Параметры ионосферы:*
 
-- ${\bar{N_m}}$, $эл/м^3$;
+- Максимум средней ЭК ${\bar{N_m}}$, $эл/м^3$;
 - Интенсивность неоднородностей $\beta$;
-- ${\sigma_{\Delta N}}$, $эл/м^3$.
+- СКО флуктуаций ЭК ${\sigma_{\Delta N}}$, $эл/м^3$.
 
 #+name: P_err-input-1
 #+begin_src python :results table replace value :noweb yes
@@ -575,7 +575,7 @@
 
 - Несущая частота $f_0$, $Гц$;
 - Скорость передачи $R_T = 1 / T_S$, $бит/с$;
-- $T_S$;
+- Период передачи 1 бит $T_S$, $с$;
 - Ширина спектра $F_0 = B_S / T_S$, $Гц$;
 - Угол возвышения $\theta_0$, $градусы$.
 
@@ -588,15 +588,38 @@
   theta_0 = np.radians(theta_0) # NumPy использует радианы по-умолчанию
 
   B_S = 1.0       # простые сигналы
-  F_0 = B_S / T_S
+  F_0 = B_S / T_S # ширина спектра
 #+end_src
 
-** sigma_phi
+** СКО флуктуаций фазового фронта волны на выходе неоднородного слоя \sigma_\phi
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 17:27]
-   :HASH:                  25697939044697473
-   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
+   :HASH:                  2278285889053276975
+   :LAST_MODIFIED:         [2022-05-06 Пт 00:40]
    :END:
+
+$\sigma_{\phi} = {
+{
+  80.8
+    \cdot \pi^{5/4}
+    \cdot \left(
+            l_s
+              \cdot z_{э}
+              \cdot \sec{\theta_0}
+          \right) ^{1/2}
+    \cdot \sigma_{\Delta N}
+}
+  \over
+{
+  c \cdot f_0
+}
+}$
+
+$\sigma_{\phi} = {
+  \left( {80.8 \cdot \pi} \over {C} \right)
+    \cdot \left( \sigma_{\Delta N_t} \over f_0 \right)
+    \cdot \sec{\theta_0}
+}$
 
 #+name: P_err-1
 #+begin_src python
@@ -620,12 +643,14 @@
 #+RESULTS: P_err-1
 [[file:static/sigma_phi_of_sigma_d_nt.png]]
 
-** gamma^2
+** Глубина общих БЗ \gamma^2
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 13:55]
-   :HASH:                  -1455044508039222113
-   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
+   :HASH:                  -1750157403776334246
+   :LAST_MODIFIED:         [2022-05-05 Чт 23:36]
    :END:
+
+$\gamma^2 = {{1} \over {\exp{\sigma_{\phi}^2} - 1}}$
 
 #+name: P_err-2
 #+begin_src python
@@ -649,12 +674,61 @@
 #+RESULTS: P_err-2
 [[file:static/gamma_2_of_sigma_phi.png]]
 
-** F_k
+** Полоса когерентности F_К
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 13:56]
-   :HASH:                  1583896943038019282
-   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
+   :HASH:                  -591362640536920356
+   :LAST_MODIFIED:         [2022-05-06 Пт 01:43]
    :END:
+
+$F_{К} = {
+  {f_0^2 \cdot c}
+    \over
+  {
+    80.8
+      \cdot \pi^{5/4}
+      \cdot \left(
+              2 \cdot l_s \cdot z_{э} \cdot \sec{\theta_0}
+            \right) ^{1/2}
+      \cdot \sigma_{\Delta N}
+      \cdot Д_1
+  }
+}$
+
+$Д_1 = (1+d_1^2 \over 2)$
+
+$d_1^2 = {
+  {
+    \left(
+      3 \cdot z^2 - 3 \cdot z \cdot z_{э} + z_{э}^2
+    \right)
+    \cdot c^2
+    \cdot \sec{\theta_0}^2
+  }
+    \over
+  { 192 \cdot \pi^2 \cdot f_0^2 \cdot l_s^4 }
+}$
+
+$F_{К} = {
+  {f_0}
+    \over
+  {
+    \sigma_{\phi} \cdot \sqrt{2 + d_1^2}
+  }
+}$
+
+$d_1^2 = {
+  {{
+    \left(
+      3 \cdot z^2 - 3 \cdot z \cdot z_{э} + z_{э}^2
+    \right)
+    \cdot c^2
+    \cdot \sec{\theta_0}^2
+  }
+    \over
+  { 6 \cdot (\pi \cdot f_0 / C)^2}}
+  \cdot (l_s^{-4} / 8)
+}$
 
 #+name: P_err-3
 #+begin_src python
@@ -678,12 +752,36 @@
 #+RESULTS: P_err-3
 [[file:static/F_ks_of_sigma_d_nts.png]]
 
-** F_д
+** Полоса диспертности F_Д
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:07]
-   :HASH:                  -494311349938340387
-   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
+   :HASH:                  489943098168764122
+   :LAST_MODIFIED:         [2022-05-06 Пт 00:40]
    :END:
+
+$F_{д} = {
+  \left(
+    {c \cdot f_0^3}
+      \over
+    {
+      80.8
+        \cdot \pi
+        \cdot \pad{N_m}
+        \cdot z_{э}
+        \cdot \sec{\theta_0}
+    }
+  \right) ^{1/2}
+}$
+
+$F_{Д} = {
+  \sqrt{
+    {C \cdot \f_0^3}
+      \over
+    {
+      80.8 \cdot \pi \cdot \bar{N_m} \cdot z_{э} \cdot \sec{\theta_0}
+    }
+  }
+}$
 
 #+name: P_err-4
 #+begin_src python
@@ -708,11 +806,11 @@
 #+RESULTS: P_err-4
 [[file:static/F_ds_of_N_m.png]]
 
-** F_0 / F_k
+** F_0 / F_k                                                       :noexport:
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:19]
-   :HASH:                  -115026739049883433
-   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
+   :HASH:                  325768487612036133
+   :LAST_MODIFIED:         [2022-05-05 Чт 15:38]
    :END:
 
 #+name: P_err-5
@@ -720,11 +818,11 @@
   F_0_over_F_k = F_0 / F_ks
 #+end_src
 
-** F_0 / F_d
+** F_0 / F_d                                                       :noexport:
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:19]
-   :HASH:                  -115026768040912681
-   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
+   :HASH:                  325741824455062565
+   :LAST_MODIFIED:         [2022-05-05 Чт 15:38]
    :END:
 
 #+name: P_err-6
@@ -732,12 +830,21 @@
   F_0_over_F_d = F_0 / F_ds
 #+end_src
 
-** eta_м
+** Степень МСИ \eta_м
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:23]
-   :HASH:                  -1689717609810206767
-   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
+   :HASH:                  -1459683645438688113
+   :LAST_MODIFIED:         [2022-05-05 Чт 23:36]
    :END:
+
+$\eta_{м} = {
+  {{1} \over {2 \cdot \pi^2}}
+    \cdot \left( {{1} \over {T_S \cdot F_K}} \right)^2
+    \cdot erf \left( {\pi \cdot T_S \cdot F_K} \right) -
+  {{1} \over {\pi \cdot \sqrt{\pi}}}
+    \cdot \left( {{1} \over {T_S \cdot F_K}} \right)
+    \cdot \exp(- (\pi \cdot T_S \cdot F_K)^2)
+}$
 
 #+name: P_err-7
 #+begin_src python
@@ -761,12 +868,20 @@
 #+RESULTS: P_err-7
 [[file:static/eta_ms_of_F_ks.png]]
 
-** eta_ч
+** Степень ЧСЗ \eta_ч
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:23]
-   :HASH:                  -368710690095418271
-   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
+   :HASH:                  998382936670302626
+   :LAST_MODIFIED:         [2022-05-06 Пт 00:59]
    :END:
+
+$\eta_{ч} = {
+  \left[ 1 + {{1} \over {2 \cdot \pi^2 }} \cdot \left( F_0 \over F_k \right) ^2 \right]
+    \cdot erf \left({ {\pi \cdot F_k} \over {F_0}} \right) -
+  {{1} \over {\pi \cdot \sqrt{\pi}}}
+    \cdot \left( F_0 \over F_{к} \right)
+    \cdot \left( 2 - \exp \left(- { \left( {{\pi \cdot F_{к}} \over {F_0}} \right)}^2 \right) \right)
+}$
 
 #+name: P_err-8
 #+begin_src python
@@ -790,12 +905,17 @@
 #+RESULTS: P_err-8
 [[file:static/eta_chs_of_F_ks.png]]
 
-** eta_д
+** Степень ДИ \eta_д
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:23]
-   :HASH:                  2291464486756442065
-   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
+   :HASH:                  -2139145442157611198
+   :LAST_MODIFIED:         [2022-05-05 Чт 23:36]
    :END:
+
+$\eta_{д} = {
+  {\pi \cdot \left[ C_2 \cdot \left( F_0 \over F_{д} \right)^2 \right]^2 }
+    / {2 \cdot \left( F_0 \over F_{д} \right)^2}
+}$
 
 #+name: P_err-9
 #+begin_src python
@@ -822,9 +942,13 @@
 ** Построение графиков вероятности ошибки
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 13:56]
-   :HASH:                  -954050220507236503
-   :LAST_MODIFIED:         [2022-04-30 Сб 10:33]
+   :HASH:                  -1227538128272245758
+   :LAST_MODIFIED:         [2022-05-06 Пт 01:10]
    :END:
+
+$P_{ош} = {
+  0.25 \cdot \left( P_{111} + P_{110} + P_{011} + P_{010} \right)
+}$
 
 #+name: P_err-10
 #+begin_src python :results table replace value org
