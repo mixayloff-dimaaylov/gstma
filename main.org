@@ -1,6 +1,6 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-05-06 Пт 18:56]
+#+last_modified: [2022-05-06 Пт 19:02]
 
 #+options: user:nil tex:t
 #+language: ru
@@ -910,7 +910,7 @@ $\eta_{ч} = {
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:23]
    :HASH:                  -2139145442157611198
-   :LAST_MODIFIED:         [2022-05-05 Чт 23:36]
+   :LAST_MODIFIED:         [2022-05-06 Пт 18:55]
    :END:
 
 $\eta_{д} = {
@@ -952,7 +952,7 @@ $P_{ош} = {
 }$
 
 #+name: P_err-10
-#+begin_src python :results table replace value org
+#+begin_src python :results table replace value raw
   sim_params = np.vstack((
       sigma_phis.reshape(1, 5),
       gamma_2s.reshape(1, 5),
@@ -968,7 +968,6 @@ $P_{ош} = {
 #+end_src
 
 #+RESULTS: P_err-10
-#+begin_src org
 |   0.0956520422 |    0.167391074 |     1.99275088 |     199.275088 |     1992.75088 |
 |     108.798584 |     35.1914196 |   0.0192157973 |            0.0 |            0.0 |
 |   2912482810.0 |   1664275890.0 |    139799175.0 |     1397991.75 |     139799.175 |
@@ -978,7 +977,6 @@ $P_{ош} = {
 | 4.35382576e-14 | 1.33335914e-13 | 1.88968132e-11 | 1.88968132e-07 | 1.88968132e-05 |
 |    0.999999667 |    0.999999417 |    0.999993065 |    0.999324719 |    0.994903839 |
 | 0.000238984393 | 0.000577202146 | 0.000577202146 |  0.00154263762 |  0.00344944259 |
-#+end_src
 
 #+name: P_err-11
 #+begin_src python
