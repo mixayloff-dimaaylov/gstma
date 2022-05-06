@@ -1,6 +1,6 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-05-06 Пт 02:44]
+#+last_modified: [2022-05-06 Пт 18:56]
 
 #+options: user:nil tex:t
 #+language: ru
@@ -523,8 +523,8 @@
 ** Исходные данные
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:36]
-   :HASH:                  -1963961183677347268
-   :LAST_MODIFIED:         [2022-05-06 Пт 02:44]
+   :HASH:                  -144895528921908603
+   :LAST_MODIFIED:         [2022-05-06 Пт 18:55]
    :END:
 
 *Параметры ионосферы:*
@@ -545,6 +545,7 @@
   ion_params_evi   = [1.4 * 1e12, 3.6 * 1e-2, 5.0 * 1e10]
   ion_params_ivil  = [1.0 * 1e13, 5.0 * 1e-1, 5.0 * 1e12]
   ion_params_ivib  = [5.0 * 1e13, 1.0,        5.0 * 1e13]
+  labels = ("1", "2", "3", "4", "5")
 
   ion_params = np.vstack((ion_params_nigth,
                           ion_params_day,
@@ -942,8 +943,8 @@ $\eta_{д} = {
 ** Построение графиков вероятности ошибки
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 13:56]
-   :HASH:                  -1227538128272245758
-   :LAST_MODIFIED:         [2022-05-06 Пт 01:10]
+   :HASH:                  583651758123088160
+   :LAST_MODIFIED:         [2022-05-06 Пт 18:56]
    :END:
 
 $P_{ош} = {
@@ -990,10 +991,8 @@ $P_{ош} = {
 
   fig, ax = plt.subplots()
 
-  for i in P_errs:
-      print("---\n")
-      print(i)
-      ax.plot(h2s, i)
+  for i, l in zip(P_errs, labels):
+      ax.plot(h2s, i, label=l)
 
   fname = 'static/P_err.png'
   plt.xscale("log")
