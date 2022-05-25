@@ -1065,7 +1065,7 @@
           "format": "none",
           "label": "TECU",
           "logBase": 1,
-          "max": null,
+          "max": "0.05",
           "min": null,
           "show": true
         },
