@@ -1,4 +1,4 @@
-v12 clickhouse database layout
+v13 clickhouse database layout
 =============================
 
 ### Таблицы для входных данных
@@ -128,7 +128,7 @@ CREATE MATERIALIZED VIEW computed.range
 ENGINE = MergeTree
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 2 MONTH DELETE
+TTL d + INTERVAL 1 MONTH DELETE
 POPULATE AS
 SELECT
     time,
@@ -160,7 +160,7 @@ CREATE MATERIALIZED VIEW computed.ismredobs
 ENGINE = MergeTree
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 2 MONTH DELETE
+TTL d + INTERVAL 1 MONTH DELETE
 SELECT
     time,
     totals4,
@@ -184,7 +184,7 @@ CREATE MATERIALIZED VIEW computed.ismdetobs
 ENGINE = MergeTree
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, freq)
-TTL d + INTERVAL 2 MONTH DELETE
+TTL d + INTERVAL 1 MONTH DELETE
 POPULATE AS
 SELECT
     time,
@@ -209,7 +209,7 @@ CREATE MATERIALIZED VIEW computed.ismrawtec
 ENGINE = MergeTree
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, primaryfreq, secondaryfreq)
-TTL d + INTERVAL 2 MONTH DELETE
+TTL d + INTERVAL 1 MONTH DELETE
 POPULATE AS
 SELECT
     time,
@@ -235,7 +235,7 @@ CREATE MATERIALIZED VIEW computed.satxyz2
 ENGINE = MergeTree
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat)
-TTL d + INTERVAL 2 MONTH DELETE
+TTL d + INTERVAL 1 MONTH DELETE
 POPULATE AS
 SELECT
     time,
@@ -264,7 +264,7 @@ CREATE TABLE computed.s4 (
     s4 Float64 COMMENT 'S4',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
-TTL d + INTERVAL 2 MONTH DELETE
+TTL d + INTERVAL 1 MONTH DELETE
 ```
 
 #### Обычные таблицы
@@ -283,7 +283,7 @@ CREATE TABLE computed.NT (
     psrNt Float64 COMMENT 'ПЭС псевдодальностный',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
-TTL d + INTERVAL 2 MONTH DELETE;
+TTL d + INTERVAL 1 MONTH DELETE;
 ```
 
 Источник: *computed.NT*
@@ -300,7 +300,7 @@ CREATE TABLE computed.NTDerivatives (
     delNT Float64 COMMENT 'Значение флуктуаций ПЭС',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 
-TTL d + INTERVAL 2 MONTH DELETE;
+TTL d + INTERVAL 1 MONTH DELETE;
 ```
 
 #### Односекундные таблицы
@@ -322,7 +322,7 @@ CREATE TABLE computed.xz1 (
     Pc Float64 COMMENT 'Значение интервала пространственной корреляции',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 
-TTL d + INTERVAL 2 MONTH DELETE;
+TTL d + INTERVAL 1 MONTH DELETE;
 ```
 
 #### N - секундные таблицы
@@ -338,7 +338,7 @@ CREATE TABLE computed.Tc (
     Tc Float64 COMMENT 'Значение интервала временной корреляции',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
-TTL d + INTERVAL 2 MONTH DELETE
+TTL d + INTERVAL 1 MONTH DELETE
 ```
 
 ### Таблицы для прочего
