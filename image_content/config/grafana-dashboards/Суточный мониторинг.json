@@ -341,6 +341,121 @@
         "x": 12,
         "y": 1
       },
+      "id": 9,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'Average TEC %sat  %sigcomb',\n    avg(avgNT) avgNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)    ",
+          "rawQuery": "SELECT t, groupArray((concat('TEC ', sat, ' ', sigcomb), nt)) as groupArr FROM ( SELECT intDiv(time, 2000) * 2000 as t, sat, sigcomb, avg(nt) nt FROM computed.NT final WHERE d >= toDate(1650994878241/1000) AND time >= 1650994878241 AND      sat = 'GPS22'     and sigcomb in () GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "NTDerivatives",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Среднее ПЭС",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "TECU",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 7
+      },
       "id": 2,
       "legend": {
         "alignAsTable": false,
@@ -395,7 +510,7 @@
           "interval": "",
           "intervalFactor": 1,
           "query": "$columns(\n    'TEC %sat %sigcomb',\n    avg(nt) nt)\nFROM $table final\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
-          "rawQuery": "SELECT t, groupArray((concat('TEC ', sat, ' ', sigcomb), nt)) as groupArr FROM ( SELECT intDiv(time, 2000) * 2000 as t, sat, sigcomb, avg(nt) nt FROM computed.NT final WHERE d >= toDate(1650994878241/1000) AND time >= 1650994878241 AND      sat = 'GPS22'     and sigcomb in () GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('S4 ', sat, ' ', freq), s4)) as groupArr FROM ( SELECT intDiv(time, 2000) * 2000 as t, sat, freq, avg(s4) s4 FROM computed.s4 WHERE d >= toDate(1650994878241/1000) AND time >= 1650994878241 AND      freq IN ('L1CA')     AND sat = 'GPS22' GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
           "table": "NT",
@@ -453,10 +568,10 @@
       "gridPos": {
         "h": 6,
         "w": 12,
-        "x": 0,
+        "x": 12,
         "y": 7
       },
-      "id": 26,
+      "id": 10,
       "legend": {
         "alignAsTable": false,
         "avg": false,
@@ -509,11 +624,11 @@
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "query": "$columns(\n    'S4 %sat %freq',\n    avg(s4) s4)\nFROM $table\nWHERE\n    freq IN ($freq)\n    AND sat = '$satgraph'",
-          "rawQuery": "SELECT t, groupArray((concat('S4 ', sat, ' ', freq), s4)) as groupArr FROM ( SELECT intDiv(time, 2000) * 2000 as t, sat, freq, avg(s4) s4 FROM computed.s4 WHERE d >= toDate(1650994878241/1000) AND time >= 1650994878241 AND      freq IN ('L1CA')     AND sat = 'GPS22' GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
+          "query": "$columns(\n    'TEC deviation STD %sat %sigcomb',\n    avg(sigNT) sigNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
+          "rawQuery": "SELECT t, groupArray((concat('Сырой TEC ', sat, ' L1CA+', secondaryfreq), tec)) as groupArr FROM ( SELECT intDiv(time, 2000) * 2000 as t, sat, secondaryfreq, avg(tec) tec FROM rawdata.ismrawtec WHERE d >= toDate(1650994878241/1000) AND time >= 1650994878241 AND      secondaryfreq IN ()     AND sat = 'GPS22' GROUP BY t, sat, secondaryfreq  ORDER BY t, sat, secondaryfreq) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
-          "table": "s4",
+          "table": "xz1",
           "tableLoading": false
         }
       ],
@@ -521,7 +636,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "S4",
+      "title": "СКО флуктуаций ПЭС",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -538,9 +653,9 @@
       "yaxes": [
         {
           "format": "none",
-          "label": "",
+          "label": "TECU",
           "logBase": 1,
-          "max": null,
+          "max": "1.0",
           "min": null,
           "show": true
         },
@@ -568,8 +683,8 @@
       "gridPos": {
         "h": 6,
         "w": 12,
-        "x": 12,
-        "y": 7
+        "x": 0,
+        "y": 13
       },
       "id": 31,
       "legend": {
@@ -625,7 +740,7 @@
           "interval": "",
           "intervalFactor": 1,
           "query": "$columns(\n    'Сырой TEC %sat L1CA+%secondaryfreq',\n    avg(tec) tec)\nFROM $table\nWHERE\n    secondaryfreq IN ($TEC_secondaryfreq)\n    AND sat = '$satgraph'",
-          "rawQuery": "SELECT t, groupArray((concat('Сырой TEC ', sat, ' L1CA+', secondaryfreq), tec)) as groupArr FROM ( SELECT intDiv(time, 2000) * 2000 as t, sat, secondaryfreq, avg(tec) tec FROM rawdata.ismrawtec WHERE d >= toDate(1650994878241/1000) AND time >= 1650994878241 AND      secondaryfreq IN ()     AND sat = 'GPS22' GROUP BY t, sat, secondaryfreq  ORDER BY t, sat, secondaryfreq) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('Сырое S4 ', sat, ' ', freq), totals4)) as groupArr FROM ( SELECT intDiv(time, 2000) * 2000 as t, sat, freq, avg(totals4) totals4 FROM rawdata.ismredobs WHERE d >= toDate(1650994878241/1000) AND time >= 1650994878241 AND      freq IN ('L1CA')     AND sat = 'GPS22' GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
           "table": "ismrawtec",
@@ -683,125 +798,10 @@
       "gridPos": {
         "h": 6,
         "w": 12,
-        "x": 0,
-        "y": 13
-      },
-      "id": 30,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {},
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/Возвышение/",
-          "yaxis": 2
-        },
-        {
-          "alias": "ADR GPS5 L1",
-          "yaxis": 2
-        },
-        {
-          "alias": "ADR GPS5 L2",
-          "yaxis": 2
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "aggregator": "sum",
-          "database": "computed",
-          "dateColDataType": "d",
-          "dateLoading": false,
-          "dateTimeColDataType": "time",
-          "dateTimeType": "TIMESTAMPMS",
-          "datetimeLoading": false,
-          "downsampleAggregator": "avg",
-          "downsampleFillPolicy": "none",
-          "format": "time_series",
-          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
-          "hide": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "query": "$columns(\n    'Сырое S4 %sat %freq',\n    avg(totals4) totals4)\nFROM $table\nWHERE\n    freq IN ($freq)\n    AND sat = '$satgraph'",
-          "rawQuery": "SELECT t, groupArray((concat('Сырое S4 ', sat, ' ', freq), totals4)) as groupArr FROM ( SELECT intDiv(time, 2000) * 2000 as t, sat, freq, avg(totals4) totals4 FROM rawdata.ismredobs WHERE d >= toDate(1650994878241/1000) AND time >= 1650994878241 AND      freq IN ('L1CA')     AND sat = 'GPS22' GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
-          "refId": "A",
-          "round": "0s",
-          "table": "ismredobs",
-          "tableLoading": false
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "S4",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "none",
-          "label": "ADR",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "ClickHouse",
-      "fill": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 12,
         "x": 12,
         "y": 13
       },
-      "id": 9,
+      "id": 32,
       "legend": {
         "alignAsTable": false,
         "avg": false,
@@ -854,11 +854,11 @@
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "query": "$columns(\n    'Average TEC %sat  %sigcomb',\n    avg(avgNT) avgNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)    ",
+          "query": "$columns(\n    'TEC deviation STD %sat %sigcomb',\n    avg(sigNT) sigNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
           "rawQuery": "SELECT t, groupArray((concat('Average TEC ', sat, '  ', sigcomb), avgNT)) as groupArr FROM ( SELECT intDiv(time, 2000) * 2000 as t, sat, sigcomb, avg(avgNT) avgNT FROM computed.NTDerivatives WHERE d >= toDate(1650994878241/1000) AND time >= 1650994878241 AND      sat = 'GPS22'     and sigcomb in () GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
-          "table": "NTDerivatives",
+          "table": "xz1",
           "tableLoading": false
         }
       ],
@@ -866,7 +866,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Среднее ПЭС",
+      "title": "СКО флуктуаций ПЭС",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -885,7 +885,7 @@
           "format": "none",
           "label": "TECU",
           "logBase": 1,
-          "max": null,
+          "max": "0.1",
           "min": null,
           "show": true
         },
@@ -981,7 +981,7 @@
         "x": 12,
         "y": 19
       },
-      "id": 10,
+      "id": 26,
       "legend": {
         "alignAsTable": false,
         "avg": false,
@@ -1034,11 +1034,11 @@
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "query": "$columns(\n    'TEC deviation STD %sat %sigcomb',\n    avg(sigNT) sigNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
+          "query": "$columns(\n    'S4 %sat %freq',\n    avg(s4) s4)\nFROM $table\nWHERE\n    freq IN ($freq)\n    AND sat = '$satgraph'",
           "rawQuery": "SELECT t, groupArray((concat('TEC deviation ', sat, ' ', sigcomb), delNT)) as groupArr FROM ( SELECT intDiv(time, 2000) * 2000 as t, sat, sigcomb, avg(delNT) delNT FROM computed.NTDerivatives WHERE d >= toDate(1650994878242/1000) AND time >= 1650994878242 AND      sat = 'GPS22'     and sigcomb in () GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
-          "table": "xz1",
+          "table": "s4",
           "tableLoading": false
         }
       ],
@@ -1046,7 +1046,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "СКО флуктуаций ПЭС",
+      "title": "S4",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1063,9 +1063,124 @@
       "yaxes": [
         {
           "format": "none",
-          "label": "TECU",
+          "label": "",
           "logBase": 1,
-          "max": "1.0",
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "ClickHouse",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 25
+      },
+      "id": 30,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'Сырое S4 %sat %freq',\n    avg(totals4) totals4)\nFROM $table\nWHERE\n    freq IN ($freq)\n    AND sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('Сырое S4 ', sat, ' ', freq), totals4)) as groupArr FROM ( SELECT intDiv(time, 2000) * 2000 as t, sat, freq, avg(totals4) totals4 FROM computed.ismredobs WHERE d >= toDate(1655206015100/1000) AND time >= 1655206015100 AND      freq IN ('')     AND sat = '' GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "ismredobs",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "S4",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "",
+          "logBase": 1,
+          "max": null,
           "min": null,
           "show": true
         },
