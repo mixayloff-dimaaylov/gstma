@@ -123,7 +123,7 @@ _script="$(basename "${0}")"
 _dump_path='/tmp/rawdump'
 _cont_name='clickhouse'
 
-while getopts ':hi' _opt ; do
+while getopts ':hin' _opt ; do
 	case "${_opt}" in
 		h)
 			print_help
