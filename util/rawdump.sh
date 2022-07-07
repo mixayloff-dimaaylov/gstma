@@ -24,6 +24,7 @@ print_help() {
 # $2 -- from
 # $3 -- to
 dump_range() {
+    for _db in 'rawdata' 'computed' ; do
     if [[ "${1}" =~ ^GPS ]] ; then
         _cols=\
 "     anyIf(psr, freq = 'L1CA') AS P1,"\
@@ -50,7 +51,7 @@ dump_range() {
 "${_cols}"\
 "     sat"\
 " FROM"\
-"     rawdata.range"\
+"     ${_db}.range"\
 " WHERE"\
 "     sat='${1}'"\
 "     AND time BETWEEN ${2} AND ${3}"\
@@ -59,27 +60,30 @@ dump_range() {
 " ORDER BY"\
 "     time ASC"\
 " FORMAT CSV" \
-    '--format' 'CSV' > "${_dump_path}/range_${1}_${2}_${3}.csv"
+    '--format' 'CSV' >> "${_dump_path}/${_db}_range_${1}_${2}_${3}.csv"
+    done
 }
 
 # $1 -- sat
 # $2 -- from
 # $3 -- to
 dump_satxyz2() {
+    for _db in 'rawdata' 'computed' ; do
     docker-compose exec "${_cont_name}" 'clickhouse-client' '--query' \
 " SELECT"\
 "     time,"\
 "     elevation,"\
 "     sat"\
 " FROM"\
-"     rawdata.satxyz2"\
+"     ${_db}.satxyz2"\
 " WHERE"\
 "     sat='${1}'"\
 "     AND time BETWEEN ${2} AND ${3}"\
 " ORDER BY"\
 "     time ASC"\
 " FORMAT CSV" \
-    '--format' 'CSV' > "${_dump_path}/satxyz2_${1}_${2}_${3}.csv"
+    '--format' 'CSV' >> "${_dump_path}/${_db}satxyz2_${1}_${2}_${3}.csv"
+    done
 }
 
 # $1 -- sat
@@ -87,13 +91,14 @@ dump_satxyz2() {
 # $3 -- to
 # $4 -- secondaryfreq
 dump_ismrawtec() {
+    for _db in 'rawdata' 'computed' ; do
     docker-compose exec "${_cont_name}" 'clickhouse-client' '--query' \
 " SELECT"\
 "     time,"\
 "     anyIf(tec, secondaryfreq = '${4}') AS TEC,"\
 "     sat"\
 " FROM"\
-"     rawdata.ismrawtec"\
+"     ${_db}.ismrawtec"\
 " WHERE"\
 "     sat='${1}'"\
 "     AND time BETWEEN ${2} AND ${3}"\
@@ -103,7 +108,8 @@ dump_ismrawtec() {
 " ORDER BY"\
 "     time ASC"\
 " FORMAT CSV" \
-    '--format' 'CSV' > "${_dump_path}/ismrawtec_${1}_${2}_${3}_${4}.csv"
+    '--format' 'CSV' >> "${_dump_path}/${_db}_ismrawtec_${1}_${2}_${3}_${4}.csv"
+    done
 }
 
 # $1 -- sat
@@ -123,7 +129,7 @@ _script="$(basename "${0}")"
 _dump_path='/tmp/rawdump'
 _cont_name='clickhouse'
 
-while getopts ':hi' _opt ; do
+while getopts ':hin' _opt ; do
 	case "${_opt}" in
 		h)
 			print_help
