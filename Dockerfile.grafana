@@ -14,27 +14,8 @@ COPY ./satmap-panel/src/ src/
 COPY ./satmap-panel/README.md .
 RUN grunt
 
-FROM node:lts as build-clickhouse-grafana
-WORKDIR '/home/node/clickhouse-grafana/'
-
-RUN npm install -g grunt-cli
-
-COPY ./clickhouse-grafana/package.json .
-RUN npm install --legacy-peer-deps
-
-COPY ./clickhouse-grafana/LICENSE .
-COPY ./clickhouse-grafana/CHANGELOG.md .
-COPY ./clickhouse-grafana/tsconfig.json .
-COPY ./clickhouse-grafana/tslint.json .
-COPY ./clickhouse-grafana/Gruntfile.js .
-COPY ./clickhouse-grafana/karma.conf.js .
-COPY ./clickhouse-grafana/specs/ specs/
-COPY ./clickhouse-grafana/src/ src/
-COPY ./clickhouse-grafana/README.md .
-RUN grunt
-
 FROM grafana/grafana:6.2.5 as grafana
 COPY --from=build-satmap-panel /home/node/satmap-panel/ /var/lib/grafana/plugins/satmap-panel/
-COPY --from=build-clickhouse-grafana /home/node/clickhouse-grafana/ /var/lib/grafana/plugins/vertamedia-clickhouse-datasource/
+COPY ./clickhouse-grafana/dist/ /var/lib/grafana/plugins/vertamedia-clickhouse-datasource/
 
 ENTRYPOINT [ "/run.sh" ]

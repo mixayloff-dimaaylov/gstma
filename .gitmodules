@@ -4,7 +4,7 @@
 	branch = master
 [submodule "clickhouse-grafana"]
 	path = clickhouse-grafana
-	url = https://github.com/mixayloff-dimaaylov/clickhouse-grafana
+	url = https://github.com/Altinity/clickhouse-grafana
 	branch = master
 [submodule "satmap-panel"]
 	path = satmap-panel
