@@ -14,8 +14,15 @@ COPY ./satmap-panel/src/ src/
 COPY ./satmap-panel/README.md .
 RUN grunt
 
+FROM node:lts as build-datasource
+WORKDIR '/home/node/clickhouse-grafana/'
+COPY ./clickhouse-grafana/ .
+RUN if [ "3" -eq `ls -la ./node_modules/ | wc -l` ]; then npm install --production=false; fi && \
+    npm run build:prod && \
+    npm run test:docker
+
 FROM grafana/grafana:6.2.5 as grafana
 COPY --from=build-satmap-panel /home/node/satmap-panel/ /var/lib/grafana/plugins/satmap-panel/
-COPY ./clickhouse-grafana/dist/ /var/lib/grafana/plugins/vertamedia-clickhouse-datasource/
+COPY --from=build-datasource /home/node/clickhouse-grafana/dist/ /var/lib/grafana/plugins/vertamedia-clickhouse-datasource/
 
 ENTRYPOINT [ "/run.sh" ]
