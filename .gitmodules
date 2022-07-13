@@ -5,7 +5,7 @@
 [submodule "clickhouse-grafana"]
 	path = clickhouse-grafana
 	url = https://github.com/mixayloff-dimaaylov/clickhouse-grafana
-	branch = master
+	branch = timestampms-with-columns-2.5.0
 [submodule "satmap-panel"]
 	path = satmap-panel
 	url = https://github.com/mixayloff-dimaaylov/satmap-panel
