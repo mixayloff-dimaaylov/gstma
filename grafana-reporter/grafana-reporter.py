@@ -167,9 +167,10 @@ def main(dashboard_url):
                 else:
                     print("Failed to connect to WebDriver. Trying...")
                     sleep(5)
-            finally:
+            else:
                 break
-            retry -= 1
+            finally:
+                retry -= 1
 
         browser.set_window_size(1920, 1080)
         browser.implicitly_wait(10)
