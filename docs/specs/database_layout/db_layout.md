@@ -249,15 +249,15 @@ SELECT
 FROM rawdata.satxyz2
 ```
 
-##### computed.s4
+##### computed.s4pwr
 
 Источник: *rawdata.range*  
-*Примечание:* s4 считается для частот, а не для их комбинаций.  
+*Примечание:* Эта S4 считается для частот, а не для их комбинаций.  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
-CREATE TABLE computed.s4 (
+CREATE TABLE computed.s4pwr (
     time UInt64 COMMENT 'Метка времени (timestamp в ms)',
     sat String COMMENT 'Спутник',
     freq String COMMENT 'Частота, для которой рассчитано значение',

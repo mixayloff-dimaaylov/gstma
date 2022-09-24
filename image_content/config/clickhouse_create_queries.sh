@@ -207,7 +207,7 @@ FROM rawdata.satxyz2
 EOL123
 
 clickhouse-client <<EOL123
-CREATE TABLE IF NOT EXISTS computed.s4 (
+CREATE TABLE IF NOT EXISTS computed.s4pwr (
   time UInt64,
   sat String,
   freq String,
