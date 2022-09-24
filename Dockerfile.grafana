@@ -14,15 +14,27 @@ COPY ./satmap-panel/src/ src/
 COPY ./satmap-panel/README.md .
 RUN grunt
 
-FROM node:lts as build-datasource
+FROM golang:1.18 as build-datasource-backend
+WORKDIR '/go/src/grafana-clickhouse'
+COPY ./clickhouse-grafana/ /go/src/grafana-clickhouse
+RUN env GOCACHE="/go-cache" RUN_TESTS="${RUN_TESTS:-.+}" && \
+    go test -timeout 1m -failfast -tags=integration -run "${RUN_TESTS:-.+}" -v ./pkg/ && \
+    GOOS=linux GOARCH=amd64 go build -buildvcs=false -o ./dist/altinity-clickhouse-plugin_linux_amd64 ./pkg/ && \
+    GOOS=linux GOARCH=arm64 go build -buildvcs=false -o ./dist/altinity-clickhouse-plugin_linux_arm64 ./pkg/ && \
+    GOOS=windows GOARCH=amd64 go build -buildvcs=false -o ./dist/altinity-clickhouse-plugin_windows_amd64.exe ./pkg/ && \
+    GOOS=darwin GOARCH=amd64 go build -buildvcs=false -o ./dist/altinity-clickhouse-plugin_darwin_amd64 ./pkg/ && \
+    GOOS=darwin GOARCH=arm64 go build -buildvcs=false -o ./dist/altinity-clickhouse-plugin_darwin_arm64 ./pkg/ && \
+    chmod +x ./dist/altinity-clickhouse-plugin*
+
+FROM node:lts as build-datasource-frontend
 WORKDIR '/home/node/clickhouse-grafana/'
-COPY ./clickhouse-grafana/ .
+COPY --from=build-datasource-backend /go/src/grafana-clickhouse .
 RUN if [ "3" -eq `ls -la ./node_modules/ | wc -l` ]; then npm install --production=false; fi && \
     npm run build:prod && \
     npm run test:docker
 
-FROM grafana/grafana:6.2.5 as grafana
+FROM grafana/grafana:9.1.3 as grafana
 COPY --from=build-satmap-panel /home/node/satmap-panel/ /var/lib/grafana/plugins/satmap-panel/
-COPY --from=build-datasource /home/node/clickhouse-grafana/dist/ /var/lib/grafana/plugins/vertamedia-clickhouse-datasource/
+COPY --from=build-datasource-frontend /home/node/clickhouse-grafana/dist/ /var/lib/grafana/plugins/vertamedia-clickhouse-datasource/
 
 ENTRYPOINT [ "/run.sh" ]

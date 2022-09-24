@@ -179,9 +179,9 @@ def main(dashboard_url):
 
         # аутентификация
         try:
-            browser.find_element(By.NAME,  'username').send_keys(GF_USERNAME)
+            browser.find_element(By.NAME,  'user').send_keys(GF_USERNAME)
             browser.find_element(By.NAME,  'password').send_keys(GF_PASSWORD)
-            browser.find_element(By.XPATH, "//button[contains(text(),'Log In')]").click()
+            browser.find_element(By.XPATH, "//button[@aria-label='Login button']").click()
         except NoSuchElementException:
             print("Failed to log in to Grafana")
             browser.quit()
