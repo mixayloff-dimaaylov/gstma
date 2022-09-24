@@ -207,6 +207,20 @@ FROM rawdata.satxyz2
 EOL123
 
 clickhouse-client <<EOL123
+CREATE TABLE IF NOT EXISTS computed.s4 (
+  time UInt64,
+  sat String,
+  sigcomb String,
+  s4 Float64,
+  d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree()
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, sigcomb)
+TTL d + INTERVAL 1 MONTH DELETE
+SETTINGS index_granularity=8192
+EOL123
+
+clickhouse-client <<EOL123
 CREATE TABLE IF NOT EXISTS computed.s4pwr (
   time UInt64,
   sat String,

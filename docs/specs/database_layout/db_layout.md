@@ -249,6 +249,23 @@ SELECT
 FROM rawdata.satxyz2
 ```
 
+##### computed.s4
+
+Источник: *rawdata.range*  
+
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE TABLE computed.s4 (
+    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+    sat String COMMENT 'Спутник',
+    sigcomb String COMMENT 'Комбинация сигналов, для которой рассчитано значение',
+    s4 Float64 COMMENT 'S4',
+    d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
+TTL d + INTERVAL 1 MONTH DELETE
+```
+
 ##### computed.s4pwr
 
 Источник: *rawdata.range*  
