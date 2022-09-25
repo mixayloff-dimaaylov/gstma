@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# v13
+# v14
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
