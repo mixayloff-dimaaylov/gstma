@@ -3,25 +3,38 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "limit": 100,
         "name": "Annotations & Alerts",
         "showIn": 0,
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
-  "iteration": 1656772010860,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -30,6 +43,15 @@
       },
       "id": 17,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Данные",
       "type": "row"
     },
@@ -38,14 +60,19 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "ClickHouse",
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 0,
         "y": 1
       },
+      "hiddenSeries": false,
       "id": 2,
       "legend": {
         "alignAsTable": false,
@@ -61,8 +88,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.1.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -87,6 +117,10 @@
         {
           "aggregator": "sum",
           "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -108,9 +142,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "ПЭС",
       "tooltip": {
         "shared": true,
@@ -119,9 +151,7 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
@@ -130,22 +160,17 @@
           "format": "none",
           "label": "TECU",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "none",
           "label": "ADR",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": false
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -153,14 +178,19 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "ClickHouse",
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 1
       },
+      "hiddenSeries": false,
       "id": 5,
       "legend": {
         "avg": false,
@@ -175,8 +205,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.1.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -368,6 +401,10 @@
       "targets": [
         {
           "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -385,6 +422,10 @@
         },
         {
           "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -402,9 +443,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "C/No",
       "tooltip": {
         "shared": true,
@@ -413,33 +452,24 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "dB",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "degree",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -447,14 +477,19 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "ClickHouse",
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 0,
         "y": 7
       },
+      "hiddenSeries": false,
       "id": 31,
       "legend": {
         "alignAsTable": false,
@@ -470,8 +505,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.1.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -496,6 +534,10 @@
         {
           "aggregator": "sum",
           "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -517,9 +559,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "ПЭС ОЕМ6",
       "tooltip": {
         "shared": true,
@@ -528,9 +568,7 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
@@ -539,22 +577,17 @@
           "format": "none",
           "label": "TECU",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "none",
           "label": "ADR",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": false
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -562,14 +595,19 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "ClickHouse",
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 7
       },
+      "hiddenSeries": false,
       "id": 9,
       "legend": {
         "alignAsTable": false,
@@ -585,8 +623,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.1.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -611,6 +652,10 @@
         {
           "aggregator": "sum",
           "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -632,9 +677,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Среднее ПЭС",
       "tooltip": {
         "shared": true,
@@ -643,9 +686,7 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
@@ -654,27 +695,21 @@
           "format": "none",
           "label": "TECU",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "none",
           "label": "ADR",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": false
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
       "aliasColors": {},
-      "cacheTimeout": null,
       "colorize": false,
       "colors": [
         "#5b94ff",
@@ -682,7 +717,10 @@
         "#fff882",
         "#ff5b5b"
       ],
-      "datasource": "ClickHouse",
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
       "fontSize": "80%",
       "gridPos": {
         "h": 16,
@@ -693,7 +731,6 @@
       "heatmap": true,
       "heatmapField": "S4",
       "id": 7,
-      "interval": null,
       "legend": {
         "show": false
       },
@@ -701,7 +738,6 @@
       "links": [],
       "maxDataPoints": 2,
       "nullPointMode": "connected",
-      "options": {},
       "polar": false,
       "polarCenter": {
         "lat": 45.040638,
@@ -711,6 +747,10 @@
       "targets": [
         {
           "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -742,14 +782,19 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "ClickHouse",
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 13
       },
+      "hiddenSeries": false,
       "id": 32,
       "legend": {
         "alignAsTable": false,
@@ -765,8 +810,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.1.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -791,6 +839,10 @@
         {
           "aggregator": "sum",
           "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -812,9 +864,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "СКО флуктуаций ПЭС",
       "tooltip": {
         "shared": true,
@@ -823,9 +873,7 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
@@ -834,22 +882,17 @@
           "format": "none",
           "label": "TECU",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "none",
           "label": "ADR",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": false
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -857,14 +900,19 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "ClickHouse",
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 19
       },
+      "hiddenSeries": false,
       "id": 26,
       "legend": {
         "alignAsTable": false,
@@ -880,8 +928,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.1.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -906,6 +957,10 @@
         {
           "aggregator": "sum",
           "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -922,15 +977,13 @@
           "rawQuery": "SELECT t, groupArray((concat('S4 ', sat, ' ', freq), s4)) as groupArr FROM ( SELECT intDiv(time, 15000) * 15000 as t, sat, freq, avg(s4) s4 FROM computed.s4 WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND      freq IN ('L1CA')     AND sat = 'GLONASS1' GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
-          "table": "s4",
+          "table": "s4pwr",
           "tableLoading": false
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
-      "title": "S4",
+      "title": "Мощностной S4",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -938,9 +991,7 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
@@ -949,22 +1000,17 @@
           "format": "none",
           "label": "",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "none",
           "label": "ADR",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": false
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -972,15 +1018,20 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "ClickHouse",
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 25
       },
-      "id": 30,
+      "hiddenSeries": false,
+      "id": 33,
       "legend": {
         "alignAsTable": false,
         "avg": false,
@@ -995,8 +1046,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.1.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1021,6 +1075,130 @@
         {
           "aggregator": "sum",
           "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'S4 %sat %sigcomb',\n    avg(s4) s4)\nFROM $table\nWHERE\n    sigcomb IN ($sigcomb)\n    AND sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('S4 ', sat, ' ', sigcomb), s4)) AS groupArr FROM ( SELECT (intDiv(time, (5 * 1000)) * (5 * 1000)) AS t, sat, sigcomb, avg(s4) s4 FROM computed.s4\nWHERE time >= toUInt64(1664038327 * 1000) AND time <= toUInt64(1664049127 * 1000) AND\n    sigcomb IN ('L1CA+L2CA','L1CA+L2P')\n    AND sat = 'GLONASS1' GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "s4",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "S4",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": "ADR",
+          "logBase": 1,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 31
+      },
+      "hiddenSeries": false,
+      "id": 30,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.1.3",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/Возвышение/",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L1",
+          "yaxis": 2
+        },
+        {
+          "alias": "ADR GPS5 L2",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
@@ -1042,9 +1220,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "S4 ОЕМ6",
       "tooltip": {
         "shared": true,
@@ -1053,9 +1229,7 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
@@ -1064,40 +1238,40 @@
           "format": "none",
           "label": "",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "none",
           "label": "ADR",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": false
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     }
   ],
   "refresh": "10s",
-  "schemaVersion": 18,
+  "schemaVersion": 37,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
-        "allValue": null,
         "current": {
-          "text": "GLONASS1",
+          "selected": true,
+          "text": [
+            "GLONASS1"
+          ],
           "value": [
             "GLONASS1"
           ]
         },
-        "datasource": "ClickHouse",
+        "datasource": {
+          "type": "vertamedia-clickhouse-datasource",
+          "uid": "PDEE91DDB90597936"
+        },
         "definition": "select distinct(sat) from computed.satxyz2 where time between $__from and $__to",
         "hide": 0,
         "includeAll": false,
@@ -1111,18 +1285,20 @@
         "skipUrlSync": false,
         "sort": 3,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
       },
       {
-        "allValue": null,
         "current": {
+          "selected": false,
           "text": "GLONASS1",
           "value": "GLONASS1"
         },
-        "datasource": "ClickHouse",
+        "datasource": {
+          "type": "vertamedia-clickhouse-datasource",
+          "uid": "PDEE91DDB90597936"
+        },
         "definition": "select distinct(sat) from computed.satxyz2 where time between $__from and $__to",
         "hide": 0,
         "includeAll": false,
@@ -1136,22 +1312,27 @@
         "skipUrlSync": false,
         "sort": 3,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
       },
       {
-        "allValue": null,
         "current": {
-          "text": "L1CA",
-          "value": "L1CA"
+          "selected": true,
+          "text": [
+            "L1CA"
+          ],
+          "value": [
+            "L1CA"
+          ]
         },
-        "datasource": "ClickHouse",
+        "datasource": {
+          "type": "vertamedia-clickhouse-datasource",
+          "uid": "PDEE91DDB90597936"
+        },
         "definition": "select distinct(freq) from computed.range where sat='$satgraph' and time between $__from and $__to",
         "hide": 0,
         "includeAll": false,
-        "label": null,
         "multi": true,
         "name": "freq",
         "options": [],
@@ -1161,23 +1342,27 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
       },
       {
-        "allValue": null,
         "current": {
           "selected": true,
-          "text": "All",
-          "value": "$__all"
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
-        "datasource": "ClickHouse",
+        "datasource": {
+          "type": "vertamedia-clickhouse-datasource",
+          "uid": "PDEE91DDB90597936"
+        },
         "definition": "select distinct(sigcomb) from computed.NT where sat='$satgraph' and time between $__from and $__to",
         "hide": 0,
         "includeAll": true,
-        "label": null,
         "multi": true,
         "name": "sigcomb",
         "options": [],
@@ -1187,22 +1372,27 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
       },
       {
-        "allValue": null,
         "current": {
-          "text": "All",
-          "value": "$__all"
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
-        "datasource": "ClickHouse",
+        "datasource": {
+          "type": "vertamedia-clickhouse-datasource",
+          "uid": "PDEE91DDB90597936"
+        },
         "definition": "select distinct(secondaryfreq) from computed.ismrawtec where sat='$satgraph' and time between $__from and $__to",
         "hide": 0,
         "includeAll": true,
-        "label": null,
         "multi": true,
         "name": "TEC_secondaryfreq",
         "options": [],
@@ -1212,7 +1402,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -1251,5 +1440,6 @@
   "timezone": "",
   "title": "Суточный мониторинг",
   "uid": "0F2yyfCWz3",
-  "version": 1
+  "version": 1,
+  "weekStart": ""
 }

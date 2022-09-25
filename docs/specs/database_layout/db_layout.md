@@ -1,4 +1,4 @@
-v13 clickhouse database layout
+v14 clickhouse database layout
 =============================
 
 ### Таблицы для входных данных
@@ -252,12 +252,29 @@ FROM rawdata.satxyz2
 ##### computed.s4
 
 Источник: *rawdata.range*  
-*Примечание:* s4 считается для частот, а не для их комбинаций.  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
 CREATE TABLE computed.s4 (
+    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+    sat String COMMENT 'Спутник',
+    sigcomb String COMMENT 'Комбинация сигналов, для которой рассчитано значение',
+    s4 Float64 COMMENT 'S4',
+    d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
+TTL d + INTERVAL 1 MONTH DELETE
+```
+
+##### computed.s4pwr
+
+Источник: *rawdata.range*  
+*Примечание:* Эта S4 считается для частот, а не для их комбинаций.  
+
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE TABLE computed.s4pwr (
     time UInt64 COMMENT 'Метка времени (timestamp в ms)',
     sat String COMMENT 'Спутник',
     freq String COMMENT 'Частота, для которой рассчитано значение',
