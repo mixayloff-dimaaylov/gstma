@@ -92,7 +92,7 @@ def sigNT(dnt):
 
 
 def sigPhi(sigNT, f):
-    return 10e16 * 80.8 * pi * sigNT / (C * f)
+    return 1e16 * 80.8 * pi * sigNT / (C * f)
 
 
 def perf_cal(file_range, file_ismrawtec, file_satxyz2):
