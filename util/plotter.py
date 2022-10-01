@@ -5,6 +5,7 @@ import glob
 import re
 import csv
 import statistics
+import scipy.signal as sc
 import datetime as dt
 
 import matplotlib.pyplot as plt
@@ -35,6 +36,29 @@ def k(adr1, adr2, f1, f2, psr1, psr2):
 def DNT(adr1, adr2, f1, f2, psr1, psr2, length):
     return multiplier(f1, f2) * \
            statistics.mean(k(adr1, adr2, f1, f2, psr1, psr2))
+
+
+order = 6
+fs = 60.0
+cutoff = 3.667
+
+ab, aa = sc.butter(order, cutoff / (0.5 * fs), btype='low', analog=False)
+db, da = sc.butter(order, cutoff / (0.5 * fs), btype='high', analog=False)
+
+
+def avgNT(NT):
+    # filter settings
+    return sc.lfilter(ab, aa, NT)
+
+
+def delNT(NT):
+    # filter settings
+    return sc.lfilter(db, da, NT)
+
+
+def sigNT(dnt):
+    v = np.lib.stride_tricks.sliding_window_view(dnt, 60)
+    return v.std(axis=-1)
 
 
 def perf_cal(file_range, file_ismrawtec, file_satxyz2):
@@ -128,6 +152,17 @@ def perf_cal(file_range, file_ismrawtec, file_satxyz2):
 
     # plt.show()
 
+    avgNT12 = avgNT(NT12adr)
+    avgNT15 = avgNT(NT15adr)
+
+    delNT12 = delNT(NT12adr)
+    delNT15 = delNT(NT15adr)
+
+    sigNT12 = sigNT(delNT12)
+    sigNT15 = sigNT(delNT15)
+    print(sigNT12)
+    print(sigNT15)
+
     # dict_key = file_a_sat + '_' + str(times_unix[0]) + ' ' + str(times_unix[-1])
     result = {'sat': file_a_sat,
               'times': times,
@@ -136,7 +171,13 @@ def perf_cal(file_range, file_ismrawtec, file_satxyz2):
               'NT12psr': NT12psr,
               'NT15psr': NT15psr,
               'NT12adr': NT12adr,
-              'NT15adr': NT15adr}
+              'NT15adr': NT15adr,
+              'avgNT12': avgNT12,
+              'avgNT15': avgNT15,
+              'delNT12': delNT12,
+              'delNT15': delNT15,
+              'sigNT12': sigNT12,
+              'sigNT15': sigNT15}
 
     return result
 
@@ -151,6 +192,12 @@ def plot_build(sat):
     ax.plot(sat['times'], sat['NT12adr'], label="NT(adr1 - adr2)")
     ax.plot(sat['times'], sat['NT15adr'], label="NT(adr1 - adr5)")
     ax.plot(sat['ism_times'], sat['ism_tec'], label="ISMRAWTEC's TEC")
+    ax.plot(sat['times'], sat['avgNT12'], label="avgNT(12)")
+    ax.plot(sat['times'], sat['avgNT15'], label="avgNT(15)")
+    ax.plot(sat['times'], sat['delNT12'], label="delNT(12)")
+    ax.plot(sat['times'], sat['delNT15'], label="delNT(15)")
+    ax.plot(sat['times'][59:], sat['sigNT12'], label="sigNT(12)")
+    ax.plot(sat['times'][59:], sat['sigNT15'], label="sigNT(15)")
     ax.legend()
     plt.title(f"ПЭСы спутника {sat['sat']}")
     plt.savefig(f"ПЭСы спутника {sat['sat']}")
