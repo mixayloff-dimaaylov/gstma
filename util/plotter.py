@@ -11,6 +11,8 @@ import datetime as dt
 import matplotlib.pyplot as plt
 import numpy as np
 
+from math import pi
+
 C = 299792458.0
 
 
@@ -59,6 +61,10 @@ def delNT(NT):
 def sigNT(dnt):
     v = np.lib.stride_tricks.sliding_window_view(dnt, 60)
     return v.std(axis=-1)
+
+
+def sigPhi(sigNT, f):
+    return 10e16 * 80.8 * pi * sigNT / (C * f)
 
 
 def perf_cal(file_range, file_ismrawtec, file_satxyz2):
@@ -160,8 +166,9 @@ def perf_cal(file_range, file_ismrawtec, file_satxyz2):
 
     sigNT12 = sigNT(delNT12)
     sigNT15 = sigNT(delNT15)
-    print(sigNT12)
-    print(sigNT15)
+
+    sigPhi12 = sigPhi(sigNT12, f2)
+    sigPhi15 = sigPhi(sigNT15, f5)
 
     # dict_key = file_a_sat + '_' + str(times_unix[0]) + ' ' + str(times_unix[-1])
     result = {'sat': file_a_sat,
@@ -177,7 +184,9 @@ def perf_cal(file_range, file_ismrawtec, file_satxyz2):
               'delNT12': delNT12,
               'delNT15': delNT15,
               'sigNT12': sigNT12,
-              'sigNT15': sigNT15}
+              'sigNT15': sigNT15,
+              'sigPhi12': sigPhi12,
+              'sigPhi15': sigPhi15}
 
     return result
 
@@ -198,6 +207,8 @@ def plot_build(sat):
     ax.plot(sat['times'], sat['delNT15'], label="delNT(15)")
     ax.plot(sat['times'][59:], sat['sigNT12'], label="sigNT(12)")
     ax.plot(sat['times'][59:], sat['sigNT15'], label="sigNT(15)")
+    ax.plot(sat['times'][59:], sat['sigPhi12'], label="sigPhi(12)")
+    ax.plot(sat['times'][59:], sat['sigPhi15'], label="sigPhi(15)")
     ax.legend()
     plt.title(f"ПЭСы спутника {sat['sat']}")
     plt.savefig(f"ПЭСы спутника {sat['sat']}")
