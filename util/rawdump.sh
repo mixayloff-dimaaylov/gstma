@@ -82,7 +82,7 @@ dump_satxyz2() {
 " ORDER BY"\
 "     time ASC"\
 " FORMAT CSV" \
-    '--format' 'CSV' >> "${_dump_path}/${_db}satxyz2_${1}_${2}_${3}.csv"
+    '--format' 'CSV' >> "${_dump_path}/${_db}_satxyz2_${1}_${2}_${3}.csv"
     done
 }
 
