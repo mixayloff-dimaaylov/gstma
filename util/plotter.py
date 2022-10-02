@@ -96,7 +96,8 @@ def sigPhi(sigNT, f):
 
 
 def perf_cal(file_range, file_ismrawtec, file_satxyz2):
-    file_a_sat = re.search('^range_([^\._]*)_[0-9]*_[0-9]*\.csv$', file_range).group(1)
+    file_a_sat = re.search(
+        '^rawdata_range_([^\._]*)_[0-9]*_[0-9]*\.csv$', file_range).group(1)
     file_a_sat_system = re.search('^([A-Z]+)[0-9]+$', file_a_sat).group(1)
 
     if file_a_sat_system == 'GPS':
