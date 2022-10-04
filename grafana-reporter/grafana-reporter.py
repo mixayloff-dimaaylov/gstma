@@ -90,7 +90,7 @@ def sat_shot(browser, dashboard_url, sat, t_from, t_to):
     try:
         el = WebDriverWait(browser, 30).until(
             expected_conditions.presence_of_element_located(
-                (By.CLASS_NAME, "dashboard-container"))
+                (By.CLASS_NAME, "main-view"))
         )
 
         browser.implicitly_wait(10)
