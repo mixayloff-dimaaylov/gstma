@@ -249,9 +249,9 @@ def plot_build(sat):
 if __name__ == '__main__':
     # find files
     os.chdir('./rawdump/')
-    files_range = glob.glob("range_*.csv")
-    files_ismrawtec = glob.glob("ismrawtec_*.csv")
-    files_satxyz2 = glob.glob("satxyz2_*.csv")
+    files_range = glob.glob("rawdata_range_*.csv")
+    files_ismrawtec = glob.glob("rawdata_ismrawtec_*.csv")
+    files_satxyz2 = glob.glob("rawdata_satxyz2_*.csv")
 
     for files in zip(files_range, files_ismrawtec, files_satxyz2):
         plot_build(perf_cal(*files))
