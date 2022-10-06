@@ -27,20 +27,20 @@ dump_range() {
     for _db in 'rawdata' 'computed' ; do
     if [[ "${1}" =~ ^GPS ]] ; then
         _cols=\
-"     anyIf(psr, freq = 'L1CA') AS P1,"\
-"     anyIf(psr, freq = 'L2C') AS P2,"\
-"     anyIf(psr, freq = 'L5Q') AS P5,"\
-"     anyIf(adr, freq = 'L1CA') AS L1,"\
-"     anyIf(adr, freq = 'L2C') AS L2,"\
-"     anyIf(adr, freq = 'L5Q') AS L5,"
+"     anyIf(psr, freq = 'L1CA') AS psr1,"\
+"     anyIf(psr, freq = 'L2C') AS psr2,"\
+"     anyIf(psr, freq = 'L5Q') AS psr5,"\
+"     anyIf(adr, freq = 'L1CA') AS adr1,"\
+"     anyIf(adr, freq = 'L2C') AS adr2,"\
+"     anyIf(adr, freq = 'L5Q') AS adr5,"
     elif [[ "${1}" =~ ^GLONASS ]] ; then
         _cols=\
-"     anyIf(psr, freq = 'L1CA') AS P1,"\
-"     anyIf(psr, freq = 'L2CA') AS P2,"\
-"     anyIf(psr, freq = 'L2P') AS P2P,"\
-"     anyIf(adr, freq = 'L1CA') AS L1,"\
-"     anyIf(adr, freq = 'L2CA') AS L2,"\
-"     anyIf(adr, freq = 'L2P') AS L2P,"
+"     anyIf(psr, freq = 'L1CA') AS psr1,"\
+"     anyIf(psr, freq = 'L2CA') AS psr2,"\
+"     anyIf(psr, freq = 'L2P') AS psr5,"\
+"     anyIf(adr, freq = 'L1CA') AS adr1,"\
+"     anyIf(adr, freq = 'L2CA') AS adr2,"\
+"     anyIf(adr, freq = 'L2P') AS adr5,"
     else
         errexit "Unsupported system.\n" '1'
     fi
@@ -58,9 +58,8 @@ dump_range() {
 " GROUP BY"\
 "     time, sat"\
 " ORDER BY"\
-"     time ASC"\
-" FORMAT CSV" \
-    '--format' 'CSV' >> "${_dump_path}/${_db}_range_${1}_${2}_${3}.csv"
+"     time ASC" \
+    '--format' 'CSVWithNames' >> "${_dump_path}/${_db}_range_${1}_${2}_${3}.csv"
     done
 }
 
@@ -80,9 +79,8 @@ dump_satxyz2() {
 "     sat='${1}'"\
 "     AND time BETWEEN ${2} AND ${3}"\
 " ORDER BY"\
-"     time ASC"\
-" FORMAT CSV" \
-    '--format' 'CSV' >> "${_dump_path}/${_db}_satxyz2_${1}_${2}_${3}.csv"
+"     time ASC" \
+    '--format' 'CSVWithNames' >> "${_dump_path}/${_db}_satxyz2_${1}_${2}_${3}.csv"
     done
 }
 
@@ -95,7 +93,7 @@ dump_ismrawtec() {
     docker-compose exec "${_cont_name}" 'clickhouse-client' '--query' \
 " SELECT"\
 "     time,"\
-"     anyIf(tec, secondaryfreq = '${4}') AS TEC,"\
+"     anyIf(tec, secondaryfreq = '${4}') AS tec,"\
 "     sat"\
 " FROM"\
 "     ${_db}.ismrawtec"\
@@ -106,9 +104,8 @@ dump_ismrawtec() {
 "     time,"\
 "     sat"\
 " ORDER BY"\
-"     time ASC"\
-" FORMAT CSV" \
-    '--format' 'CSV' >> "${_dump_path}/${_db}_ismrawtec_${1}_${2}_${3}_${4}.csv"
+"     time ASC" \
+    '--format' 'CSVWithNames' >> "${_dump_path}/${_db}_ismrawtec_${1}_${2}_${3}_${4}.csv"
     done
 }
 

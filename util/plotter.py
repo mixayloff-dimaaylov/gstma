@@ -95,6 +95,30 @@ def sigPhi(sigNT, f):
     return 1e16 * 80.8 * pi * sigNT / (C * f)
 
 
+def csvReadAsDict(file):
+    columns = {}
+
+    with open(file) as csvfile:
+        csvreader = csv.reader(csvfile, delimiter=',')
+
+        # read header
+        headers = next(csvreader, None)
+
+        if headers is None:
+            print(f'File {file} is empty.')
+            return columns
+
+        for h in headers:
+            columns[h] = []
+
+        # fill header fields
+        for row in csvreader:
+            for h, v in zip(headers, row):
+                columns[h].append(v)
+
+    return columns
+
+
 def perf_cal(file_range, file_ismrawtec, file_satxyz2):
     file_a_sat = re.search(
         '^rawdata_range_([^\._]*)_[0-9]*_[0-9]*\.csv$', file_range).group(1)
@@ -119,38 +143,28 @@ def perf_cal(file_range, file_ismrawtec, file_satxyz2):
         print("Неопределенный тип спутниковой системы.")
         exit(1)
 
-    values_range = []
+    values_range = {}
+    values_range = csvReadAsDict(file_range)
 
-    with open(file_range) as csvfile:
-        csvreader = csv.reader(csvfile, delimiter=',')
-        for row in csvreader:
-            values_range.append(row)
-
-    values_ismrawtec = []
-
-    with open(file_ismrawtec) as csvfile:
-        csvreader = csv.reader(csvfile, delimiter=',')
-        for row in csvreader:
-            values_ismrawtec.append(row)
+    values_ismrawtec = {}
+    values_ismrawtec = csvReadAsDict(file_ismrawtec)
 
     # RANGE
-    times_unix, psr1, psr2, psr5, adr1, adr2, adr5, sat = zip(*values_range)
-
-    times = np.array([dt.datetime.fromtimestamp(int(ts)/1000) for ts in times_unix]).astype(dt.datetime)
-    psr1 = np.array(psr1).astype(float)
-    psr2 = np.array(psr2).astype(float)
-    psr5 = np.array(psr5).astype(float)
-    adr1 = np.array(adr1).astype(float)
-    adr2 = np.array(adr2).astype(float)
-    adr5 = np.array(adr5).astype(float)
-    sat = np.array(sat).astype(str)
+    times = np.array([dt.datetime.fromtimestamp(int(ts)/1000) for ts in values_range['time']]).astype(dt.datetime)
+    psr1 = np.array(values_range['psr1']).astype(float)
+    psr2 = np.array(values_range['psr2']).astype(float)
+    psr5 = np.array(values_range['psr5']).astype(float)
+    adr1 = np.array(values_range['adr1']).astype(float)
+    adr2 = np.array(values_range['adr2']).astype(float)
+    adr5 = np.array(values_range['adr5']).astype(float)
+    sat = np.array(values_range['sat']).astype(str)
 
     # ISMRAWTEC
     ism_times_unix, ism_tec, ism_sat = zip(*values_ismrawtec)
 
-    ism_times = np.array([dt.datetime.fromtimestamp(int(ts)/1000) for ts in ism_times_unix]).astype(dt.datetime)
-    ism_tec = np.array(ism_tec).astype(float)
-    ism_sat = np.array(ism_sat).astype(str)
+    ism_times = np.array([dt.datetime.fromtimestamp(int(ts)/1000) for ts in values_ismrawtec['time']]).astype(dt.datetime)
+    ism_tec = np.array(values_ismrawtec['tec']).astype(float)
+    ism_sat = np.array(values_ismrawtec['sat']).astype(str)
 
     # Расчеты
 
@@ -249,9 +263,9 @@ def plot_build(sat):
 if __name__ == '__main__':
     # find files
     os.chdir('./rawdump/')
-    files_range = glob.glob("range_*.csv")
-    files_ismrawtec = glob.glob("ismrawtec_*.csv")
-    files_satxyz2 = glob.glob("satxyz2_*.csv")
+    files_range = glob.glob("rawdata_range_*.csv")
+    files_ismrawtec = glob.glob("rawdata_ismrawtec_*.csv")
+    files_satxyz2 = glob.glob("rawdata_satxyz2_*.csv")
 
     for files in zip(files_range, files_ismrawtec, files_satxyz2):
         plot_build(perf_cal(*files))
