@@ -58,9 +58,8 @@ dump_range() {
 " GROUP BY"\
 "     time, sat"\
 " ORDER BY"\
-"     time ASC"\
-" FORMAT CSV" \
-    '--format' 'CSV' >> "${_dump_path}/${_db}_range_${1}_${2}_${3}.csv"
+"     time ASC" \
+    '--format' 'CSVWithNames' >> "${_dump_path}/${_db}_range_${1}_${2}_${3}.csv"
     done
 }
 
@@ -80,9 +79,8 @@ dump_satxyz2() {
 "     sat='${1}'"\
 "     AND time BETWEEN ${2} AND ${3}"\
 " ORDER BY"\
-"     time ASC"\
-" FORMAT CSV" \
-    '--format' 'CSV' >> "${_dump_path}/${_db}_satxyz2_${1}_${2}_${3}.csv"
+"     time ASC" \
+    '--format' 'CSVWithNames' >> "${_dump_path}/${_db}_satxyz2_${1}_${2}_${3}.csv"
     done
 }
 
@@ -106,9 +104,8 @@ dump_ismrawtec() {
 "     time,"\
 "     sat"\
 " ORDER BY"\
-"     time ASC"\
-" FORMAT CSV" \
-    '--format' 'CSV' >> "${_dump_path}/${_db}_ismrawtec_${1}_${2}_${3}_${4}.csv"
+"     time ASC" \
+    '--format' 'CSVWithNames' >> "${_dump_path}/${_db}_ismrawtec_${1}_${2}_${3}_${4}.csv"
     done
 }
 
