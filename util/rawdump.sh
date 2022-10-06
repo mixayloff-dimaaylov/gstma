@@ -27,20 +27,20 @@ dump_range() {
     for _db in 'rawdata' 'computed' ; do
     if [[ "${1}" =~ ^GPS ]] ; then
         _cols=\
-"     anyIf(psr, freq = 'L1CA') AS p1,"\
-"     anyIf(psr, freq = 'L2C') AS p2,"\
-"     anyIf(psr, freq = 'L5Q') AS p5,"\
-"     anyIf(adr, freq = 'L1CA') AS l1,"\
-"     anyIf(adr, freq = 'L2C') AS l2,"\
-"     anyIf(adr, freq = 'L5Q') AS l5,"
+"     anyIf(psr, freq = 'L1CA') AS psr1,"\
+"     anyIf(psr, freq = 'L2C') AS psr2,"\
+"     anyIf(psr, freq = 'L5Q') AS psr5,"\
+"     anyIf(adr, freq = 'L1CA') AS adr1,"\
+"     anyIf(adr, freq = 'L2C') AS adr2,"\
+"     anyIf(adr, freq = 'L5Q') AS adr5,"
     elif [[ "${1}" =~ ^GLONASS ]] ; then
         _cols=\
-"     anyIf(psr, freq = 'L1CA') AS p1,"\
-"     anyIf(psr, freq = 'L2CA') AS p2,"\
-"     anyIf(psr, freq = 'L2P') AS p2p,"\
-"     anyIf(adr, freq = 'L1CA') AS l1,"\
-"     anyIf(adr, freq = 'L2CA') AS l2,"\
-"     anyIf(adr, freq = 'L2P') AS l2P,"
+"     anyIf(psr, freq = 'L1CA') AS psr1,"\
+"     anyIf(psr, freq = 'L2CA') AS psr2,"\
+"     anyIf(psr, freq = 'L2P') AS psr5,"\
+"     anyIf(adr, freq = 'L1CA') AS adr1,"\
+"     anyIf(adr, freq = 'L2CA') AS adr2,"\
+"     anyIf(adr, freq = 'L2P') AS adr5,"
     else
         errexit "Unsupported system.\n" '1'
     fi
