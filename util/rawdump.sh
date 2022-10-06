@@ -27,20 +27,20 @@ dump_range() {
     for _db in 'rawdata' 'computed' ; do
     if [[ "${1}" =~ ^GPS ]] ; then
         _cols=\
-"     anyIf(psr, freq = 'L1CA') AS P1,"\
-"     anyIf(psr, freq = 'L2C') AS P2,"\
-"     anyIf(psr, freq = 'L5Q') AS P5,"\
-"     anyIf(adr, freq = 'L1CA') AS L1,"\
-"     anyIf(adr, freq = 'L2C') AS L2,"\
-"     anyIf(adr, freq = 'L5Q') AS L5,"
+"     anyIf(psr, freq = 'L1CA') AS p1,"\
+"     anyIf(psr, freq = 'L2C') AS p2,"\
+"     anyIf(psr, freq = 'L5Q') AS p5,"\
+"     anyIf(adr, freq = 'L1CA') AS l1,"\
+"     anyIf(adr, freq = 'L2C') AS l2,"\
+"     anyIf(adr, freq = 'L5Q') AS l5,"
     elif [[ "${1}" =~ ^GLONASS ]] ; then
         _cols=\
-"     anyIf(psr, freq = 'L1CA') AS P1,"\
-"     anyIf(psr, freq = 'L2CA') AS P2,"\
-"     anyIf(psr, freq = 'L2P') AS P2P,"\
-"     anyIf(adr, freq = 'L1CA') AS L1,"\
-"     anyIf(adr, freq = 'L2CA') AS L2,"\
-"     anyIf(adr, freq = 'L2P') AS L2P,"
+"     anyIf(psr, freq = 'L1CA') AS p1,"\
+"     anyIf(psr, freq = 'L2CA') AS p2,"\
+"     anyIf(psr, freq = 'L2P') AS p2p,"\
+"     anyIf(adr, freq = 'L1CA') AS l1,"\
+"     anyIf(adr, freq = 'L2CA') AS l2,"\
+"     anyIf(adr, freq = 'L2P') AS l2P,"
     else
         errexit "Unsupported system.\n" '1'
     fi
@@ -93,7 +93,7 @@ dump_ismrawtec() {
     docker-compose exec "${_cont_name}" 'clickhouse-client' '--query' \
 " SELECT"\
 "     time,"\
-"     anyIf(tec, secondaryfreq = '${4}') AS TEC,"\
+"     anyIf(tec, secondaryfreq = '${4}') AS tec,"\
 "     sat"\
 " FROM"\
 "     ${_db}.ismrawtec"\
