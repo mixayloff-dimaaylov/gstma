@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# v14
+# v15
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
@@ -216,6 +216,20 @@ CREATE TABLE IF NOT EXISTS computed.s4 (
 ) ENGINE = ReplacingMergeTree()
 PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat, sigcomb)
+TTL d + INTERVAL 1 MONTH DELETE
+SETTINGS index_granularity=8192
+EOL123
+
+clickhouse-client <<EOL123
+CREATE TABLE IF NOT EXISTS computed.s4cno (
+  time UInt64,
+  sat String,
+  freq String,
+  s4 Float64,
+  d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree()
+PARTITION BY toYYYYMM(d)
+ORDER BY (time, sat, freq)
 TTL d + INTERVAL 1 MONTH DELETE
 SETTINGS index_granularity=8192
 EOL123
