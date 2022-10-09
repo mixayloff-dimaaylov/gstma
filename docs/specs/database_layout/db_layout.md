@@ -1,4 +1,4 @@
-v14 clickhouse database layout
+v15 clickhouse database layout
 =============================
 
 ### Таблицы для входных данных
@@ -266,9 +266,27 @@ CREATE TABLE computed.s4 (
 TTL d + INTERVAL 1 MONTH DELETE
 ```
 
-##### computed.s4pwr
+##### computed.s4cno
 
 Источник: *rawdata.range*  
+*Примечание:* Эта S4 считается для частот, а не для их комбинаций.  
+
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE TABLE computed.s4cno (
+    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+    sat String COMMENT 'Спутник',
+    freq String COMMENT 'Частота, для которой рассчитано значение',
+    s4 Float64 COMMENT 'S4 cno,
+    d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
+TTL d + INTERVAL 1 MONTH DELETE
+```
+
+##### computed.s4pwr
+
+Источник: *rawdata.ismdetobs*  
 *Примечание:* Эта S4 считается для частот, а не для их комбинаций.  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
@@ -278,7 +296,7 @@ CREATE TABLE computed.s4pwr (
     time UInt64 COMMENT 'Метка времени (timestamp в ms)',
     sat String COMMENT 'Спутник',
     freq String COMMENT 'Частота, для которой рассчитано значение',
-    s4 Float64 COMMENT 'S4',
+    s4 Float64 COMMENT 'S4 pwr',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
 TTL d + INTERVAL 1 MONTH DELETE
