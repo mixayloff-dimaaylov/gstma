@@ -84,7 +84,20 @@
           },
           "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^Elevation.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 13,
@@ -124,7 +137,7 @@
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
           "query": "$columns(\n    'Computed TEC %sat',\n    avg(nt) nt)\nFROM $table final\nWHERE\n    sat IN ($satellite)\n    AND sigcomb = 'L1CA+$secondaryfreq'",
-          "rawQuery": "SELECT t, groupArray((concat('Computed TEC ', sat), nt)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, avg(nt) nt FROM computed.NT final\nWHERE \"d\" >= toDate(1665908830) AND \"d\" <= toDate(1665909011) AND time >= toUInt64(1665908830 * 1000) AND time <= toUInt64(1665909011 * 1000) AND\n    sat IN ('GPS1')\n    AND sigcomb = 'L1CA+L2CA' GROUP BY t, sat ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('Computed TEC ', sat), nt)) AS groupArr FROM ( SELECT (intDiv(time, (15)) * (15)) AS t, sat, avg(nt) nt FROM computed.NT final\nWHERE \"d\" >= toDate(1665923705) AND \"d\" <= toDate(1665945305) AND time >= toUInt64(1665923705 * 1000) AND time <= toUInt64(1665945305 * 1000) AND\n    sat IN ('GLONASS1')\n    AND sigcomb = 'L1CA+L2P' GROUP BY t, sat ORDER BY t, sat) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
           "skip_comments": true,
@@ -147,7 +160,7 @@
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
           "query": "$columns(\n    'Novatel TEC %sat',\n    avg(tec) tec)\nFROM $table\nWHERE\n    sat IN ($satellite)\n    AND secondaryfreq = '$secondaryfreq'",
-          "rawQuery": "SELECT t, groupArray((concat('Novatel TEC ', sat), tec)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, avg(tec) tec FROM computed.ismrawtec\nWHERE \"d\" >= toDate(1665908830) AND \"d\" <= toDate(1665909011) AND time >= toUInt64(1665908830 * 1000) AND time <= toUInt64(1665909011 * 1000) AND\n    sat IN ('GPS1')\n    AND secondaryfreq = 'L2CA' GROUP BY t, sat ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('Novatel TEC ', sat), tec)) AS groupArr FROM ( SELECT (intDiv(time, (15)) * (15)) AS t, sat, avg(tec) tec FROM computed.ismrawtec\nWHERE \"d\" >= toDate(1665923705) AND \"d\" <= toDate(1665945305) AND time >= toUInt64(1665923705 * 1000) AND time <= toUInt64(1665945305 * 1000) AND\n    sat IN ('GLONASS1')\n    AND secondaryfreq = 'L2P' GROUP BY t, sat ORDER BY t, sat) GROUP BY t ORDER BY t",
           "refId": "B",
           "round": "0s",
           "skip_comments": true,
@@ -170,7 +183,7 @@
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
           "query": "$columns(\n    'Elevation %sat',\n    avg(elevation) elevation)\nFROM $table\nWHERE\n    sat IN ($satellite)",
-          "rawQuery": "SELECT t, groupArray((concat('Elevation ', sat), elevation)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, avg(elevation) elevation FROM computed.satxyz2\nWHERE \"d\" >= toDate(1665908830) AND \"d\" <= toDate(1665909011) AND time >= toUInt64(1665908830 * 1000) AND time <= toUInt64(1665909011 * 1000) AND\n    sat IN ('GPS1') GROUP BY t, sat ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('Elevation ', sat), elevation)) AS groupArr FROM ( SELECT (intDiv(time, (15)) * (15)) AS t, sat, avg(elevation) elevation FROM computed.satxyz2\nWHERE \"d\" >= toDate(1665923705) AND \"d\" <= toDate(1665945305) AND time >= toUInt64(1665923705 * 1000) AND time <= toUInt64(1665945305 * 1000) AND\n    sat IN ('GLONASS1') GROUP BY t, sat ORDER BY t, sat) GROUP BY t ORDER BY t",
           "refId": "C",
           "round": "0s",
           "skip_comments": true,
@@ -191,8 +204,8 @@
       {
         "current": {
           "selected": false,
-          "text": "GPS1",
-          "value": "GPS1"
+          "text": "GLONASS1",
+          "value": "GLONASS1"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
