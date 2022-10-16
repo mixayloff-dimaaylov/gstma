@@ -26,7 +26,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
-  "id": 5,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -114,54 +114,6 @@
         },
         "overrides": [
           {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/Возвышение/"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "hidden"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "ADR"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ADR GPS5 L1"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "hidden"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "ADR"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ADR GPS5 L2"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "hidden"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "ADR"
-              }
-            ]
-          },
-          {
             "__systemRef": "hideSeriesFrom",
             "matcher": {
               "id": "byNames",
@@ -180,7 +132,7 @@
                 "value": {
                   "legend": false,
                   "tooltip": false,
-                  "viz": true
+                  "viz": false
                 }
               }
             ]
@@ -230,7 +182,7 @@
           "interval": "",
           "intervalFactor": 1,
           "query": "$columns(\n    'TEC %sat %sigcomb',\n    avg(nt) nt)\nFROM $table final\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
-          "rawQuery": "SELECT t, groupArray((concat('TEC ', sat, ' ', sigcomb), nt)) as groupArr FROM ( SELECT intDiv(time, 15000) * 15000 as t, sat, sigcomb, avg(nt) nt FROM computed.NT final WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND      sat = 'GLONASS1'     and sigcomb in ('L1CA+L2CA','L1CA+L2P') GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('TEC ', sat, ' ', sigcomb), nt)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, avg(nt) nt FROM computed.NT final\nWHERE \"d\" >= toDate(1665939421) AND \"d\" <= toDate(1665940321) AND time >= toUInt64(1665939421 * 1000) AND time <= toUInt64(1665940321 * 1000) AND\n    sat = 'GLONASS8'\n    and sigcomb in ('L1CA+L2CA','L1CA+L2P') GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
           "skip_comments": true,
@@ -1131,54 +1083,6 @@
         },
         "overrides": [
           {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/Возвышение/"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "hidden"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "ADR"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ADR GPS5 L1"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "hidden"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "ADR"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ADR GPS5 L2"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "hidden"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "ADR"
-              }
-            ]
-          },
-          {
             "__systemRef": "hideSeriesFrom",
             "matcher": {
               "id": "byNames",
@@ -1197,7 +1101,7 @@
                 "value": {
                   "legend": false,
                   "tooltip": false,
-                  "viz": true
+                  "viz": false
                 }
               }
             ]
@@ -1247,7 +1151,7 @@
           "interval": "",
           "intervalFactor": 1,
           "query": "$columns(\n    'Average TEC %sat  %sigcomb',\n    avg(avgNT) avgNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)    ",
-          "rawQuery": "SELECT t, groupArray((concat('Average TEC ', sat, '  ', sigcomb), avgNT)) as groupArr FROM ( SELECT intDiv(time, 15000) * 15000 as t, sat, sigcomb, avg(avgNT) avgNT FROM computed.NTDerivatives WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND      sat = 'GLONASS1'     and sigcomb in ('L1CA+L2CA','L1CA+L2P') GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('Average TEC ', sat, '  ', sigcomb), avgNT)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, avg(avgNT) avgNT FROM computed.NTDerivatives\nWHERE \"d\" >= toDate(1665939432) AND \"d\" <= toDate(1665940332) AND time >= toUInt64(1665939432 * 1000) AND time <= toUInt64(1665940332 * 1000) AND\n    sat = 'GLONASS8'\n    and sigcomb in ('L1CA+L2CA','L1CA+L2P') GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
           "skip_comments": true,
@@ -1694,7 +1598,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1854,7 +1759,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1979,8 +1885,8 @@
       {
         "current": {
           "selected": false,
-          "text": "GLONASS4",
-          "value": "GLONASS4"
+          "text": "GLONASS8",
+          "value": "GLONASS8"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -2006,8 +1912,8 @@
       {
         "current": {
           "selected": false,
-          "text": "GLONASS4",
-          "value": "GLONASS4"
+          "text": "GLONASS8",
+          "value": "GLONASS8"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -2032,13 +1938,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": [
-            "L1CA"
-          ],
-          "value": [
-            "L1CA"
-          ]
+          "selected": false,
+          "text": "L1CA",
+          "value": "L1CA"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -2123,7 +2025,7 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -2154,6 +2056,6 @@
   "timezone": "",
   "title": "Суточный мониторинг",
   "uid": "0F2yyfCWz3",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }

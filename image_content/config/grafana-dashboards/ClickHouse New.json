@@ -114,73 +114,13 @@
         },
         "overrides": [
           {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/Возвышение/"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "none"
-              },
-              {
-                "id": "custom.axisPlacement",
-                "value": "hidden"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "ADR"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ADR GPS5 L1"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "none"
-              },
-              {
-                "id": "custom.axisPlacement",
-                "value": "hidden"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "ADR"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ADR GPS5 L2"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "none"
-              },
-              {
-                "id": "custom.axisPlacement",
-                "value": "hidden"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "ADR"
-              }
-            ]
-          },
-          {
             "__systemRef": "hideSeriesFrom",
             "matcher": {
               "id": "byNames",
               "options": {
                 "mode": "exclude",
                 "names": [
-                  "PSR GPS4 L1CA"
+                  "PSR GLONASS8 L1CA"
                 ],
                 "prefix": "All except:",
                 "readOnly": true
@@ -192,7 +132,7 @@
                 "value": {
                   "legend": false,
                   "tooltip": false,
-                  "viz": true
+                  "viz": false
                 }
               }
             ]
@@ -242,7 +182,7 @@
           "interval": "",
           "intervalFactor": 1,
           "query": "$columns(\n    'PSR %sat %freq',\n    avg(psr) psr)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    AND freq IN ($freq)",
-          "rawQuery": "SELECT t, groupArray((concat('PSR ', sat, ' ', freq), psr)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, freq, avg(psr) psr FROM rawdata.range\nWHERE \"d\" >= toDate(1665925553) AND \"d\" <= toDate(1665925561) AND time >= toUInt64(1665925553 * 1000) AND time <= toUInt64(1665925561 * 1000) AND\n    sat = 'GPS4'\n    AND freq IN ('L1CA') GROUP BY t, sat, freq ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('PSR ', sat, ' ', freq), psr)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, freq, avg(psr) psr FROM rawdata.range\nWHERE \"d\" >= toDate(1665943068) AND \"d\" <= toDate(1665943968) AND time >= toUInt64(1665943068 * 1000) AND time <= toUInt64(1665943968 * 1000) AND\n    sat = 'GLONASS1'\n    AND freq IN ('L1CA') GROUP BY t, sat, freq ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
           "skip_comments": true,
@@ -3262,7 +3202,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3434,7 +3375,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3595,7 +3537,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3761,7 +3704,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3921,7 +3865,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -4046,8 +3991,8 @@
       {
         "current": {
           "selected": false,
-          "text": "GPS5",
-          "value": "GPS5"
+          "text": "GLONASS1",
+          "value": "GLONASS1"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -4073,8 +4018,8 @@
       {
         "current": {
           "selected": false,
-          "text": "GPS5",
-          "value": "GPS5"
+          "text": "GLONASS1",
+          "value": "GLONASS1"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
