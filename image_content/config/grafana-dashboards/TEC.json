@@ -3,29 +3,102 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 3,
-  "iteration": 1643654707285,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "ClickHouse",
-      "fill": 1,
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^Elevation.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 13,
         "w": 24,
@@ -33,147 +106,114 @@
         "y": 0
       },
       "id": 2,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
-      "options": {},
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "Elevation GLONASS1",
-          "yaxis": 2
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
         }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "9.1.3",
       "targets": [
         {
           "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
           "dateTimeType": "TIMESTAMPMS",
           "datetimeLoading": false,
+          "extrapolate": true,
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "$columns(\n    'Computed TEC %sat',\n    avg(nt) nt)\nFROM $table final\nWHERE\n    sat IN ($satellite)\n    AND sigcomb = 'L1CA+$secondaryfreq'",
-          "rawQuery": "SELECT t, groupArray((concat('Computed TEC ', sat), nt)) as groupArr FROM ( SELECT intDiv(time, 10000) * 10000 as t, sat, avg(nt) nt FROM computed.NT final WHERE d >= toDate(1643633107410/1000) AND time >= 1643633107410 AND      sat IN ('')     AND sigcomb = 'L1CA+' GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "query": "SELECT\n    t,\n    groupArray((concat('Computed TEC ', sat), nt)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        avg(nt) nt\n    FROM computed.NT final\n\n    WHERE\n        $timeFilterMs\n        AND sat IN ($satellite)\n        AND sigcomb = 'L1CA+$secondaryfreq'\n    GROUP BY\n        t,\n        sat\n    ORDER BY\n        t,\n        sat\n)\nGROUP BY t\n\nORDER BY t\n",
+          "rawQuery": "SELECT\n    t,\n    groupArray((concat('Computed TEC ', sat), nt)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        avg(nt) nt\n    FROM computed.NT final\n\n    WHERE\n        \"d\" >= toDate(1665942398) AND \"d\" <= toDate(1665942478) AND time >= toUInt64(1665942398549/1000 * 1000) AND time <= toUInt64(1665942478091/1000 * 1000)\n        AND sat IN ('GLONASS1')\n        AND sigcomb = 'L1CA+L2P'\n    GROUP BY\n        t,\n        sat\n    ORDER BY\n        t,\n        sat\n)\nGROUP BY t\n\nORDER BY t",
           "refId": "A",
           "round": "0s",
+          "skip_comments": true,
           "table": "NT",
           "tableLoading": false
         },
         {
           "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
           "dateTimeType": "TIMESTAMPMS",
           "datetimeLoading": false,
+          "extrapolate": true,
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "$columns(\n    'Novatel TEC %sat',\n    avg(tec) tec)\nFROM $table\nWHERE\n    sat IN ($satellite)\n    AND secondaryfreq = '$secondaryfreq'",
-          "rawQuery": "SELECT t, groupArray((concat('Novatel TEC ', sat), tec)) as groupArr FROM ( SELECT intDiv(time, 10000) * 10000 as t, sat, avg(tec) tec FROM rawdata.ismrawtec WHERE d >= toDate(1643633107410/1000) AND time >= 1643633107410 AND      sat IN ('')     AND secondaryfreq = '' GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "query": "SELECT\n    t,\n    groupArray((concat('Novatel TEC ', sat), tec)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        avg(tec) tec\n    FROM computed.ismrawtec\n\n    WHERE\n        $timeFilterMs\n        AND sat IN ($satellite)\n        AND secondaryfreq = '$secondaryfreq'\n    GROUP BY\n        t,\n        sat\n    ORDER BY\n        t,\n        sat\n)\nGROUP BY t\n\nORDER BY t\n",
+          "rawQuery": "SELECT\n    t,\n    groupArray((concat('Novatel TEC ', sat), tec)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        avg(tec) tec\n    FROM computed.ismrawtec\n\n    WHERE\n        \"d\" >= toDate(1665942398) AND \"d\" <= toDate(1665942478) AND time >= toUInt64(1665942398549/1000 * 1000) AND time <= toUInt64(1665942478091/1000 * 1000)\n        AND sat IN ('GLONASS1')\n        AND secondaryfreq = 'L2P'\n    GROUP BY\n        t,\n        sat\n    ORDER BY\n        t,\n        sat\n)\nGROUP BY t\n\nORDER BY t",
           "refId": "B",
           "round": "0s",
+          "skip_comments": true,
           "table": "ismrawtec",
           "tableLoading": false
         },
         {
           "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
           "dateColDataType": "d",
           "dateLoading": false,
           "dateTimeColDataType": "time",
           "dateTimeType": "TIMESTAMPMS",
           "datetimeLoading": false,
+          "extrapolate": true,
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "$columns(\n    'Elevation %sat',\n    avg(elevation) elevation)\nFROM $table\nWHERE\n    sat IN ($satellite)",
-          "rawQuery": "SELECT t, groupArray((concat('Elevation ', sat), elevation)) as groupArr FROM ( SELECT intDiv(time, 10000) * 10000 as t, sat, avg(elevation) elevation FROM rawdata.satxyz2 WHERE d >= toDate(1643633107410/1000) AND time >= 1643633107410 AND  sat IN ('') GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "query": "SELECT\n    t,\n    groupArray((concat('Elevation ', sat), elevation)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        avg(elevation) elevation\n    FROM computed.satxyz2\n\n    WHERE\n        $timeFilterMs\n        AND sat IN ($satellite)\n    GROUP BY\n        t,\n        sat\n    ORDER BY\n        t,\n        sat\n)\nGROUP BY t\n\nORDER BY t\n",
+          "rawQuery": "SELECT\n    t,\n    groupArray((concat('Elevation ', sat), elevation)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        avg(elevation) elevation\n    FROM computed.satxyz2\n\n    WHERE\n        \"d\" >= toDate(1665942398) AND \"d\" <= toDate(1665942478) AND time >= toUInt64(1665942398549/1000 * 1000) AND time <= toUInt64(1665942478091/1000 * 1000)\n        AND sat IN ('GLONASS1')\n    GROUP BY\n        t,\n        sat\n    ORDER BY\n        t,\n        sat\n)\nGROUP BY t\n\nORDER BY t",
           "refId": "C",
           "round": "0s",
+          "skip_comments": true,
           "table": "satxyz2",
           "tableLoading": false
         }
       ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
       "title": "TEC",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "timeseries"
     }
   ],
   "refresh": false,
-  "schemaVersion": 18,
+  "schemaVersion": 37,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
-        "allValue": null,
         "current": {
-          "isNone": true,
           "selected": false,
-          "text": "None",
-          "value": ""
+          "text": "GLONASS1",
+          "value": "GLONASS1"
         },
-        "datasource": "ClickHouse",
+        "datasource": {
+          "type": "vertamedia-clickhouse-datasource",
+          "uid": "PDEE91DDB90597936"
+        },
         "definition": "select distinct(sat) from computed.NT where time between $__from and $__to",
         "hide": 0,
         "includeAll": false,
-        "label": null,
         "multi": true,
         "name": "satellite",
         "options": [],
@@ -183,23 +223,23 @@
         "skipUrlSync": false,
         "sort": 3,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
       },
       {
-        "allValue": null,
         "current": {
-          "isNone": true,
-          "text": "None",
-          "value": ""
+          "selected": false,
+          "text": "L2P",
+          "value": "L2P"
         },
-        "datasource": "ClickHouse",
+        "datasource": {
+          "type": "vertamedia-clickhouse-datasource",
+          "uid": "PDEE91DDB90597936"
+        },
         "definition": "select distinct(sigcomb) from computed.NT where time between $__from and $__to",
         "hide": 0,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "secondaryfreq",
         "options": [],
@@ -209,7 +249,6 @@
         "skipUrlSync": false,
         "sort": 3,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -248,5 +287,6 @@
   "timezone": "",
   "title": "TEC",
   "uid": "7kQ9pZx7k",
-  "version": 9
+  "version": 2,
+  "weekStart": ""
 }

@@ -26,6 +26,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
+  "id": 5,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -56,63 +57,109 @@
       "type": "row"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": {
         "type": "vertamedia-clickhouse-datasource",
         "uid": "PDEE91DDB90597936"
       },
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "TECU",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "TEC GPS3 L1CA+L5Q"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 0,
         "y": 1
       },
-      "hiddenSeries": false,
       "id": 2,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "9.1.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/Возвышение/",
-          "yaxis": 2
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        {
-          "alias": "ADR GPS5 L1",
-          "yaxis": 2
-        },
-        {
-          "alias": "ADR GPS5 L2",
-          "yaxis": 2
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
         }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "9.1.3",
       "targets": [
         {
           "aggregator": "sum",
@@ -128,276 +175,116 @@
           "datetimeLoading": false,
           "downsampleAggregator": "avg",
           "downsampleFillPolicy": "none",
+          "extrapolate": true,
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "query": "$columns(\n    'TEC %sat %sigcomb',\n    avg(nt) nt)\nFROM $table final\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
-          "rawQuery": "SELECT t, groupArray((concat('TEC ', sat, ' ', sigcomb), nt)) as groupArr FROM ( SELECT intDiv(time, 15000) * 15000 as t, sat, sigcomb, avg(nt) nt FROM computed.NT final WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND      sat = 'GLONASS1'     and sigcomb in ('L1CA+L2CA','L1CA+L2P') GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "query": "SELECT\n    t,\n    groupArray((concat('TEC ', sat, ' ', sigcomb), nt)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, 1000) * 1000) as t,\n        sat,\n        sigcomb,\n        avg(nt) nt\n    FROM computed.NT final\n\n    WHERE\n        $timeFilterMs\n        AND sat = '$satgraph'\n        and sigcomb in ($sigcomb)\n    GROUP BY\n        t,\n        sat,\n        sigcomb\n    ORDER BY\n        t,\n        sat,\n        sigcomb\n)\nGROUP BY t\n\nORDER BY t\n",
+          "rawQuery": "SELECT\n    t,\n    groupArray((concat('TEC ', sat, ' ', sigcomb), nt)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, 1000) * 1000) as t,\n        sat,\n        sigcomb,\n        avg(nt) nt\n    FROM computed.NT final\n\n    WHERE\n        \"d\" >= toDate(1665947096) AND \"d\" <= toDate(1665947126) AND time >= toUInt64(1665947096327/1000 * 1000) AND time <= toUInt64(1665947126643/1000 * 1000)\n        AND sat = 'GLONASS11'\n        and sigcomb in ('L1CA+L2CA','L1CA+L2P')\n    GROUP BY\n        t,\n        sat,\n        sigcomb\n    ORDER BY\n        t,\n        sat,\n        sigcomb\n)\nGROUP BY t\n\nORDER BY t",
           "refId": "A",
           "round": "0s",
+          "skip_comments": true,
           "table": "NT",
           "tableLoading": false
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "ПЭС",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "label": "TECU",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "none",
-          "label": "ADR",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": {
         "type": "vertamedia-clickhouse-datasource",
         "uid": "PDEE91DDB90597936"
       },
-      "fill": 1,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "dB"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^Elevation.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 1
       },
-      "hiddenSeries": false,
       "id": 5,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "9.1.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "Elevation GLONASS4",
-          "yaxis": 2
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        {
-          "alias": "Elevation GLONASS2",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS3",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS5",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS30",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS1",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS14",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS15",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS17",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS19",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS24",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS9",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS19",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS25",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS18",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS17",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS11",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS12",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS18",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS29",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS7",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS16",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS6",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS8",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS12",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS32",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS1",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS22",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS11",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS8",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS10",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS14",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS20",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GLONASS21",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS22",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS27",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS2",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS3",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS21",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS7",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS20",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS4",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS9",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS26",
-          "yaxis": 2
-        },
-        {
-          "alias": "Elevation GPS31",
-          "yaxis": 2
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
         }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "9.1.3",
       "targets": [
         {
           "database": "computed",
@@ -410,13 +297,15 @@
           "dateTimeColDataType": "time",
           "dateTimeType": "TIMESTAMPMS",
           "datetimeLoading": false,
+          "extrapolate": true,
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
           "query": "$columns(\n    'Elevation %sat',\n    avg(elevation) elevation)\nFROM $table\nWHERE\n    sat = '$satgraph'",
-          "rawQuery": "SELECT t, groupArray((concat('Elevation ', sat), elevation)) as groupArr FROM ( SELECT intDiv(time, 15000) * 15000 as t, sat, avg(elevation) elevation FROM computed.satxyz2 WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND  sat = 'GLONASS1' GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('Elevation ', sat), elevation)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, avg(elevation) elevation FROM computed.satxyz2\nWHERE \"d\" >= toDate(1665947096) AND \"d\" <= toDate(1665947126) AND time >= toUInt64(1665947096 * 1000) AND time <= toUInt64(1665947126 * 1000) AND\n    sat = 'GLONASS11' GROUP BY t, sat ORDER BY t, sat) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
+          "skip_comments": true,
           "table": "satxyz2",
           "tableLoading": false
         },
@@ -431,105 +320,150 @@
           "dateTimeColDataType": "time",
           "dateTimeType": "TIMESTAMPMS",
           "datetimeLoading": false,
+          "extrapolate": true,
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
           "query": "$columns(\n    'C/No %sat %freq',\n    avg(cno) cno)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    AND freq IN ($freq)",
-          "rawQuery": "SELECT t, groupArray((concat('C/No ', sat, ' ', freq), cno)) as groupArr FROM ( SELECT intDiv(time, 15000) * 15000 as t, sat, freq, avg(cno) cno FROM computed.range WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND      sat = 'GLONASS1'     AND freq IN ('L1CA') GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('C/No ', sat, ' ', freq), cno)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, freq, avg(cno) cno FROM computed.range\nWHERE \"d\" >= toDate(1665947096) AND \"d\" <= toDate(1665947126) AND time >= toUInt64(1665947096 * 1000) AND time <= toUInt64(1665947126 * 1000) AND\n    sat = 'GLONASS11'\n    AND freq IN ('L1CA') GROUP BY t, sat, freq ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
           "refId": "B",
           "round": "0s",
+          "skip_comments": true,
           "table": "range",
           "tableLoading": false
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "C/No",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "dB",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "degree",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": {
         "type": "vertamedia-clickhouse-datasource",
         "uid": "PDEE91DDB90597936"
       },
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "TECU",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Возвышение/"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L1"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L2"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 0,
         "y": 7
       },
-      "hiddenSeries": false,
       "id": 31,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "9.1.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/Возвышение/",
-          "yaxis": 2
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        {
-          "alias": "ADR GPS5 L1",
-          "yaxis": 2
-        },
-        {
-          "alias": "ADR GPS5 L2",
-          "yaxis": 2
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
         }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "9.1.3",
       "targets": [
         {
           "aggregator": "sum",
@@ -545,109 +479,128 @@
           "datetimeLoading": false,
           "downsampleAggregator": "avg",
           "downsampleFillPolicy": "none",
+          "extrapolate": true,
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
           "query": "$columns(\n    'Сырой TEC %sat L1CA+%secondaryfreq',\n    avg(tec) tec)\nFROM $table\nWHERE\n    secondaryfreq IN ($TEC_secondaryfreq)\n    AND sat = '$satgraph'",
-          "rawQuery": "SELECT t, groupArray((concat('Сырой TEC ', sat, ' L1CA+', secondaryfreq), tec)) as groupArr FROM ( SELECT intDiv(time, 15000) * 15000 as t, sat, secondaryfreq, avg(tec) tec FROM computed.ismrawtec WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND      secondaryfreq IN ('L2CA','L2P')     AND sat = 'GLONASS1' GROUP BY t, sat, secondaryfreq  ORDER BY t, sat, secondaryfreq) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('Сырой TEC ', sat, ' L1CA+', secondaryfreq), tec)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, secondaryfreq, avg(tec) tec FROM computed.ismrawtec\nWHERE \"d\" >= toDate(1665947096) AND \"d\" <= toDate(1665947126) AND time >= toUInt64(1665947096 * 1000) AND time <= toUInt64(1665947126 * 1000) AND\n    secondaryfreq IN ('L2CA','L2P')\n    AND sat = 'GLONASS11' GROUP BY t, sat, secondaryfreq ORDER BY t, sat, secondaryfreq) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
+          "skip_comments": true,
           "table": "ismrawtec",
           "tableLoading": false
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "ПЭС ОЕМ6",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "label": "TECU",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "none",
-          "label": "ADR",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": {
         "type": "vertamedia-clickhouse-datasource",
         "uid": "PDEE91DDB90597936"
       },
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "TECU",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "Average TEC GPS3  L1CA+L5Q"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 7
       },
-      "hiddenSeries": false,
       "id": 9,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "9.1.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/Возвышение/",
-          "yaxis": 2
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        {
-          "alias": "ADR GPS5 L1",
-          "yaxis": 2
-        },
-        {
-          "alias": "ADR GPS5 L2",
-          "yaxis": 2
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
         }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "9.1.3",
       "targets": [
         {
           "aggregator": "sum",
@@ -663,50 +616,23 @@
           "datetimeLoading": false,
           "downsampleAggregator": "avg",
           "downsampleFillPolicy": "none",
+          "extrapolate": true,
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "query": "$columns(\n    'Average TEC %sat  %sigcomb',\n    avg(avgNT) avgNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)    ",
-          "rawQuery": "SELECT t, groupArray((concat('Average TEC ', sat, '  ', sigcomb), avgNT)) as groupArr FROM ( SELECT intDiv(time, 15000) * 15000 as t, sat, sigcomb, avg(avgNT) avgNT FROM computed.NTDerivatives WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND      sat = 'GLONASS1'     and sigcomb in ('L1CA+L2CA','L1CA+L2P') GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "query": "SELECT\n    t,\n    groupArray((concat('Average TEC ', sat, '  ', sigcomb), avgNT)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        sigcomb,\n        avg(avgNT) avgNT\n    FROM computed.NTDerivatives\n\n    WHERE\n        $timeFilterMs\n        AND sat = '$satgraph'\n        and sigcomb in ($sigcomb)\n    GROUP BY\n        t,\n        sat,\n        sigcomb\n    ORDER BY\n        t,\n        sat,\n        sigcomb\n)\nGROUP BY t\n\nORDER BY t\n",
+          "rawQuery": "SELECT\n    t,\n    groupArray((concat('Average TEC ', sat, '  ', sigcomb), avgNT)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        sigcomb,\n        avg(avgNT) avgNT\n    FROM computed.NTDerivatives\n\n    WHERE\n        \"d\" >= toDate(1665947096) AND \"d\" <= toDate(1665947126) AND time >= toUInt64(1665947096327/1000 * 1000) AND time <= toUInt64(1665947126643/1000 * 1000)\n        AND sat = 'GLONASS11'\n        and sigcomb in ('L1CA+L2CA','L1CA+L2P')\n    GROUP BY\n        t,\n        sat,\n        sigcomb\n    ORDER BY\n        t,\n        sat,\n        sigcomb\n)\nGROUP BY t\n\nORDER BY t",
           "refId": "A",
           "round": "0s",
+          "skip_comments": true,
           "table": "NTDerivatives",
           "tableLoading": false
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "Среднее ПЭС",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "label": "TECU",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "none",
-          "label": "ADR",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
       "aliasColors": {},
@@ -778,63 +704,133 @@
       "type": "satmap-panel"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": {
         "type": "vertamedia-clickhouse-datasource",
         "uid": "PDEE91DDB90597936"
       },
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "TECU",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Возвышение/"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L1"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L2"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 13
       },
-      "hiddenSeries": false,
       "id": 32,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "9.1.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/Возвышение/",
-          "yaxis": 2
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        {
-          "alias": "ADR GPS5 L1",
-          "yaxis": 2
-        },
-        {
-          "alias": "ADR GPS5 L2",
-          "yaxis": 2
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
         }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "9.1.3",
       "targets": [
         {
           "aggregator": "sum",
@@ -850,6 +846,7 @@
           "datetimeLoading": false,
           "downsampleAggregator": "avg",
           "downsampleFillPolicy": "none",
+          "extrapolate": true,
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "hide": false,
@@ -859,100 +856,142 @@
           "rawQuery": "SELECT t, groupArray((concat('TEC deviation STD ', sat, ' ', sigcomb), sigNT)) as groupArr FROM ( SELECT intDiv(time, 15000) * 15000 as t, sat, sigcomb, avg(sigNT) sigNT FROM computed.xz1 WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND      sat = 'GLONASS1'     and sigcomb in ('L1CA+L2CA','L1CA+L2P') GROUP BY t, sat, sigcomb  ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
+          "skip_comments": true,
           "table": "xz1",
           "tableLoading": false
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "СКО флуктуаций ПЭС",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "label": "TECU",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "none",
-          "label": "ADR",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": {
         "type": "vertamedia-clickhouse-datasource",
         "uid": "PDEE91DDB90597936"
       },
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Возвышение/"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L1"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L2"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 19
       },
-      "hiddenSeries": false,
       "id": 26,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "9.1.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/Возвышение/",
-          "yaxis": 2
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        {
-          "alias": "ADR GPS5 L1",
-          "yaxis": 2
-        },
-        {
-          "alias": "ADR GPS5 L2",
-          "yaxis": 2
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
         }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "9.1.3",
       "targets": [
         {
           "aggregator": "sum",
@@ -968,6 +1007,7 @@
           "datetimeLoading": false,
           "downsampleAggregator": "avg",
           "downsampleFillPolicy": "none",
+          "extrapolate": true,
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "hide": false,
@@ -977,100 +1017,141 @@
           "rawQuery": "SELECT t, groupArray((concat('S4 ', sat, ' ', freq), s4)) as groupArr FROM ( SELECT intDiv(time, 15000) * 15000 as t, sat, freq, avg(s4) s4 FROM computed.s4 WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND      freq IN ('L1CA')     AND sat = 'GLONASS1' GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
+          "skip_comments": true,
           "table": "s4pwr",
           "tableLoading": false
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "Мощностной S4",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "label": "",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "none",
-          "label": "ADR",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": {
         "type": "vertamedia-clickhouse-datasource",
         "uid": "PDEE91DDB90597936"
       },
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Возвышение/"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L1"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L2"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 25
       },
-      "hiddenSeries": false,
       "id": 33,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "9.1.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/Возвышение/",
-          "yaxis": 2
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        {
-          "alias": "ADR GPS5 L1",
-          "yaxis": 2
-        },
-        {
-          "alias": "ADR GPS5 L2",
-          "yaxis": 2
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
         }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "9.1.3",
       "targets": [
         {
           "aggregator": "sum",
@@ -1101,96 +1182,136 @@
           "tableLoading": false
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "S4",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "label": "",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "none",
-          "label": "ADR",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": {
         "type": "vertamedia-clickhouse-datasource",
         "uid": "PDEE91DDB90597936"
       },
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Возвышение/"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L1"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L2"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 6,
         "w": 12,
         "x": 12,
         "y": 31
       },
-      "hiddenSeries": false,
       "id": 30,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "9.1.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "/Возвышение/",
-          "yaxis": 2
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        {
-          "alias": "ADR GPS5 L1",
-          "yaxis": 2
-        },
-        {
-          "alias": "ADR GPS5 L2",
-          "yaxis": 2
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
         }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "9.1.3",
       "targets": [
         {
           "aggregator": "sum",
@@ -1206,6 +1327,7 @@
           "datetimeLoading": false,
           "downsampleAggregator": "avg",
           "downsampleFillPolicy": "none",
+          "extrapolate": true,
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "hide": false,
@@ -1215,44 +1337,16 @@
           "rawQuery": "SELECT t, groupArray((concat('Сырое S4 ', sat, ' ', freq), totals4)) as groupArr FROM ( SELECT intDiv(time, 15000) * 15000 as t, sat, freq, avg(totals4) totals4 FROM computed.ismredobs WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND      freq IN ('L1CA')     AND sat = 'GLONASS1' GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
+          "skip_comments": true,
           "table": "ismredobs",
           "tableLoading": false
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "S4 ОЕМ6",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "label": "",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "format": "none",
-          "label": "ADR",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     }
   ],
-  "refresh": "10s",
+  "refresh": false,
   "schemaVersion": 37,
   "style": "dark",
   "tags": [],
@@ -1260,13 +1354,9 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": [
-            "GLONASS1"
-          ],
-          "value": [
-            "GLONASS1"
-          ]
+          "selected": false,
+          "text": "GPS6",
+          "value": "GPS6"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -1292,8 +1382,8 @@
       {
         "current": {
           "selected": false,
-          "text": "GLONASS1",
-          "value": "GLONASS1"
+          "text": "GPS6",
+          "value": "GPS6"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -1318,13 +1408,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": [
-            "L1CA"
-          ],
-          "value": [
-            "L1CA"
-          ]
+          "selected": false,
+          "text": "L1CA",
+          "value": "L1CA"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -1409,7 +1495,7 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -1440,6 +1526,6 @@
   "timezone": "",
   "title": "Суточный мониторинг",
   "uid": "0F2yyfCWz3",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
