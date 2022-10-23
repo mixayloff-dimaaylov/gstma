@@ -26,7 +26,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
-  "id": 2,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -343,7 +343,7 @@
           "interval": "",
           "intervalFactor": 1,
           "query": "$columns(\n    'TEC %sat %sigcomb',\n    avg(nt) nt)\nFROM $table final\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
-          "rawQuery": "SELECT t, groupArray((concat('TEC ', sat, ' ', sigcomb), nt)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, avg(nt) nt FROM computed.NT final\nWHERE \"d\" >= toDate(1665925553) AND \"d\" <= toDate(1665925561) AND time >= toUInt64(1665925553 * 1000) AND time <= toUInt64(1665925561 * 1000) AND\n    sat = 'GPS4'\n    and sigcomb in ('L1CA+L2C','L1CA+L5Q') GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('TEC ', sat, ' ', sigcomb), nt)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, avg(nt) nt FROM computed.NT final\nWHERE \"d\" >= toDate(1666448300) AND \"d\" <= toDate(1666448600) AND time >= toUInt64(1666448300 * 1000) AND time <= toUInt64(1666448600 * 1000) AND\n    sat = 'GLONASS4'\n    and sigcomb in ('L1CA+L2CA','L1CA+L2P') GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
           "skip_comments": true,
@@ -371,8 +371,36 @@
           "interval": "",
           "intervalFactor": 1,
           "query": "$columns(\n    'TEC псевдодальностный %sat %sigcomb',\n    avg(psrNt) psrNnt)\nFROM $table final\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
-          "rawQuery": "SELECT t, groupArray((concat('TEC псевдодальностный ', sat, ' ', sigcomb), psrNnt)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, avg(psrNt) psrNnt FROM computed.NT final\nWHERE \"d\" >= toDate(1665925553) AND \"d\" <= toDate(1665925561) AND time >= toUInt64(1665925553 * 1000) AND time <= toUInt64(1665925561 * 1000) AND\n    sat = 'GPS4'\n    and sigcomb in ('L1CA+L2C','L1CA+L5Q') GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('TEC псевдодальностный ', sat, ' ', sigcomb), psrNnt)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, avg(psrNt) psrNnt FROM computed.NT final\nWHERE \"d\" >= toDate(1666448300) AND \"d\" <= toDate(1666448600) AND time >= toUInt64(1666448300 * 1000) AND time <= toUInt64(1666448600 * 1000) AND\n    sat = 'GLONASS4'\n    and sigcomb in ('L1CA+L2CA','L1CA+L2P') GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
           "refId": "B",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "NT",
+          "tableLoading": false
+        },
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'TEC псевдофазовый %sat %sigcomb',\n    avg(adrNt) adrNnt)\nFROM $table final\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)",
+          "rawQuery": "SELECT t, groupArray((concat('TEC псевдофазовый ', sat, ' ', sigcomb), adrNnt)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, avg(adrNt) adrNnt FROM computed.NT final\nWHERE \"d\" >= toDate(1666448300) AND \"d\" <= toDate(1666448600) AND time >= toUInt64(1666448300 * 1000) AND time <= toUInt64(1666448600 * 1000) AND\n    sat = 'GLONASS4'\n    and sigcomb in ('L1CA+L2CA','L1CA+L2P') GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "C",
           "round": "0s",
           "skip_comments": true,
           "table": "NT",
@@ -3457,8 +3485,8 @@
       {
         "current": {
           "selected": false,
-          "text": "GLONASS11",
-          "value": "GLONASS11"
+          "text": "GLONASS4",
+          "value": "GLONASS4"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -3484,8 +3512,8 @@
       {
         "current": {
           "selected": false,
-          "text": "GLONASS11",
-          "value": "GLONASS11"
+          "text": "GLONASS4",
+          "value": "GLONASS4"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -3589,7 +3617,7 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
