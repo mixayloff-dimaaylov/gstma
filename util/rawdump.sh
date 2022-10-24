@@ -32,7 +32,8 @@ dump_range() {
 "     anyIf(psr, freq = 'L5Q') AS psr5,"\
 "     anyIf(adr, freq = 'L1CA') AS adr1,"\
 "     anyIf(adr, freq = 'L2C') AS adr2,"\
-"     anyIf(adr, freq = 'L5Q') AS adr5,"
+"     anyIf(adr, freq = 'L5Q') AS adr5,"\
+"     any(cno) as cno,"
     elif [[ "${1}" =~ ^GLONASS ]] ; then
         _cols=\
 "     anyIf(psr, freq = 'L1CA') AS psr1,"\
@@ -40,7 +41,8 @@ dump_range() {
 "     anyIf(psr, freq = 'L2P') AS psr5,"\
 "     anyIf(adr, freq = 'L1CA') AS adr1,"\
 "     anyIf(adr, freq = 'L2CA') AS adr2,"\
-"     anyIf(adr, freq = 'L2P') AS adr5,"
+"     anyIf(adr, freq = 'L2P') AS adr5,"\
+"     any(cno) as cno,"
     else
         errexit "Unsupported system.\n" '1'
     fi
@@ -87,6 +89,65 @@ dump_satxyz2() {
 # $1 -- sat
 # $2 -- from
 # $3 -- to
+dump_ismredobs() {
+    for _db in 'rawdata' 'computed' ; do
+    docker-compose exec "${_cont_name}" 'clickhouse-client' '--query' \
+" SELECT"\
+"     time,"\
+"     any(totals4) as totals4,"\
+"     sat,"\
+"     system,"\
+"     any(freq) as freq,"\
+"     any(glofreq) as glofreq,"\
+"     any(prn) as prn"\
+" FROM"\
+"     ${_db}.ismredobs"\
+" WHERE"\
+"     sat='${1}'"\
+"     AND time BETWEEN ${2} AND ${3}"\
+" GROUP BY"\
+"     time,"\
+"     sat,"\
+"     system"\
+" ORDER BY"\
+"     time ASC" \
+    '--format' 'CSVWithNames' >> "${_dump_path}/${_db}_ismredobs_${1}_${2}_${3}.csv"
+    done
+}
+
+# $1 -- sat
+# $2 -- from
+# $3 -- to
+dump_ismdetobs() {
+    for _db in 'rawdata' 'computed' ; do
+    docker-compose exec "${_cont_name}" 'clickhouse-client' '--query' \
+" SELECT"\
+"     time,"\
+"     any(power) as power,"\
+"     sat,"\
+"     system,"\
+"     freq,"\
+"     any(glofreq) as glofreq,"\
+"     any(prn) as prn"\
+" FROM"\
+"     ${_db}.ismdetobs"\
+" WHERE"\
+"     sat='${1}'"\
+"     AND time BETWEEN ${2} AND ${3}"\
+" GROUP BY"\
+"     time,"\
+"     sat,"\
+"     system,"\
+"     freq"\
+" ORDER BY"\
+"     time ASC" \
+    '--format' 'CSVWithNames' >> "${_dump_path}/${_db}_ismdetobs_${1}_${2}_${3}.csv"
+    done
+}
+
+# $1 -- sat
+# $2 -- from
+# $3 -- to
 # $4 -- secondaryfreq
 dump_ismrawtec() {
     for _db in 'rawdata' 'computed' ; do
@@ -105,7 +166,7 @@ dump_ismrawtec() {
 "     sat"\
 " ORDER BY"\
 "     time ASC" \
-    '--format' 'CSVWithNames' >> "${_dump_path}/${_db}_ismrawtec_${1}_${2}_${3}_${4}.csv"
+    '--format' 'CSVWithNames' >> "${_dump_path}/${_db}_ismrawtec_${1}_${2}_${3}.csv"
     done
 }
 
@@ -116,6 +177,8 @@ dump_ismrawtec() {
 dump() {
     dump_range "${1}" "${2}" "${3}"
     dump_satxyz2 "${1}" "${2}" "${3}"
+    dump_ismredobs "${1}" "${2}" "${3}"
+    dump_ismdetobs "${1}" "${2}" "${3}"
     dump_ismrawtec "${1}" "${2}" "${3}" "${4}"
 }
 
