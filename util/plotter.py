@@ -147,6 +147,33 @@ def F_k(sigPhi, h_max, l_s, f_0, alpha):
         (sigPhi * np.sqrt(1.0 + d_ / 2)))
 
 
+def autocorr(x, t):
+    if t <= 0:
+        return 1
+
+    return np.corrcoef(x[:-t], x[t:])[0, 1]
+
+
+def R_delNT(delNT, sigNT):
+    n = 50
+
+    res = np.zeros((n-1, n))
+    for delnt, signt in zip(
+          np.lib.stride_tricks.sliding_window_view(delNT, n),
+          np.lib.stride_tricks.sliding_window_view(sigNT, n)):
+        acc = np.empty((1, n))
+        for i in range(0, n):
+            acc[0, i] = autocorr(delnt, i)/signt[i]
+        res = np.append(res, acc, axis=0)
+
+    return res
+
+
+def l_s(delNT, sigNT):
+    k = (R_delNT(delNT, sigNT) < np.exp(-1)).argmax(axis=1)
+    return 1000 * (k + 1) * 0.02
+
+
 # ### Работа с выгрузками
 
 # In[ ]:
@@ -330,11 +357,12 @@ def perf_cal(values):
     df_range['sigNT'] = pd.Series(sigNT(df_range.delNT)).shift(59, fill_value=0.0)
     df_range['sigPhi'] = sigPhi(df_range.sigNT, df_range.f2)
 
+    df_range['l_s'] = l_s(df_range.delNT, df_range.sigNT)
+
     h_max = 300000
-    l_s = 100
     df_range['F_d'] = F_d(df_range.avgNT, df_range.f1, df_satxyz2.elevation)
-    df_range['d'] = d(h_max, l_s, df_range.f1, df_satxyz2.elevation)
-    df_range['F_k'] = F_k(df_range.sigPhi, h_max, l_s, df_range.f1, df_satxyz2.elevation)
+    df_range['d'] = d(h_max, df_range.l_s, df_range.f1, df_satxyz2.elevation)
+    df_range['F_k'] = F_k(df_range.sigPhi, h_max, df_range.l_s, df_range.f1, df_satxyz2.elevation)
 
     # For export
     df_range['ism_tec'] = df_ismrawtec.tec
@@ -415,6 +443,11 @@ def plot_build(sat):
 
     # Other plots:
     gfig, gax = init_plot()
+    dumpplot(gax, sat.time, sat.l_s, "l_s", "m")
+    gax.set_ylabel("безразмерная")
+    plot_finalize(gax, "$l_s$")
+
+    gfig, gax = init_plot()
     dumpplot(gax, sat.time, sat.F_d, "F_d", "Hz")
     gax.set_ylabel("Hz")
     plot_finalize(gax, "$F_d$")
@@ -427,12 +460,12 @@ def plot_build(sat):
     gfig, gax = init_plot()
     dumpplot(gax, sat.time, sat.d, "d", "безразмерная")
     gax.set_ylabel("безразмерная")
-    plot_finalize(gax, "$F_d$")
+    plot_finalize(gax, "$d$")
 
     gfig, gax = init_plot()
     dumpplot(gax, sat.time, sat.elevation, "elevation", "Deg")
     gax.set_ylabel("Deg")
-    plot_finalize(gax, "Углы")
+    plot_finalize(gax, "Угол возвышения")
 
 
 # Ref: https://stackoverflow.com/questions/15411967
