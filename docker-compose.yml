@@ -111,6 +111,17 @@ services:
     depends_on:
       - clickhouse
 
+  # Jupyter Lab
+  # Docs: https://jupyter-docker-stacks.readthedocs.io
+  jupyter:
+    container_name: ionosphere-iif-jupyter
+    profiles: ["jupyter"]
+    image: jupyter/pyspark-notebook:spark-3.3.1
+    ports:
+      - 8888:8888
+    volumes:
+      - './docs/jupyter/:/home/jovyan/work'
+
   reporter:
     container_name: ionosphere-iif-reporter
     profiles: ["reporter"]
