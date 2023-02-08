@@ -18,7 +18,7 @@ Compose-файл реализует простой кластер. Чтобы е
 ```sh
 git clone --recurse-submodules https://github.com/mixayloff-dimaaylov/ionosphere_iif.git
 cd ionosphere_iif/
-docker-compose build
+docker-compose --profile default build
 ```
 
 2. Указать настройки для кластера
@@ -34,7 +34,7 @@ echo "KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://<ip_адрес>:9092" >> .env
 3. Запустить кластер 
 
 ```sh
-docker-compose up -d
+docker-compose --profile default up -d
 ```
 
 4. Установить NovAtelLogReader и направить трафик вычислительному кластеру по
