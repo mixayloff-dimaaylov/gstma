@@ -59,3 +59,60 @@ KAFKA_HOST=<адрес_шины_в_другом_кластере>
 ```sh
 docker-compose --profile base up -d
 ```
+
+## Репликация из основного брокера Kafka (не рекомендуется)
+
+На базе compose-файла так же возможно реализовать схему репликации 1-в-2 с
+подключением второго кластера к шине Kafka первого.
+
+```mermaid
+flowchart LR
+  N[NovAtelLogReader]
+
+  N --> K1
+  K1 <--> K2
+
+  subgraph clusters[Кластеры]
+    subgraph c1["Кластер prod"]
+      Z1[Zookeeper]; K1[Kafka]; S1[Spark]; C1[(ClickHouse)]
+
+      Z1 <--> K1
+      K1 --> S1
+      S1 <--> C1
+    end
+
+    subgraph c2["Кластер testing"]
+      Z2[Zookeeper]; K2[Kafka]; S2[Spark]; C2[(ClickHouse)]
+
+      K2 --> Z1
+      K2 --> S2
+      S2 <--> C2
+    end
+  end
+```
+
+Кластер _prod_ нужно запускать штатным образом с использованием штатных
+настроек:
+
+```sh
+docker-compose --profile default up -d
+```
+
+Для подключения к исходному кластеру необходимо переопределить переменные среды
+в `.env`-файле Docker Compose:
+
+- Указать уникальное значение `KAFKA_BROKER_ID`
+- Указать адреса Zookeeper-нод существующего кластера в
+  `KAFKA_CFG_ZOOKEEPER_CONNECT`
+- Если новый кластер размещен на другом хосте -- указать физические адреса
+  Kafka-брокеров `KAFKA_CFG_LISTENERS` в обоих кластерах. Тогда каждый из них
+  сможет найти остальных
+- Указать `KAFKA_CFG_ADVERTISED_LISTENERS`
+
+Затем, после запуска Kafka в первом кластере, можно запустить кластер _testing_:
+
+```sh
+docker-compose --profile default up -d
+```
+
+Zookeeper будет запущен, но не задействован.
