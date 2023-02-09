@@ -3,6 +3,7 @@ version: "3.4"
 services:
   zookeeper:
     container_name: ionosphere-iif-zookeeper
+    profiles: ["kafka", "default"]
     image: docker.io/bitnami/zookeeper:3.4.10-r4
     ports:
       - "2181:2181"
@@ -13,6 +14,7 @@ services:
 
   kafka:
     container_name: ionosphere-iif-kafka
+    profiles: ["kafka", "default"]
     image: docker.io/bitnami/kafka:2.5.0
     ports:
       - "9092:9092"
@@ -40,6 +42,7 @@ services:
 
   spark-streamer-1:
     container_name: ionosphere-iif-spark-streamer-1
+    profiles: ["base", "default"]
     build:
       context: ./logserver-spark/
       target: spark-streamer-1
@@ -65,6 +68,7 @@ services:
 
   spark-streamer-2:
     container_name: ionosphere-iif-spark-streamer-2
+    profiles: ["base", "default"]
     build:
       context: ./logserver-spark/
       target: spark-streamer-2
@@ -89,6 +93,7 @@ services:
 
   clickhouse:
     container_name: ionosphere-iif-clickhouse
+    profiles: ["base", "default"]
     image: 'yandex/clickhouse-server:20.5.2.7'
     ports:
       - 8123:8123
@@ -99,6 +104,7 @@ services:
 
   grafana:
     container_name: ionosphere-iif-grafana
+    profiles: ["base", "default"]
     build:
       context: ./
       dockerfile: Dockerfile.grafana
