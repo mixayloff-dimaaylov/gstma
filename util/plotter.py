@@ -119,9 +119,28 @@ def csvReadAsDict(file):
     return columns
 
 
-def perf_cal(file_range, file_ismrawtec, file_satxyz2):
-    file_a_sat = re.search(
-        '^rawdata_range_([^\._]*)_[0-9]*_[0-9]*\.csv$', file_range).group(1)
+# Searches CSV files in ./rawdump/ dir and returns them as list of tuples, for
+# each (satellite, from, to, secondaryfreq)
+def read_csvs():
+    os.chdir('./rawdump/')
+
+    # glob SHOULD sort them in synchronous order
+    files_range = glob.glob("rawdata_range_*.csv")
+    files_ismrawtec = glob.glob("rawdata_ismrawtec_*.csv")
+    files_satxyz2 = glob.glob("rawdata_satxyz2_*.csv")
+
+    return ({"range": csvReadAsDict(r),
+             "ismrawtec": csvReadAsDict(rt),
+             "satxyz2": csvReadAsDict(xyz)}
+            for r, rt, xyz in zip(files_range, files_ismrawtec, files_satxyz2))
+
+
+def perf_cal(values):
+    values_range = values['range']
+    values_ismrawtec = values['ismrawtec']
+    values_satxyz2 = values['satxyz2']
+
+    file_a_sat = values_range['sat'][0]
     file_a_sat_system = re.search('^([A-Z]+)[0-9]+$', file_a_sat).group(1)
 
     if file_a_sat_system == 'GPS':
@@ -142,12 +161,6 @@ def perf_cal(file_range, file_ismrawtec, file_satxyz2):
     else:
         print("Неопределенный тип спутниковой системы.")
         exit(1)
-
-    values_range = {}
-    values_range = csvReadAsDict(file_range)
-
-    values_ismrawtec = {}
-    values_ismrawtec = csvReadAsDict(file_ismrawtec)
 
     # RANGE
     times = np.array([dt.datetime.fromtimestamp(int(ts)/1000) for ts in values_range['time']]).astype(dt.datetime)
@@ -261,13 +274,7 @@ def plot_build(sat):
 
 
 if __name__ == '__main__':
-    # find files
-    os.chdir('./rawdump/')
-    files_range = glob.glob("rawdata_range_*.csv")
-    files_ismrawtec = glob.glob("rawdata_ismrawtec_*.csv")
-    files_satxyz2 = glob.glob("rawdata_satxyz2_*.csv")
-
-    for files in zip(files_range, files_ismrawtec, files_satxyz2):
-        plot_build(perf_cal(*files))
+    for values in read_csvs():
+        plot_build(perf_cal(values))
 
     plt.show()
