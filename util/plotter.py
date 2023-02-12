@@ -1,3 +1,18 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# Пример взаимодействия с ClickHouse
+# ==================================
+# 
+# На [основе][altinity].
+# 
+# [altinity]: https://altinity.com/blog/2019/2/25/clickhouse-and-python-jupyter-notebooks
+
+# ## Исходная программа
+
+# In[ ]:
+
+
 #!/usr/bin/env python3
 
 import os
@@ -122,12 +137,10 @@ def csvReadAsDict(file):
 # Searches CSV files in ./rawdump/ dir and returns them as list of tuples, for
 # each (satellite, from, to, secondaryfreq)
 def read_csvs():
-    os.chdir('./rawdump/')
-
     # glob SHOULD sort them in synchronous order
-    files_range = glob.glob("rawdata_range_*.csv")
-    files_ismrawtec = glob.glob("rawdata_ismrawtec_*.csv")
-    files_satxyz2 = glob.glob("rawdata_satxyz2_*.csv")
+    files_range = glob.glob("./rawdump/rawdata_range_*.csv")
+    files_ismrawtec = glob.glob("./rawdump/rawdata_ismrawtec_*.csv")
+    files_satxyz2 = glob.glob("./rawdump/rawdata_satxyz2_*.csv")
 
     return ({"range": csvReadAsDict(r),
              "ismrawtec": csvReadAsDict(rt),
@@ -259,7 +272,7 @@ def plot_build(sat):
         plt.legend()
 
         plt.title(f"{vname}{sat_name}")
-        plt.savefig(f"{vname}{sat_name}")
+        plt.savefig(f"./rawdump/{vname}{sat_name}.png")
         plt.close(fig)
 
         gax.plot(xs, ys, label=vname)
@@ -282,7 +295,21 @@ def plot_build(sat):
     plt.title(f"ПЭСы спутника {sat_name}")
 
 
-if __name__ == '__main__':
+# Ref: https://stackoverflow.com/questions/15411967
+def is_ipython() -> bool:
+    try:
+        shell = get_ipython().__class__.__name__
+        if shell == 'ZMQInteractiveShell':
+            return True   # Jupyter notebook or qtconsole
+        elif shell == 'TerminalInteractiveShell':
+            return True   # Terminal running IPython
+        else:
+            return True   # Other type (?)
+    except NameError:
+        return False      # Probably standard Python interpreter
+
+
+if not is_ipython() and __name__ == '__main__':
     if not os.path.exists("./rawdump/"):
         print("No dump files. Requesting...")
         os.system("rawdump.sh -in")
@@ -291,3 +318,99 @@ if __name__ == '__main__':
         plot_build(perf_cal(values))
 
     plt.show()
+    exit(0)
+
+
+# ## Скрипт Jupyter
+# 
+# Эта часть будет выполняться, если программа запущена в Jupyter
+
+# ### Установка зависимостей
+# 
+# Установить пакеты для работы с ClickHouse:
+
+# In[ ]:
+
+
+# Install a conda packages in the current Jupyter kernel
+import sys
+
+get_ipython().system('conda install --yes --prefix {sys.prefix} -c conda-forge clickhouse-driver clickhouse-sqlalchemy ipython-sql')
+
+
+# Подгрузить SQL magic:
+
+# In[ ]:
+
+
+from sqlalchemy import create_engine
+
+
+# In[ ]:
+
+
+get_ipython().run_line_magic('load_ext', 'sql')
+
+
+# In[ ]:
+
+
+get_ipython().run_line_magic('sql', 'clickhouse://default:@clickhouse/default')
+
+
+# ### Получение данных
+
+# In[ ]:
+
+
+_sat = "GLONASS14"
+_from = 1676224161051
+_to = 1676224426968
+_secondaryfreq = "L2CA"
+
+
+# In[ ]:
+
+
+get_ipython().run_cell_magic('sql', 'values_range <<', "SELECT\n    time,\n    anyIf(psr, freq = 'L1CA') AS psr1,\n    anyIf(psr, freq = 'L2CA') AS psr2,\n    anyIf(psr, freq = 'L2P') AS psr5,\n    anyIf(adr, freq = 'L1CA') AS adr1,\n    anyIf(adr, freq = 'L2CA') AS adr2,\n    anyIf(adr, freq = 'L2P') AS adr5,\n    any(cno) as cno,\n    sat\nFROM\n    rawdata.range\nWHERE\n    sat=:_sat\n    AND time BETWEEN :_from AND :_to\nGROUP BY\n    time, sat\nORDER BY\n    time ASC\n")
+
+
+# In[ ]:
+
+
+get_ipython().run_cell_magic('sql', 'values_ismrawtec <<', 'SELECT\n    time,\n    anyIf(tec, secondaryfreq = :_secondaryfreq) AS tec,\n    sat\nFROM\n    rawdata.ismrawtec\nWHERE\n    sat=:_sat\n    AND time BETWEEN :_from AND :_to\nGROUP BY\n    time,\n    sat\nORDER BY\n    time ASC\n')
+
+
+# In[ ]:
+
+
+get_ipython().run_cell_magic('sql', 'values_satxyz2 <<', 'SELECT\n    time,\n    elevation,\n    sat\nFROM\n    rawdata.satxyz2\nWHERE\n    sat=:_sat\n    AND time BETWEEN :_from AND :_to\nORDER BY\n    time ASC\n')
+
+
+# ### Модификация
+
+# In[ ]:
+
+
+# Замена для источника данных
+def read_sql():
+    return [dict(
+             {"range": values_range.dict(),
+              "ismrawtec": values_ismrawtec.dict(),
+              "satxyz2": values_satxyz2.dict()})]
+
+
+# ### Расчеты
+
+# In[ ]:
+
+
+for values in read_sql():
+    plot_build(perf_cal(values))
+
+
+# In[ ]:
+
+
+
+
