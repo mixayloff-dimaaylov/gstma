@@ -248,29 +248,38 @@ def perf_cal(values):
 
 
 def plot_build(sat):
-    # --- drawings2 ---
-    # TODO: странная поправка NT12psr -5
-    fig, ax = plt.subplots()
-    ax.set_title(f"ПЭСы спутника {sat['sat']}")
-    ax.plot(sat['times'], sat['NT12psr'], label="NT(P1-P2)")
-    ax.plot(sat['times'], sat['NT15psr'], label="NT(P1-P5)")
-    ax.plot(sat['times'], sat['NT12adr'], label="NT(adr1 - adr2)")
-    ax.plot(sat['times'], sat['NT15adr'], label="NT(adr1 - adr5)")
-    ax.plot(sat['ism_times'], sat['ism_tec'], label="ISMRAWTEC's TEC")
-    ax.plot(sat['times'], sat['avgNT12'], label="avgNT(12)")
-    ax.plot(sat['times'], sat['avgNT15'], label="avgNT(15)")
-    ax.plot(sat['times'], sat['delNT12'], label="delNT(12)")
-    ax.plot(sat['times'], sat['delNT15'], label="delNT(15)")
-    ax.plot(sat['times'][59:], sat['sigNT12'], label="sigNT(12)")
-    ax.plot(sat['times'][59:], sat['sigNT15'], label="sigNT(15)")
-    ax.plot(sat['times'][59:], sat['sigPhi12'], label="sigPhi(12)")
-    ax.plot(sat['times'][59:], sat['sigPhi15'], label="sigPhi(15)")
-    ax.legend()
-    plt.title(f"ПЭСы спутника {sat['sat']}")
-    plt.savefig(f"ПЭСы спутника {sat['sat']}")
-    # fig.suptitle(f"ПЭСы спутника {sat['sat']}")
+    sat_name = f" спутника {sat['sat']}"
 
-    # графики можно будет показать все разом
+    gfig, gax = plt.subplots()
+
+    def dumpplot(xs, ys, vname):
+        fig = plt.figure()
+        plt.title(f"{vname}{sat_name}")
+        plt.plot(xs, ys, label=vname)
+        plt.legend()
+
+        plt.title(f"{vname}{sat_name}")
+        plt.savefig(f"{vname}{sat_name}")
+        plt.close(fig)
+
+        gax.plot(xs, ys, label=vname)
+
+    dumpplot(sat['times'],      sat['NT12psr'],  "NT(P1-P2)")
+    dumpplot(sat['times'],      sat['NT15psr'],  "NT(P1-P5)")
+    dumpplot(sat['times'],      sat['NT12adr'],  "NT(adr1 - adr2)")
+    dumpplot(sat['times'],      sat['NT15adr'],  "NT(adr1 - adr5)")
+    dumpplot(sat['ism_times'],  sat['ism_tec'],  "ISMRAWTEC's TEC")
+    dumpplot(sat['times'],      sat['avgNT12'],  "avgNT(12)")
+    dumpplot(sat['times'],      sat['avgNT15'],  "avgNT(15)")
+    dumpplot(sat['times'],      sat['delNT12'],  "delNT(12)")
+    dumpplot(sat['times'],      sat['delNT15'],  "delNT(15)")
+    dumpplot(sat['times'][59:], sat['sigNT12'],  "sigNT(12)")
+    dumpplot(sat['times'][59:], sat['sigNT15'],  "sigNT(15)")
+    dumpplot(sat['times'][59:], sat['sigPhi12'], "sigPhi(12)")
+    dumpplot(sat['times'][59:], sat['sigPhi15'], "sigPhi(15)")
+
+    gax.legend()
+    plt.title(f"ПЭСы спутника {sat_name}")
 
 
 if __name__ == '__main__':
