@@ -283,6 +283,10 @@ def plot_build(sat):
 
 
 if __name__ == '__main__':
+    if not os.path.exists("./rawdump/"):
+        print("No dump files. Requesting...")
+        os.system("rawdump.sh -in")
+
     for values in read_csvs():
         plot_build(perf_cal(values))
 
