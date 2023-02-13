@@ -8,6 +8,19 @@
 # 
 # [altinity]: https://altinity.com/blog/2019/2/25/clickhouse-and-python-jupyter-notebooks
 
+# ## Установка зависимостей
+# 
+# Установить пакеты для работы с ClickHouse и ipywidgets:
+
+# In[ ]:
+
+
+# Install a conda packages in the current Jupyter kernel
+import sys
+
+get_ipython().system('conda install --yes --prefix {sys.prefix} -c conda-forge clickhouse-driver clickhouse-sqlalchemy ipython-sql ipywidgets')
+
+
 # ## Исходная программа
 
 # In[ ]:
@@ -325,20 +338,7 @@ if not is_ipython() and __name__ == '__main__':
 # 
 # Эта часть будет выполняться, если программа запущена в Jupyter
 
-# ### Установка зависимостей
-# 
-# Установить пакеты для работы с ClickHouse:
-
-# In[ ]:
-
-
-# Install a conda packages in the current Jupyter kernel
-import sys
-
-get_ipython().system('conda install --yes --prefix {sys.prefix} -c conda-forge clickhouse-driver clickhouse-sqlalchemy ipython-sql')
-
-
-# Подгрузить SQL magic:
+# ### Подгрузить SQL magic:
 
 # In[ ]:
 
@@ -358,16 +358,41 @@ get_ipython().run_line_magic('load_ext', 'sql')
 get_ipython().run_line_magic('sql', 'clickhouse://default:@clickhouse/default')
 
 
-# ### Получение данных
+# ### Интерактивный запрос параметров
 
 # In[ ]:
 
 
-_sat = "GLONASS14"
-_from = 1676224161051
-_to = 1676224426968
-_secondaryfreq = "L2CA"
+from IPython.display import display
+from ipywidgets import interact, Text, IntText
 
+_satw = Text(
+    description="Спутник:")
+_fromw = IntText(
+    description="Начальное время:",
+    min=0)
+_tow = IntText(
+    description="Конечное время:",
+    min=0)
+_secondaryfreqw = Text(
+    description="Secondaryfreq:")
+
+display(_satw)
+display(_fromw)
+display(_tow)
+display(_secondaryfreqw)
+
+
+# In[ ]:
+
+
+_sat = _satw.value
+_from = _fromw.value
+_to = _tow.value
+_secondaryfreq = _secondaryfreqw.value
+
+
+# ### Получение данных
 
 # In[ ]:
 
@@ -387,7 +412,7 @@ get_ipython().run_cell_magic('sql', 'values_ismrawtec <<', 'SELECT\n    time,\n 
 get_ipython().run_cell_magic('sql', 'values_satxyz2 <<', 'SELECT\n    time,\n    elevation,\n    sat\nFROM\n    rawdata.satxyz2\nWHERE\n    sat=:_sat\n    AND time BETWEEN :_from AND :_to\nORDER BY\n    time ASC\n')
 
 
-# ### Модификация
+# ### Модификация исходной программы
 
 # In[ ]:
 
@@ -405,12 +430,9 @@ def read_sql():
 # In[ ]:
 
 
-for values in read_sql():
-    plot_build(perf_cal(values))
-
-
-# In[ ]:
-
-
-
+if values_range.DataFrame().empty:
+    print("Выгрузка пуста!")
+else:
+    for values in read_sql():
+        plot_build(perf_cal(values))
 
