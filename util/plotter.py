@@ -227,7 +227,7 @@ def perf_cal(values):
 
 
 def plot_build(sat):
-    sat_name = f" спутника {sat['sat']}"
+    sat_name = f" спутника {sat['sat'][0]}"
 
     gfig, gax = plt.subplots()
 
