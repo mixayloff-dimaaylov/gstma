@@ -137,15 +137,8 @@ def read_csvs():
             for r, rt, xyz in zip(files_range, files_ismrawtec, files_satxyz2))
 
 
-def perf_cal(values):
-    df_range = values['range']
-    df_ismrawtec = values['ismrawtec']
-    df_satxyz2 = values['satxyz2']
-
-    file_a_sat = df_range.sat[0]
-    file_a_sat_system = re.search('^([A-Z]+)[0-9]+$', file_a_sat).group(1)
-
-    if file_a_sat_system == 'GPS':
+def constants(sat_system):
+    if sat_system == 'GPS':
         f1 = 1575.42e6  # L1CA
         f2 = 1227.60e6  # L2C or L2P
         f5 = 1176.45e6  # L5Q
@@ -153,7 +146,7 @@ def perf_cal(values):
         # TODO: даже после добавления развилки не считает
         RDCB_L1L2 = 0.0  # 34.577472687 # L1CAL2C
         RDCB_L1L5 = 0.0  # 12.218264580 # L1CAL5
-    elif file_a_sat_system == 'GLONASS':
+    elif sat_system == 'GLONASS':
         f1 = 1602.0e6 + -3 * 0.5625e6  # L1 -1
         f2 = 1246.0e6 + -3 * 0.4375e6  # L2 -1
         f5 = 1246.0e6 + -3 * 0.4375e6  # L2P -1
@@ -163,6 +156,19 @@ def perf_cal(values):
     else:
         print("Неопределенный тип спутниковой системы.")
         exit(1)
+
+    return tuple((f1, f2, f5, RDCB_L1L2, RDCB_L1L5))
+
+
+def perf_cal(values):
+    df_range = values['range']
+    df_ismrawtec = values['ismrawtec']
+    df_satxyz2 = values['satxyz2']
+
+    file_a_sat = df_range.sat[0]
+    file_a_sat_system = re.search('^([A-Z]+)[0-9]+$', file_a_sat).group(1)
+
+    f1, f2, f5, RDCB_L1L2, RDCB_L1L5 = constants(file_a_sat_system)
 
     # RANGE
     df_range.time = pd.to_datetime(df_range.time, unit='ms', utc=True)
