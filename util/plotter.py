@@ -41,6 +41,12 @@ import pandas as pd
 
 from math import pi
 
+
+# ### Выражения
+
+# In[ ]:
+
+
 C = 299792458.0
 
 
@@ -123,6 +129,91 @@ def sigPhi(sigNT, f):
     return 1e16 * 80.8 * pi * sigNT / (C * f)
 
 
+# ### Работа с выгрузками
+
+# In[ ]:
+
+
+def dump_range(sql_con, _sat, _from, _to):
+    return pd.read_sql(f"""
+SELECT
+    time,
+    anyIf(psr, freq = 'L1CA') AS psr1,
+    anyIf(psr, freq = 'L2C') AS psr2,
+    anyIf(psr, freq = 'L5Q') AS psr5,
+    anyIf(adr, freq = 'L1CA') AS adr1,
+    anyIf(adr, freq = 'L2C') AS adr2,
+    anyIf(adr, freq = 'L5Q') AS adr5,
+    any(cno) as cno,
+    sat
+FROM
+    rawdata.range
+WHERE
+    sat='{_sat}'
+    AND time BETWEEN {_from} AND {_to}
+GROUP BY
+    time, sat
+ORDER BY
+    time ASC
+""", sql_con)
+
+
+def dump_ismrawtec(sql_con, _sat, _from, _to, _secondaryfreq):
+    return pd.read_sql(f"""
+SELECT
+    time,
+    anyIf(tec, secondaryfreq = '{_secondaryfreq}') AS tec,
+    sat
+FROM
+    rawdata.ismrawtec
+WHERE
+    sat='{_sat}'
+    AND time BETWEEN {_from} AND {_to}
+GROUP BY
+    time,
+    sat
+ORDER BY
+    time ASC
+""", sql_con)
+
+
+def dump_satxyz2(sql_con, _sat, _from, _to):
+    return pd.read_sql(f"""
+SELECT
+    time,
+    elevation,
+    sat
+FROM
+    rawdata.satxyz2
+WHERE
+    sat='{_sat}'
+    AND time BETWEEN {_from} AND {_to}
+ORDER BY
+    time ASC
+""", sql_con)
+
+
+# Dumps tables from sql_con to files and returns Pandas DataFrame's
+def dump_csvs(sql_con, _sat, _from, _to, _secondaryfreq):
+    df_range = dump_range(sql_con, _sat, _from, _to,)
+    df_ismrawtec = dump_ismrawtec(sql_con, _sat, _from, _to, _secondaryfreq)
+    df_satxyz2 = dump_satxyz2(sql_con, _sat, _from, _to)
+
+    csv_params = {"sep":",", "encoding":"utf-8",
+                  "index":False, "header":True, "lineterminator":"\n"}
+
+    df_range.to_csv(**csv_params,
+        path_or_buf=f"./rawdump/rawdata_range_{_sat}_{_from}_{_to}.csv")
+    df_ismrawtec.to_csv(**csv_params,
+        path_or_buf=f"./rawdump/rawdata_ismrawtec_{_sat}_{_from}_{_to}.csv")
+    df_satxyz2.to_csv(**csv_params,
+        path_or_buf=f"./rawdump/rawdata_satxyz2_{_sat}_{_from}_{_to}.csv")
+
+    return [dict({"range": df_range,
+                  "ismrawtec": df_ismrawtec,
+                  "satxyz2": df_satxyz2})]
+
+
 # Searches CSV files in ./rawdump/ dir and returns them as list of tuples, for
 # each (satellite, from, to, secondaryfreq)
 def read_csvs():
@@ -135,6 +226,11 @@ def read_csvs():
              "ismrawtec": pd.read_csv(rt),
              "satxyz2": pd.read_csv(xyz)}
             for r, rt, xyz in zip(files_range, files_ismrawtec, files_satxyz2))
+
+
+# ### Расчеты
+
+# In[ ]:
 
 
 def constants(sat_system):
@@ -305,7 +401,7 @@ if not is_ipython() and __name__ == '__main__':
 sql_con = "clickhouse://default:@clickhouse/default"
 
 
-# ### Интерактивный запрос параметров
+# ### Интерактивный запрос параметров выгрузки
 
 # In[ ]:
 
@@ -339,94 +435,15 @@ _to = _tow.value
 _secondaryfreq = _secondaryfreqw.value
 
 
-# ### Получение данных
+# ### Получение данных и расчеты
 
 # In[ ]:
 
 
-df_range = pd.read_sql(f"""
-SELECT
-    time,
-    anyIf(psr, freq = 'L1CA') AS psr1,
-    anyIf(psr, freq = 'L2CA') AS psr2,
-    anyIf(psr, freq = 'L2P') AS psr5,
-    anyIf(adr, freq = 'L1CA') AS adr1,
-    anyIf(adr, freq = 'L2CA') AS adr2,
-    anyIf(adr, freq = 'L2P') AS adr5,
-    any(cno) as cno,
-    sat
-FROM
-    rawdata.range
-WHERE
-    sat='{_sat}'
-    AND time BETWEEN {_from} AND {_to}
-GROUP BY
-    time, sat
-ORDER BY
-    time ASC
-""", sql_con)
-
-
-# In[ ]:
-
-
-df_ismrawtec = pd.read_sql(f"""
-SELECT
-    time,
-    anyIf(tec, secondaryfreq = '{_secondaryfreq}') AS tec,
-    sat
-FROM
-    rawdata.ismrawtec
-WHERE
-    sat='{_sat}'
-    AND time BETWEEN {_from} AND {_to}
-GROUP BY
-    time,
-    sat
-ORDER BY
-    time ASC
-""", sql_con)
-
-
-# In[ ]:
-
-
-df_satxyz2 = pd.read_sql(f"""
-SELECT
-    time,
-    elevation,
-    sat
-FROM
-    rawdata.satxyz2
-WHERE
-    sat='{_sat}'
-    AND time BETWEEN {_from} AND {_to}
-ORDER BY
-    time ASC
-""", sql_con)
-
-
-# ### Модификация исходной программы
-
-# In[ ]:
-
-
-# Замена для источника данных
-def read_sql():
-    return [dict(
-             {"range": df_range,
-              "ismrawtec": df_ismrawtec,
-              "satxyz2": df_satxyz2})]
-
-
-# ### Расчеты
-
-# In[ ]:
-
-
-if df_range.empty:
-    print("Выгрузка пуста!")
-else:
-    for values in read_sql():
+for values in dump_csvs(sql_con, _sat,
+                        _from, _to, _secondaryfreq):
+    if values['range'].empty:
+        print("Выгрузка пуста!")
+    else:
         plot_build(perf_cal(values))
 
