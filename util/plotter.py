@@ -18,7 +18,7 @@
 # Install a conda packages in the current Jupyter kernel
 import sys
 
-get_ipython().system('conda install --yes --prefix {sys.prefix} -c conda-forge clickhouse-driver clickhouse-sqlalchemy ipython-sql ipywidgets')
+get_ipython().system('conda install --yes --prefix {sys.prefix} -c conda-forge clickhouse-driver clickhouse-sqlalchemy ipywidgets')
 
 
 # ## Исходная программа
@@ -297,25 +297,12 @@ if not is_ipython() and __name__ == '__main__':
 # 
 # Эта часть будет выполняться, если программа запущена в Jupyter
 
-# ### Подгрузить SQL magic:
+# ### Параметры SQL-подключения:
 
 # In[ ]:
 
 
-from sqlalchemy import create_engine
-
-
-# In[ ]:
-
-
-get_ipython().run_line_magic('load_ext', 'sql')
-get_ipython().run_line_magic('config', 'SqlMagic.autopandas=True')
-
-
-# In[ ]:
-
-
-get_ipython().run_line_magic('sql', 'clickhouse://default:@clickhouse/default')
+sql_con = "clickhouse://default:@clickhouse/default"
 
 
 # ### Интерактивный запрос параметров
@@ -357,19 +344,66 @@ _secondaryfreq = _secondaryfreqw.value
 # In[ ]:
 
 
-get_ipython().run_cell_magic('sql', 'df_range <<', "SELECT\n    time,\n    anyIf(psr, freq = 'L1CA') AS psr1,\n    anyIf(psr, freq = 'L2CA') AS psr2,\n    anyIf(psr, freq = 'L2P') AS psr5,\n    anyIf(adr, freq = 'L1CA') AS adr1,\n    anyIf(adr, freq = 'L2CA') AS adr2,\n    anyIf(adr, freq = 'L2P') AS adr5,\n    any(cno) as cno,\n    sat\nFROM\n    rawdata.range\nWHERE\n    sat=:_sat\n    AND time BETWEEN :_from AND :_to\nGROUP BY\n    time, sat\nORDER BY\n    time ASC\n")
+df_range = pd.read_sql(f"""
+SELECT
+    time,
+    anyIf(psr, freq = 'L1CA') AS psr1,
+    anyIf(psr, freq = 'L2CA') AS psr2,
+    anyIf(psr, freq = 'L2P') AS psr5,
+    anyIf(adr, freq = 'L1CA') AS adr1,
+    anyIf(adr, freq = 'L2CA') AS adr2,
+    anyIf(adr, freq = 'L2P') AS adr5,
+    any(cno) as cno,
+    sat
+FROM
+    rawdata.range
+WHERE
+    sat='{_sat}'
+    AND time BETWEEN {_from} AND {_to}
+GROUP BY
+    time, sat
+ORDER BY
+    time ASC
+""", sql_con)
 
 
 # In[ ]:
 
 
-get_ipython().run_cell_magic('sql', 'df_ismrawtec <<', 'SELECT\n    time,\n    anyIf(tec, secondaryfreq = :_secondaryfreq) AS tec,\n    sat\nFROM\n    rawdata.ismrawtec\nWHERE\n    sat=:_sat\n    AND time BETWEEN :_from AND :_to\nGROUP BY\n    time,\n    sat\nORDER BY\n    time ASC\n')
+df_ismrawtec = pd.read_sql(f"""
+SELECT
+    time,
+    anyIf(tec, secondaryfreq = '{_secondaryfreq}') AS tec,
+    sat
+FROM
+    rawdata.ismrawtec
+WHERE
+    sat='{_sat}'
+    AND time BETWEEN {_from} AND {_to}
+GROUP BY
+    time,
+    sat
+ORDER BY
+    time ASC
+""", sql_con)
 
 
 # In[ ]:
 
 
-get_ipython().run_cell_magic('sql', 'df_satxyz2 <<', 'SELECT\n    time,\n    elevation,\n    sat\nFROM\n    rawdata.satxyz2\nWHERE\n    sat=:_sat\n    AND time BETWEEN :_from AND :_to\nORDER BY\n    time ASC\n')
+df_satxyz2 = pd.read_sql(f"""
+SELECT
+    time,
+    elevation,
+    sat
+FROM
+    rawdata.satxyz2
+WHERE
+    sat='{_sat}'
+    AND time BETWEEN {_from} AND {_to}
+ORDER BY
+    time ASC
+""", sql_con)
 
 
 # ### Модификация исходной программы
