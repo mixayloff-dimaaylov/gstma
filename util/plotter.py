@@ -136,23 +136,12 @@ def sigPhi(sigNT, f):
 
 def dump_range(sql_con, _sat, _from, _to):
     return pd.read_sql(f"""
-SELECT
-    time,
-    anyIf(psr, freq = 'L1CA') AS psr1,
-    anyIf(psr, freq = 'L2C') AS psr2,
-    anyIf(psr, freq = 'L5Q') AS psr5,
-    anyIf(adr, freq = 'L1CA') AS adr1,
-    anyIf(adr, freq = 'L2C') AS adr2,
-    anyIf(adr, freq = 'L5Q') AS adr5,
-    any(cno) as cno,
-    sat
+SELECT *
 FROM
     rawdata.range
 WHERE
     sat='{_sat}'
     AND time BETWEEN {_from} AND {_to}
-GROUP BY
-    time, sat
 ORDER BY
     time ASC
 """, sql_con)
@@ -160,18 +149,13 @@ ORDER BY
 
 def dump_ismrawtec(sql_con, _sat, _from, _to, _secondaryfreq):
     return pd.read_sql(f"""
-SELECT
-    time,
-    anyIf(tec, secondaryfreq = '{_secondaryfreq}') AS tec,
-    sat
+SELECT *
 FROM
     rawdata.ismrawtec
 WHERE
     sat='{_sat}'
     AND time BETWEEN {_from} AND {_to}
-GROUP BY
-    time,
-    sat
+    AND secondaryfreq = '{_secondaryfreq}'
 ORDER BY
     time ASC
 """, sql_con)
@@ -179,10 +163,7 @@ ORDER BY
 
 def dump_satxyz2(sql_con, _sat, _from, _to):
     return pd.read_sql(f"""
-SELECT
-    time,
-    elevation,
-    sat
+SELECT *
 FROM
     rawdata.satxyz2
 WHERE
@@ -202,25 +183,32 @@ def dump_csvs(sql_con, _sat, _from, _to, _secondaryfreq):
     csv_params = {"sep":",", "encoding":"utf-8",
                   "index":False, "header":True, "lineterminator":"\n"}
 
+    _date = str(dt.datetime.fromtimestamp(_from/1000).date())
+    _path = f"./rawdump/{_date}"
+    os.makedirs(_path, exist_ok=True)
+
     df_range.to_csv(**csv_params,
-        path_or_buf=f"./rawdump/rawdata_range_{_sat}_{_from}_{_to}.csv")
+        path_or_buf=f"{_path}/rawdata_range_{_sat}_{_from}_{_to}.csv")
     df_ismrawtec.to_csv(**csv_params,
-        path_or_buf=f"./rawdump/rawdata_ismrawtec_{_sat}_{_from}_{_to}.csv")
+        path_or_buf=f"{_path}/rawdata_ismrawtec_{_sat}_{_from}_{_to}.csv")
     df_satxyz2.to_csv(**csv_params,
-        path_or_buf=f"./rawdump/rawdata_satxyz2_{_sat}_{_from}_{_to}.csv")
+        path_or_buf=f"{_path}/rawdata_satxyz2_{_sat}_{_from}_{_to}.csv")
 
     return [dict({"range": df_range,
                   "ismrawtec": df_ismrawtec,
                   "satxyz2": df_satxyz2})]
 
 
-# Searches CSV files in ./rawdump/ dir and returns them as list of tuples, for
+# Searches CSV files in ./rawdump/<_from_date> dir and returns them as list of tuples, for
 # each (satellite, from, to, secondaryfreq)
-def read_csvs():
+def read_csvs(_from):
+    _date = str(dt.datetime.fromtimestamp(_from/1000).date())
+    _path = f"./rawdump/{_date}"
+
     # glob SHOULD sort them in synchronous order
-    files_range = glob.glob("./rawdump/rawdata_range_*.csv")
-    files_ismrawtec = glob.glob("./rawdump/rawdata_ismrawtec_*.csv")
-    files_satxyz2 = glob.glob("./rawdump/rawdata_satxyz2_*.csv")
+    files_range = glob.glob(f"{_path}/rawdata_range_*.csv")
+    files_ismrawtec = glob.glob(f"{_path}/rawdata_ismrawtec_*.csv")
+    files_satxyz2 = glob.glob(f"{_path}/rawdata_satxyz2_*.csv")
 
     return ({"range": pd.read_csv(r),
              "ismrawtec": pd.read_csv(rt),
@@ -233,38 +221,39 @@ def read_csvs():
 # In[ ]:
 
 
-def constants(sat_system):
-    if sat_system == 'GPS':
-        f1 = 1575.42e6  # L1CA
-        f2 = 1227.60e6  # L2C or L2P
-        f5 = 1176.45e6  # L5Q
-
-        # TODO: даже после добавления развилки не считает
-        RDCB_L1L2 = 0.0  # 34.577472687 # L1CAL2C
-        RDCB_L1L5 = 0.0  # 12.218264580 # L1CAL5
-    elif sat_system == 'GLONASS':
-        f1 = 1602.0e6 + -3 * 0.5625e6  # L1 -1
-        f2 = 1246.0e6 + -3 * 0.4375e6  # L2 -1
-        f5 = 1246.0e6 + -3 * 0.4375e6  # L2P -1
-
-        RDCB_L1L2 = 0.0  # 14.522434235  # L1CAL2CA
-        RDCB_L1L5 = 0.0  # 23.634117126  # L1CAL2P
-    else:
-        print("Неопределенный тип спутниковой системы.")
-        exit(1)
-
-    return tuple((f1, f2, f5, RDCB_L1L2, RDCB_L1L5))
+fs = {('GPS',     'L1CA'):         1575.42e6,
+      ('GPS',     'L2C'):          1227.60e6,
+      ('GPS',     'L2P'):          1227.60e6,
+      ('GPS',     'L2P_codeless'): 1227.60e6,
+      ('GPS',     'L5Q'):          1176.45e6,
+      ('GLONASS', 'L1CA'):         1602.0e6 + -3 * 0.5625e6,
+      ('GLONASS', 'L2CA'):         1246.0e6 + -3 * 0.4375e6,
+      ('GLONASS', 'L2P'):          1246.0e6 + -3 * 0.4375e6}
 
 
-def perf_cal(values):
+rdcbs = {('GPS',     'L1CA', 'L2C'):          0.0,
+         ('GPS',     'L1CA', 'L2P'):          0.0,
+         ('GPS',     'L1CA', 'L2P_codeless'): 0.0,
+         ('GPS',     'L1CA', 'L5Q'):          0.0,
+         ('GLONASS', 'L1CA', 'L2CA'):         0.0,
+         ('GLONASS', 'L1CA', 'L2P'):          0.0}
+
+
+def comb_dfs(values):
+    def comb(base, df_f1, f2):
+        df_f2 = base[base["freq"] == f2] \
+                    .rename(columns={"freq": "freq2", "glofreq": "glofreq2",
+                                     "adr": "adr2", "psr": "psr2",
+                                     "cno": "cno2", "locktime": "locktime2"})
+
+        return pd.merge(df_f1, df_f2, how="inner", on=["time", "sat", "system", "prn"])
+
     df_range = values['range']
     df_ismrawtec = values['ismrawtec']
     df_satxyz2 = values['satxyz2']
 
-    file_a_sat = df_range.sat[0]
-    file_a_sat_system = re.search('^([A-Z]+)[0-9]+$', file_a_sat).group(1)
-
-    f1, f2, f5, RDCB_L1L2, RDCB_L1L5 = constants(file_a_sat_system)
+    sat = df_range.sat[0]
+    sat_system = re.search('^([A-Z]+)[0-9]+$', sat).group(1)
 
     # RANGE
     df_range.time = pd.to_datetime(df_range.time, unit='ms', utc=True)
@@ -276,91 +265,101 @@ def perf_cal(values):
     df_ismrawtec = df_ismrawtec.interpolate(method='linear').interpolate(method='ffill')
     df_ismrawtec.reset_index(inplace=True)
 
+    # sigcombing
+    df_f1 = df_range[df_range["freq"] == "L1CA"] \
+          .rename(columns={"freq": "freq1", "glofreq": "glofreq1",
+                           "adr": "adr1", "psr": "psr1",
+                           "cno": "cno1", "locktime": "locktime1"})
+
+    freqs = df_range["freq"].unique()
+    sigcombed = [{"range": comb(df_range, df_f1, f2),
+                  "ismrawtec": df_ismrawtec,
+                  "satxyz2": df_satxyz2}
+                 for f2 in freqs[freqs != "L1CA"]]
+
+    return sigcombed
+
+
+def perf_cal(values):
+    df_range = values['range']
+    df_ismrawtec = values['ismrawtec']
+    df_satxyz2 = values['satxyz2']
+
+    # Преобразования частот в числовые значения
+    df_range['rdcb'] = df_range.apply(lambda x: rdcbs[(x['system'], x['freq1'], x['freq2'])], axis=1)
+    df_range['f1'] = df_range.apply(lambda x: fs[(x['system'], x['freq1'])], axis=1)
+    df_range['f2'] = df_range.apply(lambda x: fs[(x['system'], x['freq2'])], axis=1)
+
     # Расчеты
-    df_range['k12'] = k(df_range.adr1, df_range.adr2, f1, f2, df_range.psr1, df_range.psr2)
-    df_range['k15'] = k(df_range.adr1, df_range.adr5, f1, f5, df_range.psr1, df_range.psr5)
-    df_range['p12'] = df_range.psr2 - df_range.psr1
-    df_range['p15'] = df_range.psr5 - df_range.psr1
+    df_range['k'] = k(df_range.adr1, df_range.adr2,
+                      df_range.f1,   df_range.f2,
+                      df_range.psr1, df_range.psr2)
+    df_range['p'] = df_range.psr2 - df_range.psr1
 
-    _DNT12 = statistics.mean(df_range.k12)
-    _DNT15 = statistics.mean(df_range.k15)
-    DNT12 = multiplier(f1, f2) * _DNT12
-    DNT15 = multiplier(f1, f5) * _DNT15
+    _DNT = statistics.mean(df_range.k)
+    DNT = multiplier(df_range.f1, df_range.f2) * _DNT
 
-    print("DNT12: " + str(DNT12))
-    print("DNT15: " + str(DNT15))
+    df_range['NTpsr'] = multiplier(df_range.f1, df_range.f2) \
+                           * df_range.p + df_range.rdcb
 
-    # --- drawings ---
-    # fig, ax = plt.subplots()
-    # ax.plot(df_range.time, [DNT12] * len(k12), label="DNT12(df_range.adr1, df_range.adr2, df_range.psr1, df_range.psr2")
-    # ax.plot(df_range.time, [DNT15] * len(k15), label="DNT15(df_range.adr1, df_range.adr5, df_range.psr1, df_range.psr5")
-    # ax.plot(df_range.time, p12, label="P1-P2")
-    # ax.plot(df_range.time, p15, label="P1-P5")
-    # ax.legend()
+    df_range['NTadr_wo_DNT'] = multiplier(df_range.f1, df_range.f2) \
+      * adr_adr(df_range.adr1, df_range.adr2, df_range.f1, df_range.f2)
+    df_range['NTadr'] = df_range.NTadr_wo_DNT + DNT + df_range.rdcb
 
-    df_range['NT12psr'] = multiplier(f1, f2) * df_range.p12 + RDCB_L1L2
-    df_range['NT15psr'] = multiplier(f1, f5) * df_range.p15 + RDCB_L1L5
+    df_range['avgNT'] = avgNT(df_range.NTadr)
+    df_range['delNT'] = delNT(df_range.NTadr)
 
-    # print(p12, p15)
-
-    df_range['NT12adr_wo_DNT'] = multiplier(f1, f2) * adr_adr(df_range.adr1, df_range.adr2, f1, f2)
-    df_range['NT15adr_wo_DNT'] = multiplier(f1, f5) * adr_adr(df_range.adr1, df_range.adr5, f1, f5)
-    df_range['NT12adr'] = df_range.NT12adr_wo_DNT + DNT12 + RDCB_L1L2
-    df_range['NT15adr'] = df_range.NT15adr_wo_DNT + DNT15 + RDCB_L1L5
-
-    # plt.show()
-
-    df_range['avgNT12'] = avgNT(df_range.NT12adr)
-    df_range['avgNT15'] = avgNT(df_range.NT15adr)
-
-    df_range['delNT12'] = delNT(df_range.NT12adr)
-    df_range['delNT15'] = delNT(df_range.NT15adr)
-
-    df_range['sigNT12'] = pd.Series(sigNT(df_range.delNT12)).shift(59, fill_value=0.0)
-    df_range['sigNT15'] = pd.Series(sigNT(df_range.delNT15)).shift(59, fill_value=0.0)
-
-    df_range['sigPhi12'] = sigPhi(df_range.sigNT12, f2)
-    df_range['sigPhi15'] = sigPhi(df_range.sigNT15, f5)
+    df_range['sigNT'] = pd.Series(sigNT(df_range.delNT)).shift(59, fill_value=0.0)
+    df_range['sigPhi'] = sigPhi(df_range.sigNT, df_range.f2)
 
     # For export
     df_range['ism_tec'] = df_ismrawtec.tec
+    df_range['ism_primaryfreq'] = df_ismrawtec.primaryfreq
+    df_range['ism_secondaryfreq'] = df_ismrawtec.secondaryfreq
 
     return df_range
 
 
 def plot_build(sat):
-    sat_name = f" спутника {sat['sat'][0]}"
+    _date = str(sat["time"].min().date())
+    _path = f"./rawdump/{_date}/plots"
+    os.makedirs(_path, exist_ok=True)
+
+    # Locals
+    _sat = sat['sat'][0]
+    _date = sat['time'].min().date()
+    _from = sat['time'].min().time()
+    _to = sat['time'].max().time()
+    _freq1 = sat['freq1'][0]
+    _freq2 = sat['freq2'][0]
+
+    track_name = f"{_sat} {_date} {_from} {_to} {_freq1}+{_freq2}"
+    track_name_human = f"спутника {_sat} {_freq1}+{_freq2}"
 
     gfig, gax = plt.subplots()
 
     def dumpplot(xs, ys, vname):
         fig = plt.figure()
-        plt.title(f"{vname}{sat_name}")
+        plt.title(f"{vname} {track_name_human}")
         plt.plot(xs, ys, label=vname)
         plt.legend()
 
-        plt.title(f"{vname}{sat_name}")
-        plt.savefig(f"./rawdump/{vname}{sat_name}.png")
+        plt.title(f"{vname} {track_name_human}")
+        plt.savefig(f"{_path}/{track_name} {vname}.png")
         plt.close(fig)
 
         gax.plot(xs, ys, label=vname)
 
-    dumpplot(sat.time, sat.NT12psr,  "NT(P1-P2)")
-    dumpplot(sat.time, sat.NT15psr,  "NT(P1-P5)")
-    dumpplot(sat.time, sat.NT12adr,  "NT(adr1 - adr2)")
-    dumpplot(sat.time, sat.NT15adr,  "NT(adr1 - adr5)")
-    dumpplot(sat.time, sat.ism_tec,  "ISMRAWTEC's TEC")
-    dumpplot(sat.time, sat.avgNT12,  "avgNT(12)")
-    dumpplot(sat.time, sat.avgNT15,  "avgNT(15)")
-    dumpplot(sat.time, sat.delNT12,  "delNT(12)")
-    dumpplot(sat.time, sat.delNT15,  "delNT(15)")
-    dumpplot(sat.time, sat.sigNT12,  "sigNT(12)")
-    dumpplot(sat.time, sat.sigNT15,  "sigNT(15)")
-    dumpplot(sat.time, sat.sigPhi12, "sigPhi(12)")
-    dumpplot(sat.time, sat.sigPhi15, "sigPhi(15)")
+    dumpplot(sat.time, sat.NTpsr,   "NT(P1-P2)")
+    dumpplot(sat.time, sat.NTadr,   "NT(adr1-adr2)")
+    dumpplot(sat.time, sat.ism_tec, "ISMRAWTEC's TEC")
+    dumpplot(sat.time, sat.avgNT,   "avgNT")
+    dumpplot(sat.time, sat.delNT,   "delNT")
+    dumpplot(sat.time, sat.sigNT,   "sigNT")
+    dumpplot(sat.time, sat.sigPhi,  "sigPhi")
 
     gax.legend()
-    plt.title(f"ПЭСы спутника {sat_name}")
+    plt.title(f"ПЭСы {track_name_human}")
 
 
 # Ref: https://stackoverflow.com/questions/15411967
@@ -377,13 +376,27 @@ def is_ipython() -> bool:
         return False      # Probably standard Python interpreter
 
 
+sql_con = "clickhouse://default:@clickhouse/default"
+
+
 if not is_ipython() and __name__ == '__main__':
     if not os.path.exists("./rawdump/"):
         print("No dump files. Requesting...")
         os.system("rawdump.sh -in")
 
-    for values in read_csvs():
-        plot_build(perf_cal(values))
+    _sat = input("sat: ")
+    _from = int(input("from (UTC UNIX Timestamp ms): "))
+    _to = int(input("to (UTC UNIX Timestamp ms):"))
+    _secondaryfreq = input("secondaryfreq (for ISMRAWTEC):")
+
+    for values in dump_csvs(sql_con,
+                            _sat, _from, _to, _secondaryfreq):
+        if values['range'].empty:
+            print("Выгрузка пуста!")
+            exit(1)
+
+        for sigcomb in comb_dfs(values):
+            plot_build(perf_cal(sigcomb))
 
     plt.show()
     exit(0)
@@ -392,14 +405,6 @@ if not is_ipython() and __name__ == '__main__':
 # ## Скрипт Jupyter
 # 
 # Эта часть будет выполняться, если программа запущена в Jupyter
-
-# ### Параметры SQL-подключения:
-
-# In[ ]:
-
-
-sql_con = "clickhouse://default:@clickhouse/default"
-
 
 # ### Интерактивный запрос параметров выгрузки
 
