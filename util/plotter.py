@@ -411,10 +411,9 @@ if not is_ipython() and __name__ == '__main__':
 # In[ ]:
 
 
-from IPython.display import display
-from ipywidgets import interact, Text, IntText
+from ipywidgets import interact, IntText, Dropdown
 
-_satw = Text(
+_satw = Dropdown(
     description="Спутник:")
 _fromw = IntText(
     description="Начальное время:",
@@ -422,22 +421,44 @@ _fromw = IntText(
 _tow = IntText(
     description="Конечное время:",
     min=0)
-_secondaryfreqw = Text(
+_secondaryfreqw = Dropdown(
     description="Secondaryfreq:")
 
-display(_satw)
-display(_fromw)
-display(_tow)
-display(_secondaryfreqw)
+
+def update_sat(*args):
+    if (_fromw.value > 0) and (_tow.value > 0) \
+        and (_fromw.value < _tow.value):
+        df = pd.read_sql(f"""
+SELECT DISTINCT(sat)
+FROM
+    rawdata.range
+WHERE
+    time BETWEEN {_fromw.value} AND {_tow.value}
+""", sql_con)
+        _satw.options = df["sat"].unique()
+    else:
+        _satw.options = []
 
 
-# In[ ]:
+def update_secondaryfreq(*args):
+    if (_fromw.value > 0) and (_tow.value > 0) \
+        and (_fromw.value < _tow.value) and (_satw.value != ""):
+        df = pd.read_sql(f"""
+SELECT DISTINCT(secondaryfreq)
+FROM
+    rawdata.ismrawtec
+WHERE
+    sat = '{_satw.value}'
+    AND time BETWEEN {_fromw.value} AND {_tow.value}
+""", sql_con)
+        _secondaryfreqw.options = df["secondaryfreq"].unique()
+    else:
+        _secondaryfreqw.options = []
 
 
-_sat = _satw.value
-_from = _fromw.value
-_to = _tow.value
-_secondaryfreq = _secondaryfreqw.value
+_fromw.observe(update_sat, 'value')
+_tow.observe(update_sat, 'value')
+_satw.observe(update_secondaryfreq, 'value')
 
 
 # ### Получение данных и расчеты
@@ -445,10 +466,15 @@ _secondaryfreq = _secondaryfreqw.value
 # In[ ]:
 
 
-for values in dump_csvs(sql_con, _sat,
-                        _from, _to, _secondaryfreq):
-    if values['range'].empty:
-        print("Выгрузка пуста!")
-    else:
-        plot_build(perf_cal(values))
+@interact(_sat=_satw, _from=_fromw, _to=_tow,
+          _secondaryfreq=_secondaryfreqw).options(manual=True)
+def jupyter_main(_sat, _from, _to, _secondaryfreq):
+    for values in dump_csvs(sql_con,
+                            _sat, _from, _to, _secondaryfreq):
+        if values['range'].empty:
+            print("Выгрузка пуста!")
+            return
+
+        for sigcomb in comb_dfs(values):
+            plot_build(perf_cal(sigcomb))
 
