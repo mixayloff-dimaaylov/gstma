@@ -36,6 +36,8 @@ import scipy.signal as sc
 import datetime as dt
 
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+
 import numpy as np
 import pandas as pd
 
@@ -336,19 +338,34 @@ def plot_build(sat):
     track_name = f"{_sat} {_date} {_from} {_to} {_freq1}+{_freq2}"
     track_name_human = f"спутника {_sat} {_freq1}+{_freq2}"
 
+    # Matplotlib setup
+    locator = mdates.AutoDateLocator()
+    formatter = mdates.ConciseDateFormatter(locator)
+
     gfig, gax = plt.subplots()
+    gax.xaxis.set_major_locator(locator)
+    gax.xaxis.set_major_formatter(formatter)
 
     def dumpplot(xs, ys, vname):
-        fig = plt.figure()
-        plt.title(f"{vname} {track_name_human}")
-        plt.plot(xs, ys, label=vname)
-        plt.legend()
+        fig, ax = plt.subplots()
+
+        ax.xaxis.set_major_locator(locator)
+        ax.xaxis.set_major_formatter(formatter)
+
+        ax.set_title(f"{vname} {track_name_human}")
+        ax.set_xlabel("Datetime")
+        ax.plot(xs, ys, label=vname)
+        ax.grid()
+        # Rotate and align the tick labels so they look better.
+        fig.autofmt_xdate()
+        fig.legend()
 
         plt.title(f"{vname} {track_name_human}")
         plt.savefig(f"{_path}/{track_name} {vname}.png")
         plt.close(fig)
 
         gax.plot(xs, ys, label=vname)
+        gax.set_xlabel("Datetime")
 
     dumpplot(sat.time, sat.NTpsr,   "NT(P1-P2)")
     dumpplot(sat.time, sat.NTadr,   "NT(adr1-adr2)")
@@ -359,7 +376,10 @@ def plot_build(sat):
     dumpplot(sat.time, sat.sigPhi,  "sigPhi")
 
     gax.legend()
-    plt.title(f"ПЭСы {track_name_human}")
+    gax.grid()
+    plt.title(f"ПЭСы {track_name_human} ({_date})")
+    # Rotate and align the tick labels so they look better.
+    gfig.autofmt_xdate()
 
 
 # Ref: https://stackoverflow.com/questions/15411967
