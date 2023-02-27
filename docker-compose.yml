@@ -122,7 +122,9 @@ services:
   jupyter:
     container_name: ionosphere-iif-jupyter
     profiles: ["jupyter"]
-    image: jupyter/pyspark-notebook:spark-3.3.1
+    build:
+      context: ./docs/jupyter
+      dockerfile: Dockerfile
     ports:
       # Default Jupyter Lab WEB-interface port
       - 8888:8888
