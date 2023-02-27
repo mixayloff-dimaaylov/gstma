@@ -117,8 +117,9 @@ services:
     depends_on:
       - clickhouse
 
-  # Jupyter Lab
+  # Jupyter Lab PySpark + Almond
   # Docs: https://jupyter-docker-stacks.readthedocs.io
+  # Docs: https://almond.sh/docs/intro
   jupyter:
     container_name: ionosphere-iif-jupyter
     profiles: ["jupyter"]
@@ -128,22 +129,6 @@ services:
     ports:
       # Default Jupyter Lab WEB-interface port
       - 8888:8888
-      # Port of Contextual Help
-      - 46629:46629
-    volumes:
-      - './docs/jupyter/:/home/jovyan/work'
-
-  # Jupyter Lab + Almond
-  # Docs: https://almond.sh/docs/intro
-  jupyter-almond:
-    container_name: ionosphere-iif-jupyter-almond
-    profiles: ["jupyter-almond"]
-    image: almondsh/almond:0.13.2-scala-2.12.17
-    ports:
-      # Default Jupyter Lab WEB-interface port
-      - 8888:8888
-      # Port of Metabrowse
-      - 46629:46629
     volumes:
       - './docs/jupyter/:/home/jovyan/work'
 
