@@ -131,6 +131,7 @@ services:
       - 8888:8888
     volumes:
       - './docs/jupyter/:/home/jovyan/work'
+      - './:/home/jovyan/ionosphere_iif:ro'
 
   reporter:
     container_name: ionosphere-iif-reporter
