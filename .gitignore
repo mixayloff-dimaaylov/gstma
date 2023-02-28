@@ -1,2 +1,5 @@
 # docker-compose environment file
 .env
+
+# JupyterLab checkpointing
+**/.ipynb_checkpoints/
