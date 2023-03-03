@@ -346,34 +346,37 @@ def plot_build(sat):
     gax.xaxis.set_major_locator(locator)
     gax.xaxis.set_major_formatter(formatter)
 
-    def dumpplot(xs, ys, vname):
+    def dumpplot(xs, ys, yname, ylabel):
         fig, ax = plt.subplots()
 
         ax.xaxis.set_major_locator(locator)
         ax.xaxis.set_major_formatter(formatter)
 
-        ax.set_title(f"{vname} {track_name_human}")
+        ax.set_title(f"${yname}$ {track_name_human}")
         ax.set_xlabel("Datetime")
-        ax.plot(xs, ys, label=vname)
+        ax.set_ylabel(f"${ylabel}$")
+        # Cuttoff filter splashes
+        ax.plot(xs[200:], ys[200:], label=f"${yname}$")
         ax.grid()
         # Rotate and align the tick labels so they look better.
         fig.autofmt_xdate()
         fig.legend()
 
-        plt.title(f"{vname} {track_name_human}")
-        plt.savefig(f"{_path}/{track_name} {vname}.png")
+        plt.title(f"${yname}$ {track_name_human}")
+        plt.savefig(f"{_path}/{track_name} {yname}.png")
         plt.close(fig)
 
-        gax.plot(xs, ys, label=vname)
+        gax.plot(xs[200:], ys[200:], label=f"${yname}$")
         gax.set_xlabel("Datetime")
 
-    dumpplot(sat.time, sat.NTpsr,   "NT(P1-P2)")
-    dumpplot(sat.time, sat.NTadr,   "NT(adr1-adr2)")
-    dumpplot(sat.time, sat.ism_tec, "ISMRAWTEC's TEC")
-    dumpplot(sat.time, sat.avgNT,   "avgNT")
-    dumpplot(sat.time, sat.delNT,   "delNT")
-    dumpplot(sat.time, sat.sigNT,   "sigNT")
-    dumpplot(sat.time, sat.sigPhi,  "sigPhi")
+    dumpplot(sat.time, sat.NTpsr,   "N_T (P_1 - P_2)",     "TECU")
+    dumpplot(sat.time, sat.NTadr,   "N_T (adr_1 - adr_2)", "TECU")
+    dumpplot(sat.time, sat.ism_tec, "ISMRAWTEC's TEC",     "TECU")
+    dumpplot(sat.time, sat.avgNT,   "\overline{{N_T}}",    "TECU")
+    dumpplot(sat.time, sat.delNT,   "\Delta N_T",          "TECU")
+    dumpplot(sat.time, sat.sigNT,   "\sigma N_T",          "TECU")
+    dumpplot(sat.time, sat.sigPhi,  "\sigma \\varphi",     "TECU")
+    gax.set_ylabel("TECU")
 
     gax.legend()
     gax.grid()
