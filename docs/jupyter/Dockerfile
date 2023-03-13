@@ -1,7 +1,6 @@
 FROM jupyter/pyspark-notebook:spark-3.3.1
 
 # Install Almond kernel
-# curl already installed
 
 # Workaround to systemwide installation of kernel
 # Ref: https://jupyter-docker-stacks.readthedocs.io/en/latest/using/recipes.html#using-sudo-within-a-container
@@ -10,7 +9,7 @@ ENV GRANT_SUDO=yes
 
 # Cannot run Almond on openjdk17 due error
 RUN apt update && \
-    apt install -y openjdk-8-jre-headless ca-certificates-java && \
+    apt install -y curl openjdk-8-jre-headless ca-certificates-java && \
     update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
 
 # Ref: https://github.com/almond-sh/almond/blob/v0.13.3/docs/pages/quick-start-install.md
