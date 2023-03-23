@@ -26,7 +26,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
-  "id": 5,
+  "id": 4,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -182,7 +182,7 @@
           "interval": "",
           "intervalFactor": 1,
           "query": "SELECT\n    t,\n    groupArray((concat('TEC ', sat, ' ', sigcomb), nt)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, 1000) * 1000) as t,\n        sat,\n        sigcomb,\n        avg(nt) nt\n    FROM computed.NT final\n\n    WHERE\n        $timeFilterMs\n        AND sat = '$satgraph'\n        and sigcomb in ($sigcomb)\n    GROUP BY\n        t,\n        sat,\n        sigcomb\n    ORDER BY\n        t,\n        sat,\n        sigcomb\n)\nGROUP BY t\n\nORDER BY t\n",
-          "rawQuery": "SELECT\n    t,\n    groupArray((concat('TEC ', sat, ' ', sigcomb), nt)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, 1000) * 1000) as t,\n        sat,\n        sigcomb,\n        avg(nt) nt\n    FROM computed.NT final\n\n    WHERE\n        \"d\" >= toDate(1665947096) AND \"d\" <= toDate(1665947126) AND time >= toUInt64(1665947096327/1000 * 1000) AND time <= toUInt64(1665947126643/1000 * 1000)\n        AND sat = 'GLONASS11'\n        and sigcomb in ('L1CA+L2CA','L1CA+L2P')\n    GROUP BY\n        t,\n        sat,\n        sigcomb\n    ORDER BY\n        t,\n        sat,\n        sigcomb\n)\nGROUP BY t\n\nORDER BY t",
+          "rawQuery": "SELECT\n    t,\n    groupArray((concat('TEC ', sat, ' ', sigcomb), nt)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, 1000) * 1000) as t,\n        sat,\n        sigcomb,\n        avg(nt) nt\n    FROM computed.NT final\n\n    WHERE\n        \"d\" >= toDate(1679301321) AND \"d\" <= toDate(1679301621) AND time >= toUInt64(1679301321780/1000 * 1000) AND time <= toUInt64(1679301621780/1000 * 1000)\n        AND sat = 'GPS6'\n        and sigcomb in ('L1CA+L2P_codeless','L1CA+L2C','L1CA+L5Q')\n    GROUP BY\n        t,\n        sat,\n        sigcomb\n    ORDER BY\n        t,\n        sat,\n        sigcomb\n)\nGROUP BY t\n\nORDER BY t",
           "refId": "A",
           "round": "0s",
           "skip_comments": true,
@@ -302,7 +302,7 @@
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
           "query": "$columns(\n    'Elevation %sat',\n    avg(elevation) elevation)\nFROM $table\nWHERE\n    sat = '$satgraph'",
-          "rawQuery": "SELECT t, groupArray((concat('Elevation ', sat), elevation)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, avg(elevation) elevation FROM computed.satxyz2\nWHERE \"d\" >= toDate(1665947096) AND \"d\" <= toDate(1665947126) AND time >= toUInt64(1665947096 * 1000) AND time <= toUInt64(1665947126 * 1000) AND\n    sat = 'GLONASS11' GROUP BY t, sat ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('Elevation ', sat), elevation)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, avg(elevation) elevation FROM computed.satxyz2\nWHERE \"d\" >= toDate(1679301197) AND \"d\" <= toDate(1679301497) AND time >= toUInt64(1679301197 * 1000) AND time <= toUInt64(1679301497 * 1000) AND\n    sat = 'GPS6' GROUP BY t, sat ORDER BY t, sat) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
           "skip_comments": true,
@@ -325,7 +325,7 @@
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
           "query": "$columns(\n    'C/No %sat %freq',\n    avg(cno) cno)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    AND freq IN ($freq)",
-          "rawQuery": "SELECT t, groupArray((concat('C/No ', sat, ' ', freq), cno)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, freq, avg(cno) cno FROM computed.range\nWHERE \"d\" >= toDate(1665947096) AND \"d\" <= toDate(1665947126) AND time >= toUInt64(1665947096 * 1000) AND time <= toUInt64(1665947126 * 1000) AND\n    sat = 'GLONASS11'\n    AND freq IN ('L1CA') GROUP BY t, sat, freq ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('C/No ', sat, ' ', freq), cno)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, freq, avg(cno) cno FROM computed.range\nWHERE \"d\" >= toDate(1679301197) AND \"d\" <= toDate(1679301497) AND time >= toUInt64(1679301197 * 1000) AND time <= toUInt64(1679301497 * 1000) AND\n    sat = 'GPS6'\n    AND freq IN ('L1CA') GROUP BY t, sat, freq ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
           "refId": "B",
           "round": "0s",
           "skip_comments": true,
@@ -333,7 +333,7 @@
           "tableLoading": false
         }
       ],
-      "title": "C/No",
+      "title": "C/No и угол возвышения",
       "type": "timeseries"
     },
     {
@@ -485,8 +485,8 @@
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "query": "$columns(\n    'Сырой TEC %sat L1CA+%secondaryfreq',\n    avg(tec) tec)\nFROM $table\nWHERE\n    secondaryfreq IN ($TEC_secondaryfreq)\n    AND sat = '$satgraph'",
-          "rawQuery": "SELECT t, groupArray((concat('Сырой TEC ', sat, ' L1CA+', secondaryfreq), tec)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, secondaryfreq, avg(tec) tec FROM computed.ismrawtec\nWHERE \"d\" >= toDate(1665947096) AND \"d\" <= toDate(1665947126) AND time >= toUInt64(1665947096 * 1000) AND time <= toUInt64(1665947126 * 1000) AND\n    secondaryfreq IN ('L2CA','L2P')\n    AND sat = 'GLONASS11' GROUP BY t, sat, secondaryfreq ORDER BY t, sat, secondaryfreq) GROUP BY t ORDER BY t",
+          "query": "$columns(\n    'Raw TEC %sat L1CA+%secondaryfreq',\n    avg(tec) tec)\nFROM $table\nWHERE\n    secondaryfreq IN ($TEC_secondaryfreq)\n    AND sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('Raw TEC ', sat, ' L1CA+', secondaryfreq), tec)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, secondaryfreq, avg(tec) tec FROM computed.ismrawtec\nWHERE \"d\" >= toDate(1679301219) AND \"d\" <= toDate(1679301519) AND time >= toUInt64(1679301219 * 1000) AND time <= toUInt64(1679301519 * 1000) AND\n    secondaryfreq IN ('L2C')\n    AND sat = 'GPS6' GROUP BY t, sat, secondaryfreq ORDER BY t, sat, secondaryfreq) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
           "skip_comments": true,
@@ -494,7 +494,7 @@
           "tableLoading": false
         }
       ],
-      "title": "ПЭС ОЕМ6",
+      "title": "ПЭС приёмника",
       "type": "timeseries"
     },
     {
@@ -622,8 +622,8 @@
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "query": "SELECT\n    t,\n    groupArray((concat('Average TEC ', sat, '  ', sigcomb), avgNT)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        sigcomb,\n        avg(avgNT) avgNT\n    FROM computed.NTDerivatives\n\n    WHERE\n        $timeFilterMs\n        AND sat = '$satgraph'\n        and sigcomb in ($sigcomb)\n    GROUP BY\n        t,\n        sat,\n        sigcomb\n    ORDER BY\n        t,\n        sat,\n        sigcomb\n)\nGROUP BY t\n\nORDER BY t\n",
-          "rawQuery": "SELECT\n    t,\n    groupArray((concat('Average TEC ', sat, '  ', sigcomb), avgNT)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        sigcomb,\n        avg(avgNT) avgNT\n    FROM computed.NTDerivatives\n\n    WHERE\n        \"d\" >= toDate(1665947096) AND \"d\" <= toDate(1665947126) AND time >= toUInt64(1665947096327/1000 * 1000) AND time <= toUInt64(1665947126643/1000 * 1000)\n        AND sat = 'GLONASS11'\n        and sigcomb in ('L1CA+L2CA','L1CA+L2P')\n    GROUP BY\n        t,\n        sat,\n        sigcomb\n    ORDER BY\n        t,\n        sat,\n        sigcomb\n)\nGROUP BY t\n\nORDER BY t",
+          "query": "SELECT\n    t,\n    groupArray((concat('TEC average ', sat, '  ', sigcomb), avgNT)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        sigcomb,\n        avg(avgNT) avgNT\n    FROM computed.NTDerivatives\n\n    WHERE\n        $timeFilterMs\n        AND sat = '$satgraph'\n        and sigcomb in ($sigcomb)\n    GROUP BY\n        t,\n        sat,\n        sigcomb\n    ORDER BY\n        t,\n        sat,\n        sigcomb\n)\nGROUP BY t\n\nORDER BY t\n",
+          "rawQuery": "SELECT\n    t,\n    groupArray((concat('TEC average ', sat, '  ', sigcomb), avgNT)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        sigcomb,\n        avg(avgNT) avgNT\n    FROM computed.NTDerivatives\n\n    WHERE\n        \"d\" >= toDate(1679301175) AND \"d\" <= toDate(1679301475) AND time >= toUInt64(1679301175591/1000 * 1000) AND time <= toUInt64(1679301475591/1000 * 1000)\n        AND sat = 'GPS6'\n        and sigcomb in ('L1CA+L2P_codeless','L1CA+L2C','L1CA+L5Q')\n    GROUP BY\n        t,\n        sat,\n        sigcomb\n    ORDER BY\n        t,\n        sat,\n        sigcomb\n)\nGROUP BY t\n\nORDER BY t",
           "refId": "A",
           "round": "0s",
           "skip_comments": true,
@@ -631,7 +631,7 @@
           "tableLoading": false
         }
       ],
-      "title": "Среднее ПЭС",
+      "title": "Средняя ПЭС",
       "type": "timeseries"
     },
     {
@@ -1014,7 +1014,7 @@
           "interval": "",
           "intervalFactor": 1,
           "query": "$columns(\n    'S4 %sat %freq',\n    avg(s4) s4)\nFROM $table\nWHERE\n    freq IN ($freq)\n    AND sat = '$satgraph'",
-          "rawQuery": "SELECT t, groupArray((concat('S4 ', sat, ' ', freq), s4)) as groupArr FROM ( SELECT intDiv(time, 15000) * 15000 as t, sat, freq, avg(s4) s4 FROM computed.s4 WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND      freq IN ('L1CA')     AND sat = 'GLONASS1' GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('S4 ', sat, ' ', freq), s4)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, freq, avg(s4) s4 FROM computed.s4pwr\nWHERE \"d\" >= toDate(1679301305) AND \"d\" <= toDate(1679301605) AND time >= toUInt64(1679301305 * 1000) AND time <= toUInt64(1679301605 * 1000) AND\n    freq IN ('L1CA')\n    AND sat = 'GPS6' GROUP BY t, sat, freq ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
           "skip_comments": true,
@@ -1070,7 +1070,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1174,7 +1175,7 @@
           "interval": "",
           "intervalFactor": 1,
           "query": "$columns(\n    'S4 %sat %sigcomb',\n    avg(s4) s4)\nFROM $table\nWHERE\n    sigcomb IN ($sigcomb)\n    AND sat = '$satgraph'",
-          "rawQuery": "SELECT t, groupArray((concat('S4 ', sat, ' ', sigcomb), s4)) AS groupArr FROM ( SELECT (intDiv(time, (5 * 1000)) * (5 * 1000)) AS t, sat, sigcomb, avg(s4) s4 FROM computed.s4\nWHERE time >= toUInt64(1664038327 * 1000) AND time <= toUInt64(1664049127 * 1000) AND\n    sigcomb IN ('L1CA+L2CA','L1CA+L2P')\n    AND sat = 'GLONASS1' GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('S4 ', sat, ' ', sigcomb), s4)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, avg(s4) s4 FROM computed.s4\nWHERE time >= toUInt64(1679301340 * 1000) AND time <= toUInt64(1679301640 * 1000) AND\n    sigcomb IN ('L1CA+L2C','L1CA+L2P_codeless','L1CA+L5Q')\n    AND sat = 'GPS6' GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
           "skip_comments": true,
@@ -1230,7 +1231,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1333,8 +1335,8 @@
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "query": "$columns(\n    'Сырое S4 %sat %freq',\n    avg(totals4) totals4)\nFROM $table\nWHERE\n    freq IN ($freq)\n    AND sat = '$satgraph'",
-          "rawQuery": "SELECT t, groupArray((concat('Сырое S4 ', sat, ' ', freq), totals4)) as groupArr FROM ( SELECT intDiv(time, 15000) * 15000 as t, sat, freq, avg(totals4) totals4 FROM computed.ismredobs WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND      freq IN ('L1CA')     AND sat = 'GLONASS1' GROUP BY t, sat, freq  ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
+          "query": "$columns(\n    'S4 %sat %freq',\n    avg(totals4) totals4)\nFROM $table\nWHERE\n    freq IN ($freq)\n    AND sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('S4 ', sat, ' ', freq), totals4)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, freq, avg(totals4) totals4 FROM computed.ismredobs\nWHERE \"d\" >= toDate(1679301350) AND \"d\" <= toDate(1679301650) AND time >= toUInt64(1679301350 * 1000) AND time <= toUInt64(1679301650 * 1000) AND\n    freq IN ('L1CA')\n    AND sat = 'GPS6' GROUP BY t, sat, freq ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
           "skip_comments": true,
@@ -1342,7 +1344,7 @@
           "tableLoading": false
         }
       ],
-      "title": "S4 ОЕМ6",
+      "title": "S4 приёмника",
       "type": "timeseries"
     }
   ],
