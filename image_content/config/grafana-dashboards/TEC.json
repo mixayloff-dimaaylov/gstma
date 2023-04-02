@@ -135,7 +135,7 @@
           "extrapolate": true,
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
-          "hide"; false,
+          "hide": false,
           "intervalFactor": 1,
           "query": "SELECT\n    t,\n    groupArray((concat('Computed TEC ', sat, ' ', sigcomb), nt)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        sigcomb,\n        avg(nt) nt\n    FROM computed.NT final\n\n    WHERE\n        $timeFilterMs\n        AND sat IN ($satellite)\n    GROUP BY\n        t,\n        sat,\n        sigcomb\n    ORDER BY\n        t,\n        sat\n)\nGROUP BY t\n\nORDER BY t\n",
           "rawQuery": "SELECT\n    t,\n    groupArray((concat('Computed TEC ', sat, ' ', sigcomb), nt)) AS groupArr\nFROM\n(\n    SELECT\n        (intDiv(time, (1000)) *(1000)) AS t,\n        sat,\n        sigcomb,\n        avg(nt) nt\n    FROM computed.NT final\n\n    WHERE\n        \"d\" >= toDate(1679293432) AND \"d\" <= toDate(1679304232) AND time >= toUInt64(1679293432634/1000 * 1000) AND time <= toUInt64(1679304232634/1000 * 1000)\n        AND sat IN ('GPS6','GPS11','GPS12','GLONASS13','GLONASS14','GPS17','GPS19','GLONASS24','GPS24')\n    GROUP BY\n        t,\n        sat,\n        sigcomb\n    ORDER BY\n        t,\n        sat\n)\nGROUP BY t\n\nORDER BY t",
