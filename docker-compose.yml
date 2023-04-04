@@ -40,18 +40,17 @@ services:
     depends_on:
       - zookeeper
 
-  spark-streamer-1:
-    container_name: ionosphere-iif-spark-streamer-1
+  spark-teccalculationv2:
+    container_name: ionosphere-iif-spark-teccalculationv2
     profiles: ["base", "default"]
     build:
       context: ./logserver-spark/
-      target: spark-streamer-1
+      target: spark-TecCalculationV2
     logging:
       driver: "local"
       options:
         max-size: "1g"
         compress: "true"
-    restart: on-failure
     ports:
       # DEBUG Spark UI
       - 4040:4040
@@ -66,35 +65,10 @@ services:
       - kafka
       - clickhouse
 
-  spark-streamer-2:
-    container_name: ionosphere-iif-spark-streamer-2
-    profiles: ["base", "default"]
-    build:
-      context: ./logserver-spark/
-      target: spark-streamer-2
-    logging:
-      driver: "local"
-      options:
-        max-size: "1g"
-        compress: "true"
-    restart: on-failure
-    ports:
-      # DEBUG Spark UI
-      - 4041:4040
-    environment:
-      CH_HOST: 'ionosphere-iif-clickhouse'
-    volumes:
-      - type: bind
-        source: ./image_content/config/spark/opt/spark/conf/log4j.properties
-        target: /spark/conf/log4j.properties
-    depends_on:
-      - kafka
-      - clickhouse
-
   clickhouse:
     container_name: ionosphere-iif-clickhouse
     profiles: ["base", "default"]
-    image: 'yandex/clickhouse-server:20.5.2.7'
+    image: 'yandex/clickhouse-server:20.7'
     ports:
       - 8123:8123
     volumes:
