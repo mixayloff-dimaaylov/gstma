@@ -18,7 +18,7 @@
 # Install a conda packages in the current Jupyter kernel
 import sys
 
-get_ipython().system('conda install --yes --prefix {sys.prefix} -c conda-forge clickhouse-driver clickhouse-sqlalchemy ipywidgets')
+get_ipython().system('mamba install --yes --prefix {sys.prefix} -c conda-forge clickhouse-driver clickhouse-sqlalchemy ipywidgets')
 
 
 # ## Исходная программа
@@ -129,6 +129,49 @@ def sigNT(dnt):
 
 def sigPhi(sigNT, f):
     return 1e16 * 80.8 * pi * sigNT / (C * f)
+
+
+def F_d(avgNT, f_0, alpha):
+    return np.sqrt(np.absolute((C * f_0 ** 3) /
+                   (80.8 * pi * (avgNT * 1e16) / np.sin(np.radians(alpha)))))
+
+
+def d(h_max, l_s, f_0, alpha):
+    return (4 * (h_max / np.sin(np.radians(alpha))) ** 2 * (C ** 2) /
+        ((pi ** 2) * (f_0 ** 2) * (l_s ** 4)))
+
+
+def F_k(sigPhi, h_max, l_s, f_0, alpha):
+    d_ = d(h_max, l_s, f_0, alpha)
+    return (np.sqrt(2) * f_0 /
+        (sigPhi * np.sqrt(1.0 + d_ / 2)))
+
+
+def autocorr(x, t):
+    if t <= 0:
+        return 1
+
+    return np.corrcoef(x[:-t], x[t:])[0, 1]
+
+
+def R_delNT(delNT, sigNT):
+    n = 50
+
+    res = np.zeros((n-1, n))
+    for delnt, signt in zip(
+          np.lib.stride_tricks.sliding_window_view(delNT, n),
+          np.lib.stride_tricks.sliding_window_view(sigNT, n)):
+        acc = np.empty((1, n))
+        for i in range(0, n):
+            acc[0, i] = autocorr(delnt, i)/signt[i]
+        res = np.append(res, acc, axis=0)
+
+    return res
+
+
+def l_s(delNT, sigNT):
+    k = (R_delNT(delNT, sigNT) < np.exp(-1)).argmax(axis=1)
+    return 1000 * (k + 1) * 0.02
 
 
 # ### Работа с выгрузками
@@ -314,10 +357,18 @@ def perf_cal(values):
     df_range['sigNT'] = pd.Series(sigNT(df_range.delNT)).shift(59, fill_value=0.0)
     df_range['sigPhi'] = sigPhi(df_range.sigNT, df_range.f2)
 
+    df_range['l_s'] = l_s(df_range.delNT, df_range.sigNT)
+
+    h_max = 300000
+    df_range['F_d'] = F_d(df_range.avgNT, df_range.f1, df_satxyz2.elevation)
+    df_range['d'] = d(h_max, df_range.l_s, df_range.f1, df_satxyz2.elevation)
+    df_range['F_k'] = F_k(df_range.sigPhi, h_max, df_range.l_s, df_range.f1, df_satxyz2.elevation)
+
     # For export
     df_range['ism_tec'] = df_ismrawtec.tec
     df_range['ism_primaryfreq'] = df_ismrawtec.primaryfreq
     df_range['ism_secondaryfreq'] = df_ismrawtec.secondaryfreq
+    df_range['elevation'] = df_satxyz2.elevation
 
     return df_range
 
@@ -342,44 +393,79 @@ def plot_build(sat):
     locator = mdates.AutoDateLocator()
     formatter = mdates.ConciseDateFormatter(locator)
 
-    gfig, gax = plt.subplots()
-    gax.xaxis.set_major_locator(locator)
-    gax.xaxis.set_major_formatter(formatter)
-
-    def dumpplot(xs, ys, vname):
+    def dumpplot(gax, xs, ys, yname, ylabel):
         fig, ax = plt.subplots()
 
         ax.xaxis.set_major_locator(locator)
         ax.xaxis.set_major_formatter(formatter)
 
-        ax.set_title(f"{vname} {track_name_human}")
+        ax.set_title(f"${yname}$ {track_name_human}")
         ax.set_xlabel("Datetime")
-        ax.plot(xs, ys, label=vname)
+        ax.set_ylabel(f"${ylabel}$")
+        # Cuttoff filter splashes
+        ax.plot(xs[200:], ys[200:], label=f"${yname}$")
         ax.grid()
         # Rotate and align the tick labels so they look better.
         fig.autofmt_xdate()
         fig.legend()
 
-        plt.title(f"{vname} {track_name_human}")
-        plt.savefig(f"{_path}/{track_name} {vname}.png")
+        plt.title(f"${yname}$ {track_name_human}")
+        plt.savefig(f"{_path}/{track_name} {yname}.png")
         plt.close(fig)
 
-        gax.plot(xs, ys, label=vname)
+        gax.plot(xs[200:], ys[200:], label=f"${yname}$")
         gax.set_xlabel("Datetime")
 
-    dumpplot(sat.time, sat.NTpsr,   "NT(P1-P2)")
-    dumpplot(sat.time, sat.NTadr,   "NT(adr1-adr2)")
-    dumpplot(sat.time, sat.ism_tec, "ISMRAWTEC's TEC")
-    dumpplot(sat.time, sat.avgNT,   "avgNT")
-    dumpplot(sat.time, sat.delNT,   "delNT")
-    dumpplot(sat.time, sat.sigNT,   "sigNT")
-    dumpplot(sat.time, sat.sigPhi,  "sigPhi")
+    def init_plot():
+        fig, ax = plt.subplots()
+        ax.xaxis.set_major_locator(locator)
+        ax.xaxis.set_major_formatter(formatter)
+        return fig, ax
 
-    gax.legend()
-    gax.grid()
-    plt.title(f"ПЭСы {track_name_human} ({_date})")
-    # Rotate and align the tick labels so they look better.
-    gfig.autofmt_xdate()
+    def plot_finalize(gax, title):
+        gax.legend()
+        gax.grid()
+        plt.title(f"{title} {track_name_human} ({_date})")
+        # Rotate and align the tick labels so they look better.
+        gfig.autofmt_xdate()
+
+    # First plot with TECU
+    gfig, gax = init_plot()
+    dumpplot(gax, sat.time, sat.NTpsr,   "N_T (P_1 - P_2)",     "TECU")
+    dumpplot(gax, sat.time, sat.NTadr,   "N_T (adr_1 - adr_2)", "TECU")
+    dumpplot(gax, sat.time, sat.ism_tec, "ISMRAWTEC's TEC",     "TECU")
+    dumpplot(gax, sat.time, sat.avgNT,   "\overline{{N_T}}",    "TECU")
+    dumpplot(gax, sat.time, sat.delNT,   "\Delta N_T",          "TECU")
+    dumpplot(gax, sat.time, sat.sigNT,   "\sigma N_T",          "TECU")
+    dumpplot(gax, sat.time, sat.sigPhi,  "\sigma \\varphi",     "TECU")
+    gax.set_ylabel("TECU")
+    plot_finalize(gax, "ПЭСы")
+
+    # Other plots:
+    gfig, gax = init_plot()
+    dumpplot(gax, sat.time, sat.l_s, "l_s", "m")
+    gax.set_ylabel("безразмерная")
+    plot_finalize(gax, "$l_s$")
+
+    gfig, gax = init_plot()
+    dumpplot(gax, sat.time, sat.F_d, "F_d", "Hz")
+    gax.set_ylabel("Hz")
+    plot_finalize(gax, "$F_d$")
+
+    gfig, gax = init_plot()
+    dumpplot(gax, sat.time, sat.F_k, "F_k", "Hz")
+    gax.set_ylabel("Hz")
+    plot_finalize(gax, "$F_k$")
+
+    gfig, gax = init_plot()
+    dumpplot(gax, sat.time, sat.d, "d", "безразмерная")
+    gax.set_ylabel("безразмерная")
+    plot_finalize(gax, "$d$")
+
+    gfig, gax = init_plot()
+    dumpplot(gax, sat.time, sat.elevation, "elevation", "Deg")
+    gax.set_ylabel("Deg")
+    plot_finalize(gax, "Угол возвышения")
 
 
 # Ref: https://stackoverflow.com/questions/15411967
