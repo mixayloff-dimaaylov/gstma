@@ -138,7 +138,7 @@ def sigPhi(sigNT, f):
 
 def dump_range(sql_con, _sat, _from, _to):
     return pd.read_sql(f"""
-SELECT *
+SELECT DISTINCT *
 FROM
     rawdata.range
 WHERE
@@ -151,7 +151,7 @@ ORDER BY
 
 def dump_ismrawtec(sql_con, _sat, _from, _to, _secondaryfreq):
     return pd.read_sql(f"""
-SELECT *
+SELECT DISTINCT *
 FROM
     rawdata.ismrawtec
 WHERE
@@ -165,7 +165,7 @@ ORDER BY
 
 def dump_satxyz2(sql_con, _sat, _from, _to):
     return pd.read_sql(f"""
-SELECT *
+SELECT DISTINCT *
 FROM
     rawdata.satxyz2
 WHERE
