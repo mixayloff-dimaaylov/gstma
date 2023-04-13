@@ -15,10 +15,25 @@
 # In[ ]:
 
 
-# Install a conda packages in the current Jupyter kernel
-import sys
+# Ref: https://stackoverflow.com/questions/15411967
+def is_ipython() -> bool:
+    try:
+        shell = get_ipython().__class__.__name__
+        if shell == 'ZMQInteractiveShell':
+            return True   # Jupyter notebook or qtconsole
+        elif shell == 'TerminalInteractiveShell':
+            return True   # Terminal running IPython
+        else:
+            return True   # Other type (?)
+    except NameError:
+        return False      # Probably standard Python interpreter
 
-get_ipython().system('mamba install --yes --prefix {sys.prefix} -c conda-forge clickhouse-driver clickhouse-sqlalchemy ipywidgets')
+
+# Install a conda packages in the current Jupyter kernel
+if is_ipython():
+    import sys
+
+    get_ipython().system('mamba install --yes --prefix {sys.prefix} -c conda-forge clickhouse-driver clickhouse-sqlalchemy ipywidgets')
 
 
 # ## Исходная программа
@@ -383,20 +398,6 @@ def plot_build(sat):
     plt.title(f"ПЭСы {track_name_human} ({_date})")
     # Rotate and align the tick labels so they look better.
     gfig.autofmt_xdate()
-
-
-# Ref: https://stackoverflow.com/questions/15411967
-def is_ipython() -> bool:
-    try:
-        shell = get_ipython().__class__.__name__
-        if shell == 'ZMQInteractiveShell':
-            return True   # Jupyter notebook or qtconsole
-        elif shell == 'TerminalInteractiveShell':
-            return True   # Terminal running IPython
-        else:
-            return True   # Other type (?)
-    except NameError:
-        return False      # Probably standard Python interpreter
 
 
 sql_con = "clickhouse://default:@clickhouse/default"
