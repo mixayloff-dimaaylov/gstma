@@ -33,7 +33,7 @@ def is_ipython() -> bool:
 if is_ipython():
     import sys
 
-    get_ipython().system('mamba install --yes --prefix {sys.prefix} -c conda-forge clickhouse-driver clickhouse-sqlalchemy ipywidgets')
+    get_ipython().system('mamba install -C --yes --prefix {sys.prefix} -c conda-forge clickhouse-driver clickhouse-sqlalchemy ipywidgets')
 
 
 # ## Исходная программа
