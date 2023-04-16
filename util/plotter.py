@@ -196,7 +196,7 @@ ORDER BY
 
 # Dumps tables from sql_con to files and returns Pandas DataFrame's
 def dump_csvs(sql_con, _sat, _from, _to, _secondaryfreq):
-    df_range = dump_range(sql_con, _sat, _from, _to,)
+    df_range = dump_range(sql_con, _sat, _from, _to)
     df_ismrawtec = dump_ismrawtec(sql_con, _sat, _from, _to, _secondaryfreq)
     df_satxyz2 = dump_satxyz2(sql_con, _sat, _from, _to)
 
