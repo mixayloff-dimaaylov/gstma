@@ -15,18 +15,31 @@
 # In[ ]:
 
 
-# Install a conda packages in the current Jupyter kernel
-import sys
+# Ref: https://stackoverflow.com/questions/15411967
+def is_ipython() -> bool:
+    try:
+        shell = get_ipython().__class__.__name__
+        if shell == 'ZMQInteractiveShell':
+            return True   # Jupyter notebook or qtconsole
+        elif shell == 'TerminalInteractiveShell':
+            return True   # Terminal running IPython
+        else:
+            return True   # Other type (?)
+    except NameError:
+        return False      # Probably standard Python interpreter
 
-get_ipython().system('conda install --yes --prefix {sys.prefix} -c conda-forge clickhouse-driver clickhouse-sqlalchemy ipywidgets')
+
+# Install a conda packages in the current Jupyter kernel
+if is_ipython():
+    import sys
+
+    get_ipython().system('mamba install -C --yes --prefix {sys.prefix} -c conda-forge clickhouse-driver clickhouse-sqlalchemy ipywidgets')
 
 
 # ## Исходная программа
 
 # In[ ]:
 
-
-#!/usr/bin/env python3
 
 import os
 import glob
@@ -136,9 +149,14 @@ def sigPhi(sigNT, f):
 # In[ ]:
 
 
+def read_sql_chunked(query, sql_con, chunksize=100000):
+    dfs = pd.read_sql(query, sql_con, chunksize=chunksize)
+    return pd.concat(dfs, ignore_index=True)
+
+
 def dump_range(sql_con, _sat, _from, _to):
-    return pd.read_sql(f"""
-SELECT *
+    return read_sql_chunked(f"""
+SELECT DISTINCT *
 FROM
     rawdata.range
 WHERE
@@ -150,8 +168,8 @@ ORDER BY
 
 
 def dump_ismrawtec(sql_con, _sat, _from, _to, _secondaryfreq):
-    return pd.read_sql(f"""
-SELECT *
+    return read_sql_chunked(f"""
+SELECT DISTINCT *
 FROM
     rawdata.ismrawtec
 WHERE
@@ -164,8 +182,8 @@ ORDER BY
 
 
 def dump_satxyz2(sql_con, _sat, _from, _to):
-    return pd.read_sql(f"""
-SELECT *
+    return read_sql_chunked(f"""
+SELECT DISTINCT *
 FROM
     rawdata.satxyz2
 WHERE
@@ -178,7 +196,7 @@ ORDER BY
 
 # Dumps tables from sql_con to files and returns Pandas DataFrame's
 def dump_csvs(sql_con, _sat, _from, _to, _secondaryfreq):
-    df_range = dump_range(sql_con, _sat, _from, _to,)
+    df_range = dump_range(sql_con, _sat, _from, _to)
     df_ismrawtec = dump_ismrawtec(sql_con, _sat, _from, _to, _secondaryfreq)
     df_satxyz2 = dump_satxyz2(sql_con, _sat, _from, _to)
 
@@ -346,34 +364,37 @@ def plot_build(sat):
     gax.xaxis.set_major_locator(locator)
     gax.xaxis.set_major_formatter(formatter)
 
-    def dumpplot(xs, ys, vname):
+    def dumpplot(xs, ys, yname, ylabel):
         fig, ax = plt.subplots()
 
         ax.xaxis.set_major_locator(locator)
         ax.xaxis.set_major_formatter(formatter)
 
-        ax.set_title(f"{vname} {track_name_human}")
+        ax.set_title(f"${yname}$ {track_name_human}")
         ax.set_xlabel("Datetime")
-        ax.plot(xs, ys, label=vname)
+        ax.set_ylabel(f"${ylabel}$")
+        # Cuttoff filter splashes
+        ax.plot(xs[200:], ys[200:], label=f"${yname}$")
         ax.grid()
         # Rotate and align the tick labels so they look better.
         fig.autofmt_xdate()
         fig.legend()
 
-        plt.title(f"{vname} {track_name_human}")
-        plt.savefig(f"{_path}/{track_name} {vname}.png")
+        plt.title(f"${yname}$ {track_name_human}")
+        plt.savefig(f"{_path}/{track_name} {yname}.png")
         plt.close(fig)
 
-        gax.plot(xs, ys, label=vname)
+        gax.plot(xs[200:], ys[200:], label=f"${yname}$")
         gax.set_xlabel("Datetime")
 
-    dumpplot(sat.time, sat.NTpsr,   "NT(P1-P2)")
-    dumpplot(sat.time, sat.NTadr,   "NT(adr1-adr2)")
-    dumpplot(sat.time, sat.ism_tec, "ISMRAWTEC's TEC")
-    dumpplot(sat.time, sat.avgNT,   "avgNT")
-    dumpplot(sat.time, sat.delNT,   "delNT")
-    dumpplot(sat.time, sat.sigNT,   "sigNT")
-    dumpplot(sat.time, sat.sigPhi,  "sigPhi")
+    dumpplot(sat.time, sat.NTpsr,   "N_T (P_1 - P_2)",     "TECU")
+    dumpplot(sat.time, sat.NTadr,   "N_T (adr_1 - adr_2)", "TECU")
+    dumpplot(sat.time, sat.ism_tec, "ISMRAWTEC's TEC",     "TECU")
+    dumpplot(sat.time, sat.avgNT,   "\overline{{N_T}}",    "TECU")
+    dumpplot(sat.time, sat.delNT,   "\Delta N_T",          "TECU")
+    dumpplot(sat.time, sat.sigNT,   "\sigma N_T",          "TECU")
+    dumpplot(sat.time, sat.sigPhi,  "\sigma \\varphi",     "TECU")
+    gax.set_ylabel("TECU")
 
     gax.legend()
     gax.grid()
@@ -382,21 +403,7 @@ def plot_build(sat):
     gfig.autofmt_xdate()
 
 
-# Ref: https://stackoverflow.com/questions/15411967
-def is_ipython() -> bool:
-    try:
-        shell = get_ipython().__class__.__name__
-        if shell == 'ZMQInteractiveShell':
-            return True   # Jupyter notebook or qtconsole
-        elif shell == 'TerminalInteractiveShell':
-            return True   # Terminal running IPython
-        else:
-            return True   # Other type (?)
-    except NameError:
-        return False      # Probably standard Python interpreter
-
-
-sql_con = "clickhouse://default:@clickhouse/default"
+sql_con = "clickhouse+native://default:@clickhouse/default"
 
 
 if not is_ipython() and __name__ == '__main__':
@@ -448,7 +455,7 @@ _secondaryfreqw = Dropdown(
 def update_sat(*args):
     if (_fromw.value > 0) and (_tow.value > 0) \
         and (_fromw.value < _tow.value):
-        df = pd.read_sql(f"""
+        df = read_sql_chunked(f"""
 SELECT DISTINCT(sat)
 FROM
     rawdata.range
@@ -463,7 +470,7 @@ WHERE
 def update_secondaryfreq(*args):
     if (_fromw.value > 0) and (_tow.value > 0) \
         and (_fromw.value < _tow.value) and (_satw.value != ""):
-        df = pd.read_sql(f"""
+        df = read_sql_chunked(f"""
 SELECT DISTINCT(secondaryfreq)
 FROM
     rawdata.ismrawtec
