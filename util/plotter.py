@@ -149,8 +149,13 @@ def sigPhi(sigNT, f):
 # In[ ]:
 
 
+def read_sql_chunked(query, sql_con, chunksize=100000):
+    dfs = pd.read_sql(query, sql_con, chunksize=chunksize)
+    return pd.concat(dfs, ignore_index=True)
+
+
 def dump_range(sql_con, _sat, _from, _to):
-    return pd.read_sql(f"""
+    return read_sql_chunked(f"""
 SELECT DISTINCT *
 FROM
     rawdata.range
@@ -163,7 +168,7 @@ ORDER BY
 
 
 def dump_ismrawtec(sql_con, _sat, _from, _to, _secondaryfreq):
-    return pd.read_sql(f"""
+    return read_sql_chunked(f"""
 SELECT DISTINCT *
 FROM
     rawdata.ismrawtec
@@ -177,7 +182,7 @@ ORDER BY
 
 
 def dump_satxyz2(sql_con, _sat, _from, _to):
-    return pd.read_sql(f"""
+    return read_sql_chunked(f"""
 SELECT DISTINCT *
 FROM
     rawdata.satxyz2
@@ -398,7 +403,7 @@ def plot_build(sat):
     gfig.autofmt_xdate()
 
 
-sql_con = "clickhouse://default:@clickhouse/default"
+sql_con = "clickhouse+native://default:@clickhouse/default"
 
 
 if not is_ipython() and __name__ == '__main__':
@@ -450,7 +455,7 @@ _secondaryfreqw = Dropdown(
 def update_sat(*args):
     if (_fromw.value > 0) and (_tow.value > 0) \
         and (_fromw.value < _tow.value):
-        df = pd.read_sql(f"""
+        df = read_sql_chunked(f"""
 SELECT DISTINCT(sat)
 FROM
     rawdata.range
@@ -465,7 +470,7 @@ WHERE
 def update_secondaryfreq(*args):
     if (_fromw.value > 0) and (_tow.value > 0) \
         and (_fromw.value < _tow.value) and (_satw.value != ""):
-        df = pd.read_sql(f"""
+        df = read_sql_chunked(f"""
 SELECT DISTINCT(secondaryfreq)
 FROM
     rawdata.ismrawtec
