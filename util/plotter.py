@@ -41,8 +41,6 @@ if is_ipython():
 # In[ ]:
 
 
-#!/usr/bin/env python3
-
 import os
 import glob
 import re
