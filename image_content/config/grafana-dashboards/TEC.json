@@ -21,9 +21,10 @@
       }
     ]
   },
+  "description": "",
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "graphTooltip": 0,
+  "graphTooltip": 2,
   "id": 2,
   "links": [],
   "liveNow": false,
@@ -111,12 +112,118 @@
       "type": "state-timeline"
     },
     {
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
+      "description": "Усреднённое за минуту количество видимых спутников.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "noValue": "-",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT\n    time t,\n    groupArray(('count', cnt)) AS groupArr\n\nFROM\n(\n    SELECT\n        time,\n        count(DISTINCT *) as cnt\n\n    FROM\n      (\n      SELECT\n          d,\n          (intDiv(time, (60000)) * (60000)) AS time,\n          sat\n\n      FROM\n          computed.satxyz2\n\n      GROUP BY\n          d,\n          time,\n          sat\n\n      ORDER BY\n          d,\n          time,\n          sat\n    )\n    WHERE\n        $timeFilterMs\n\n    GROUP BY\n        time\n\n    ORDER BY\n        time ASC\n)\nGROUP BY t\n\nORDER BY t",
+          "rawQuery": false,
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "satxyz2",
+          "tableLoading": false
+        }
+      ],
+      "title": "Количество видимых спутников",
+      "type": "timeseries"
+    },
+    {
       "collapsed": true,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 15
+        "y": 21
       },
       "id": 6,
       "panels": [
@@ -363,6 +470,6 @@
   "timezone": "",
   "title": "TEC",
   "uid": "7kQ9pZx7k",
-  "version": 2,
+  "version": 4,
   "weekStart": ""
 }
