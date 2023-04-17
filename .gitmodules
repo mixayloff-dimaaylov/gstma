@@ -1,6 +1,6 @@
 [submodule "logserver-spark"]
 	path = logserver-spark
-	url = https://github.com/mixayloff-dimaaylov/ionosphere
+	url = https://github.com/mixayloff-dimaaylov/logserver-spark
 	branch = master
 [submodule "clickhouse-grafana"]
 	path = clickhouse-grafana
@@ -10,3 +10,7 @@
 	path = satmap-panel
 	url = https://github.com/mixayloff-dimaaylov/satmap-panel
 	branch = clickhouse-ng
+[submodule "NovAtelLogReader"]
+	path = NovAtelLogReader
+	url = https://github.com/mixayloff-dimaaylov/NovAtelLogReader
+	branch = master
