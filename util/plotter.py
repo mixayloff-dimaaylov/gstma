@@ -144,9 +144,60 @@ def sigPhi(sigNT, f):
     return 1e16 * 80.8 * pi * sigNT / (C * f)
 
 
+def gamma(sigPhi):
+    return 1 / np.exp(np.power(sigPhi, 2) + 1)
+
+
+def F_c(sigPhi, f1):
+    return f1 / (np.sqrt(2) * sigPhi)
+
+
+def P_c(sigPhi):
+    return 200 / sigPhi
+
+
+def s_4(sigPhi):
+    return np.sqrt(1 - np.exp(-2 * np.power(sigPhi, 2)))
+
+
+# ### Pandas-выражения
+
+# In[ ]:
+
+
+def s_4_cno(df):
+    # tumbling window 1 sec
+    c0 = df.set_index('time')
+    c0['c1'] = np.power(np.power(10, c0.cno1/10), 2)
+    c0['c2'] = np.power(10, c0.cno1/10)
+    c0 = c0.resample('1s').mean(numeric_only=True)
+    c0['s4cno'] = (c0.c1 - np.power(c0.c2, 2)) / np.power(c0.c2, 2)
+    c0.reset_index(inplace=True)
+
+    return c0
+
+
+def s_4_pwr(df):
+    # tumbling window 1 sec
+    c0 = df.set_index('time')
+    c0['c1'] = np.power(c0.power, 2)
+    c0['c2'] = c0.power
+    c0 = c0.resample('1s').mean(numeric_only=True)
+    c0['s4pwr'] = np.sqrt((c0.c1 - np.power(c0.c2, 2)) / np.power(c0.c2, 2))
+    c0.reset_index(inplace=True)
+
+    return c0
+
+
 # ### Работа с выгрузками
 
 # In[ ]:
+
+
+def to_datetime(df):
+    res = df
+    res['time'] = pd.to_datetime(df['time'], unit='ms', utc=True)
+    return res
 
 
 def read_sql_chunked(query, sql_con, chunksize=100000):
@@ -159,6 +210,19 @@ def dump_range(sql_con, _sat, _from, _to):
 SELECT DISTINCT *
 FROM
     rawdata.range
+WHERE
+    sat='{_sat}'
+    AND time BETWEEN {_from} AND {_to}
+ORDER BY
+    time ASC
+""", sql_con)
+
+
+def dump_ismdetobs(sql_con, _sat, _from, _to):
+    return read_sql_chunked(f"""
+SELECT DISTINCT *
+FROM
+    rawdata.ismdetobs
 WHERE
     sat='{_sat}'
     AND time BETWEEN {_from} AND {_to}
@@ -181,6 +245,19 @@ ORDER BY
 """, sql_con)
 
 
+def dump_ismredobs(sql_con, _sat, _from, _to):
+    return read_sql_chunked(f"""
+SELECT DISTINCT *
+FROM
+    rawdata.ismredobs
+WHERE
+    sat='{_sat}'
+    AND time BETWEEN {_from} AND {_to}
+ORDER BY
+    time ASC
+""", sql_con)
+
+
 def dump_satxyz2(sql_con, _sat, _from, _to):
     return read_sql_chunked(f"""
 SELECT DISTINCT *
@@ -197,7 +274,9 @@ ORDER BY
 # Dumps tables from sql_con to files and returns Pandas DataFrame's
 def dump_csvs(sql_con, _sat, _from, _to, _secondaryfreq):
     df_range = dump_range(sql_con, _sat, _from, _to)
+    df_ismdetobs = dump_ismdetobs(sql_con, _sat, _from, _to)
     df_ismrawtec = dump_ismrawtec(sql_con, _sat, _from, _to, _secondaryfreq)
+    df_ismredobs = dump_ismredobs(sql_con, _sat, _from, _to)
     df_satxyz2 = dump_satxyz2(sql_con, _sat, _from, _to)
 
     csv_params = {"sep":",", "encoding":"utf-8",
@@ -209,13 +288,19 @@ def dump_csvs(sql_con, _sat, _from, _to, _secondaryfreq):
 
     df_range.to_csv(**csv_params,
         path_or_buf=f"{_path}/rawdata_range_{_sat}_{_from}_{_to}.csv")
+    df_ismdetobs.to_csv(**csv_params,
+        path_or_buf=f"{_path}/rawdata_ismdetobs_{_sat}_{_from}_{_to}.csv")
     df_ismrawtec.to_csv(**csv_params,
-        path_or_buf=f"{_path}/rawdata_ismrawtec_{_sat}_{_from}_{_to}.csv")
+        path_or_buf=f"{_path}/rawdata_ismrawtec_{_sat}_{_from}_{_to}_{_secondaryfreq}.csv")
+    df_ismredobs.to_csv(**csv_params,
+        path_or_buf=f"{_path}/rawdata_ismredobs_{_sat}_{_from}_{_to}.csv")
     df_satxyz2.to_csv(**csv_params,
         path_or_buf=f"{_path}/rawdata_satxyz2_{_sat}_{_from}_{_to}.csv")
 
     return [dict({"range": df_range,
+                  "ismdetobs": df_ismdetobs,
                   "ismrawtec": df_ismrawtec,
+                  "ismredobs": df_ismredobs,
                   "satxyz2": df_satxyz2})]
 
 
@@ -227,13 +312,18 @@ def read_csvs(_from):
 
     # glob SHOULD sort them in synchronous order
     files_range = glob.glob(f"{_path}/rawdata_range_*.csv")
+    files_ismdetobs = glob.glob(f"{_path}/rawdata_ismdetobs_*.csv")
     files_ismrawtec = glob.glob(f"{_path}/rawdata_ismrawtec_*.csv")
+    files_ismredobs = glob.glob(f"{_path}/rawdata_ismredobs_*.csv")
     files_satxyz2 = glob.glob(f"{_path}/rawdata_satxyz2_*.csv")
 
     return ({"range": pd.read_csv(r),
+             "ismdetobs": pd.read_csv(rd),
              "ismrawtec": pd.read_csv(rt),
+             "ismredobs": pd.read_csv(rrd),
              "satxyz2": pd.read_csv(xyz)}
-            for r, rt, xyz in zip(files_range, files_ismrawtec, files_satxyz2))
+            for r, rd, rt, rrd, xyz in zip(
+                files_range, files_ismdetobs, files_ismrawtec, files_ismredobs, files_satxyz2))
 
 
 # ### Расчеты
@@ -268,22 +358,30 @@ def comb_dfs(values):
 
         return pd.merge(df_f1, df_f2, how="inner", on=["time", "sat", "system", "prn"])
 
-    df_range = values['range']
-    df_ismrawtec = values['ismrawtec']
+    def comb_redobs(base, df_f1, f2):
+        df_f2 = base[base["freq"] == f2] \
+                    .rename(columns={"freq": "freq2", "glofreq": "glofreq2",
+                                     "totals4": "totals4_2"})
+
+        return pd.merge(df_f1, df_f2, how="inner", on=["time", "sat", "system", "prn"])
+
+    # RANGE
+    df_range = to_datetime(values['range'])
+
+    # ISMDETOBS
+    df_ismdetobs = to_datetime(values['ismdetobs'])
+
+    # ISMRAWTEC
+    df_ismrawtec = to_datetime(values['ismrawtec'])
+
+    # ISMREDOBS
+    df_ismredobs = to_datetime(values['ismredobs'])
+
+    # SATXYZ2
     df_satxyz2 = values['satxyz2']
 
     sat = df_range.sat[0]
     sat_system = re.search('^([A-Z]+)[0-9]+$', sat).group(1)
-
-    # RANGE
-    df_range.time = pd.to_datetime(df_range.time, unit='ms', utc=True)
-
-    # ISMRAWTEC
-    df_ismrawtec.time = pd.to_datetime(df_ismrawtec.time, unit='ms', utc=True)
-    df_ismrawtec.set_index('time', inplace=True)
-    df_ismrawtec = df_ismrawtec.resample('20ms')
-    df_ismrawtec = df_ismrawtec.interpolate(method='linear').interpolate(method='ffill')
-    df_ismrawtec.reset_index(inplace=True)
 
     # sigcombing
     df_f1 = df_range[df_range["freq"] == "L1CA"] \
@@ -291,9 +389,15 @@ def comb_dfs(values):
                            "adr": "adr1", "psr": "psr1",
                            "cno": "cno1", "locktime": "locktime1"})
 
+    df_ismredobs_f1 = df_ismredobs[df_ismredobs["freq"] == "L1CA"] \
+          .rename(columns={"freq": "freq1", "glofreq": "glofreq1",
+                           "totals4": "totals4_1"})
+
     freqs = df_range["freq"].unique()
     sigcombed = [{"range": comb(df_range, df_f1, f2),
+                  "ismdetobs": df_ismdetobs,
                   "ismrawtec": df_ismrawtec,
+                  "ismredobs": comb_redobs(df_ismredobs, df_ismredobs_f1, f2),
                   "satxyz2": df_satxyz2}
                  for f2 in freqs[freqs != "L1CA"]]
 
@@ -302,8 +406,7 @@ def comb_dfs(values):
 
 def perf_cal(values):
     df_range = values['range']
-    df_ismrawtec = values['ismrawtec']
-    df_satxyz2 = values['satxyz2']
+    df_ismdetobs = values['ismdetobs']
 
     # Преобразования частот в числовые значения
     df_range['rdcb'] = df_range.apply(lambda x: rdcbs[(x['system'], x['freq1'], x['freq2'])], axis=1)
@@ -331,27 +434,43 @@ def perf_cal(values):
 
     df_range['sigNT'] = pd.Series(sigNT(df_range.delNT)).shift(59, fill_value=0.0)
     df_range['sigPhi'] = sigPhi(df_range.sigNT, df_range.f2)
+    df_range['gamma'] = gamma(df_range.sigPhi)
+    df_range['Fc'] = F_c(df_range.sigPhi, df_range.f1)
+    df_range['Pc'] = P_c(df_range.sigPhi)
+    df_range['s4'] = s_4(df_range.sigPhi)
+
+    # df_range['s4cno'] = s_4_cno(df_range)
+    df_ismdetobs_resampled = s_4_pwr(df_ismdetobs)
 
     # For export
-    df_range['ism_tec'] = df_ismrawtec.tec
-    df_range['ism_primaryfreq'] = df_ismrawtec.primaryfreq
-    df_range['ism_secondaryfreq'] = df_ismrawtec.secondaryfreq
+    values['range'] = df_range
+    values['ismdetobs'] = df_ismdetobs
+    values['df_ismdetobs_resampled'] = df_ismdetobs_resampled
 
-    return df_range
+    return values
 
 
-def plot_build(sat):
-    _date = str(sat["time"].min().date())
+def plot_build(values):
+    df_range = values['range']
+    df_ismdetobsr = values['df_ismdetobs_resampled']
+    df_ismrawtec = values['ismrawtec']
+    df_ismredobs = values['ismredobs']
+    df_satxyz2 = values['satxyz2']
+
+    df_range.drop(index=df_range.index[:200],inplace=True)
+    df_range = df_range.reset_index()
+
+    _date = str(df_range["time"].min().date())
     _path = f"./rawdump/{_date}/plots"
     os.makedirs(_path, exist_ok=True)
 
     # Locals
-    _sat = sat['sat'][0]
-    _date = sat['time'].min().date()
-    _from = sat['time'].min().time()
-    _to = sat['time'].max().time()
-    _freq1 = sat['freq1'][0]
-    _freq2 = sat['freq2'][0]
+    _sat = df_range['sat'][0]
+    _date = df_range['time'].min().date()
+    _from = df_range['time'].min().time()
+    _to = df_range['time'].max().time()
+    _freq1 = df_range['freq1'][0]
+    _freq2 = df_range['freq2'][0]
 
     track_name = f"{_sat} {_date} {_from} {_to} {_freq1}+{_freq2}"
     track_name_human = f"спутника {_sat} {_freq1}+{_freq2}"
@@ -360,21 +479,26 @@ def plot_build(sat):
     locator = mdates.AutoDateLocator()
     formatter = mdates.ConciseDateFormatter(locator)
 
-    gfig, gax = plt.subplots()
-    gax.xaxis.set_major_locator(locator)
-    gax.xaxis.set_major_formatter(formatter)
-
-    def dumpplot(xs, ys, yname, ylabel):
+    def init_plot():
         fig, ax = plt.subplots()
-
         ax.xaxis.set_major_locator(locator)
         ax.xaxis.set_major_formatter(formatter)
+        return fig, ax
+
+    def plot_finalize(fig, ax, title):
+        ax.legend()
+        ax.grid()
+        plt.title(f"{title} {track_name_human} ({_date})")
+        # Rotate and align the tick labels so they look better.
+        fig.autofmt_xdate()
+
+    def dumpplot(gax, xs, ys, yname, ylabel):
+        fig, ax = init_plot()
 
         ax.set_title(f"${yname}$ {track_name_human}")
         ax.set_xlabel("Datetime")
-        ax.set_ylabel(f"${ylabel}$")
-        # Cuttoff filter splashes
-        ax.plot(xs[200:], ys[200:], label=f"${yname}$")
+        ax.set_ylabel(f"{ylabel}")
+        ax.plot(xs, ys, label=f"${yname}$")
         ax.grid()
         # Rotate and align the tick labels so they look better.
         fig.autofmt_xdate()
@@ -384,23 +508,49 @@ def plot_build(sat):
         plt.savefig(f"{_path}/{track_name} {yname}.png")
         plt.close(fig)
 
-        gax.plot(xs[200:], ys[200:], label=f"${yname}$")
+        gax.plot(xs, ys, label=f"${yname}$")
         gax.set_xlabel("Datetime")
 
-    dumpplot(sat.time, sat.NTpsr,   "N_T (P_1 - P_2)",     "TECU")
-    dumpplot(sat.time, sat.NTadr,   "N_T (adr_1 - adr_2)", "TECU")
-    dumpplot(sat.time, sat.ism_tec, "ISMRAWTEC's TEC",     "TECU")
-    dumpplot(sat.time, sat.avgNT,   "\overline{{N_T}}",    "TECU")
-    dumpplot(sat.time, sat.delNT,   "\Delta N_T",          "TECU")
-    dumpplot(sat.time, sat.sigNT,   "\sigma N_T",          "TECU")
-    dumpplot(sat.time, sat.sigPhi,  "\sigma \\varphi",     "TECU")
+    # First plot with TECU
+    gfig, gax = init_plot()
+    for xs, ys, yname in (
+        (df_range.time, df_range.NTpsr,       "N_T (P_1 - P_2)"),
+        (df_range.time, df_range.NTadr,       "N_T (adr_1 - adr_2)"),
+        (df_ismrawtec.time, df_ismrawtec.tec, "ISMRAWTEC's TEC"),
+        (df_range.time, df_range.avgNT,       "\overline{{N_T}}"),
+        (df_range.time, df_range.delNT,       "\Delta N_T"),
+        (df_range.time, df_range.sigNT,       "\sigma N_T"),
+        (df_range.time, df_range.sigPhi,      "\sigma \\varphi")):
+        dumpplot(gax, xs, ys, yname, "TECU")
     gax.set_ylabel("TECU")
+    plot_finalize(gfig, gax, "ПЭСы")
 
-    gax.legend()
-    gax.grid()
-    plt.title(f"ПЭСы {track_name_human} ({_date})")
-    # Rotate and align the tick labels so they look better.
-    gfig.autofmt_xdate()
+    # Other plots:
+    gfig, gax = init_plot()
+    dumpplot(gax, df_range.time, df_range.gamma, "\gamma", "")
+    gax.set_ylabel("")
+    plot_finalize(gfig, gax, "Параметр Райса")
+
+    gfig, gax = init_plot()
+    dumpplot(gax, df_range.time, df_range.Fc, "F_c", "Hz")
+    gax.set_ylabel("Hz")
+    plot_finalize(gfig, gax, "Интервал частотной корреляции\n")
+
+    gfig, gax = init_plot()
+    dumpplot(gax, df_range.time, df_range.Pc, "P_c", "m")
+    gax.set_ylabel("m")
+    plot_finalize(gfig, gax, "Интервал пространственной корреляции\n")
+
+    gfig, gax = init_plot()
+    for xs, ys, yname in (
+        (df_range.time, df_range.s4,                "S_4"),
+        #(df_range.time, df_range.s4cno,             "S_{4 CNo}"),
+        (df_ismdetobsr.time, df_ismdetobsr.s4pwr,   "S_{4 PWR}"),
+        (df_ismredobs.time, df_ismredobs.totals4_1, "S_{4 RAW}"),
+        (df_ismredobs.time, df_ismredobs.totals4_2, "S_{4 RAW}")):
+        dumpplot(gax, xs, ys, yname, "")
+    gax.set_ylabel("")
+    plot_finalize(gfig, gax, "Индекс мерцаний")
 
 
 sql_con = "clickhouse+native://default:@clickhouse/default"
