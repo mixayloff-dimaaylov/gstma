@@ -1,0 +1,1222 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Создано Microsoft Visio, экспорт SVG flowchart-spark-teccalculation.svg Страница-1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="6.36967in" height="8.81455in"
+		viewBox="0 0 458.616 634.648" xml:space="preserve" color-interpolation-filters="sRGB" class="st22">
+	<v:documentProperties v:langID="1049" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st2 {fill:#ffffff;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st3 {fill:#000000;font-family:Times New Roman;font-size:1.16666em;font-weight:bold}
+		.st4 {fill:#ffffff;fill-opacity:0}
+		.st5 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75;visibility:hidden}
+		.st6 {fill:#000000;font-family:Times New Roman;font-size:1.00001em}
+		.st7 {fill:#ffffff;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75;visibility:hidden}
+		.st8 {fill:#ffffff;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24}
+		.st9 {font-size:1em}
+		.st10 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24}
+		.st11 {fill:#000000;font-family:Times New Roman;font-size:0.833336em}
+		.st12 {marker-end:url(#mrkr4-50);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st13 {fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:0.22935779816514}
+		.st14 {fill:#ffffff}
+		.st15 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st16 {fill:#000000;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24}
+		.st17 {fill:#000000;font-family:Times New Roman;font-size:0.833336em;font-style:italic}
+		.st18 {marker-end:url(#mrkr4-50);marker-start:url(#mrkr4-195);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st19 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.5}
+		.st20 {fill:none;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st21 {fill:#000000;font-family:Times New Roman;font-size:0.666664em}
+		.st22 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<defs id="Markers">
+		<g id="lend4">
+			<path d="M 2 1 L 0 0 L 2 -1 L 2 1 " style="stroke:none"/>
+		</g>
+		<marker id="mrkr4-50" class="st13" v:arrowType="4" v:arrowSize="2" v:setback="8.72" refX="-8.72" orient="auto"
+				markerUnits="strokeWidth" overflow="visible">
+			<use xlink:href="#lend4" transform="scale(-4.36,-4.36) "/>
+		</marker>
+		<marker id="mrkr4-195" class="st13" v:arrowType="4" v:arrowSize="2" v:setback="8.24" refX="8.24" orient="auto"
+				markerUnits="strokeWidth" overflow="visible">
+			<use xlink:href="#lend4" transform="scale(4.36) "/>
+		</marker>
+	</defs>
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Страница-1</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<v:layer v:name="Соединительная линия" v:index="0"/>
+		<v:layer v:name="Сеть" v:index="1"/>
+		<v:layer v:name="Блок-схема" v:index="2"/>
+		<g id="group424-1" transform="translate(0.375,-0.375)" v:mID="424" v:groupContext="group">
+			<v:userDefs>
+				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT4(CFF Container;DoNotContain)"/>
+				<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Container)"/>
+				<v:ud v:nameU="msvSDContainerMargin" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDContainerResize" v:prompt="" v:val="VT0(2):26"/>
+				<v:ud v:nameU="msvSDContainerNoHighlight" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="msvSDContainerNoRibbon" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="msvSDContainerStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="visDirection" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="HeadingSide" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDContainerStyleCount" v:prompt="" v:val="VT0(6):26"/>
+				<v:ud v:nameU="msvSDContainerRequiredCategories" v:prompt="" v:val="VT4(CFF List)"/>
+				<v:ud v:nameU="msvSDContainerExcludedCategories" v:prompt="" v:val="VT4()"/>
+				<v:ud v:nameU="RTL" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(UACTME_M.vssx)"/>
+				<v:ud v:nameU="visRotateLabel" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visHeadingText" v:prompt=""/>
+				<v:ud v:nameU="visCFFStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="msvSDContainerLocked" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="CFFVertical" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="numLanes" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDMembersOnHiddenLayer" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="visCFFHeadingPos" v:prompt="" v:val="VT0(2):26"/>
+				<v:ud v:nameU="HeadingSpan" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="HeadingAlign" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visHeadingHeight" v:prompt="" v:val="VT0(0):1"/>
+				<v:ud v:nameU="visShowTitle" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visShowPhase" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visMargins" v:prompt="" v:val="VT0(0.23622047244094):24"/>
+				<v:ud v:nameU="visAutoExpand" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="msvSDContainerLocked" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="CFFVertical" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="numLanes" v:prompt="" v:val="VT0(2):26"/>
+				<v:ud v:nameU="visHeadingHeight" v:prompt="" v:val="VT0(0.47244094488189):24"/>
+				<v:ud v:nameU="visShowTitle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="visShowPhase" v:prompt="" v:val="VT0(1):26"/>
+			</v:userDefs>
+			<title>Контейнер CFF.92</title>
+			<g id="shape425-2" v:mID="425" v:groupContext="shape">
+				<title>Лист.425</title>
+				<v:userDefs>
+					<v:ud v:nameU="FillForegnd" v:prompt="" v:val="VT5(#ffffff)"/>
+					<v:ud v:nameU="FillBkgnd" v:prompt="" v:val="VT5(#ffffff)"/>
+					<v:ud v:nameU="CFFStyle" v:prompt="" v:val="VT0(1):26"/>
+					<v:ud v:nameU="FillForegndTrans" v:prompt="" v:val="VT0(0.8):27"/>
+				</v:userDefs>
+				<rect x="0" y="0.750025" width="457.866" height="633.898" class="st1"/>
+			</g>
+			<g id="shape426-4" v:mID="426" v:groupContext="shape" transform="translate(0,-599.882)">
+				<title>Лист.426</title>
+				<desc>Структура кластера</desc>
+				<v:userDefs>
+					<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Heading)"/>
+					<v:ud v:nameU="msvSDContainerHeadingEdge" v:prompt="" v:val="VT4(Bottom)"/>
+					<v:ud v:nameU="visHeadingHeight" v:prompt="" v:val="VT0(0.31116263699002):1"/>
+					<v:ud v:nameU="HeadingPos" v:prompt="" v:val="VT0(2):26"/>
+					<v:ud v:nameU="HSide" v:prompt="" v:val="VT0(0):26"/>
+					<v:ud v:nameU="HTxtMargin" v:prompt="" v:val="VT0(0.059055118110236):24"/>
+					<v:ud v:nameU="CStyle" v:prompt="" v:val="VT0(1):26"/>
+					<v:ud v:nameU="InsetY" v:prompt="" v:val="VT0(0):26"/>
+					<v:ud v:nameU="InsetX" v:prompt="" v:val="VT0(0):26"/>
+					<v:ud v:nameU="Inset" v:prompt="" v:val="VT0(0):24"/>
+					<v:ud v:nameU="Scale" v:prompt="" v:val="VT0(1):26"/>
+					<v:ud v:nameU="AntiScale" v:prompt="" v:val="VT0(1):26"/>
+					<v:ud v:nameU="GridRounding" v:prompt="" v:val="VT0(0.23622047244094):24"/>
+					<v:ud v:nameU="visHeadingHeight" v:prompt="" v:val="VT0(0.47244094488189):24"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="228.933" cy="617.64" width="457.87" height="34.0157"/>
+				<path d="M0 634.65 L457.87 634.65 L457.87 600.63 L0 600.63 L0 634.65 Z" class="st2"/>
+				<text x="4" y="621.84" class="st3" v:langID="1049"><v:paragraph/><v:tabList/>Структура кластера</text>			</g>
+		</g>
+		<g id="shape427-7" v:mID="427" v:groupContext="shape" transform="translate(28.7215,-0.375)">
+			<title>Список дорожек.93</title>
+			<v:userDefs>
+				<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(List)"/>
+				<v:ud v:nameU="msvSDContainerLocked" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvSDContainerMargin" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDContainerNoHighlight" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="msvSDContainerNoRibbon" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="msvSDContainerResize" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT4(CFF List;DoNotContain)"/>
+				<v:ud v:nameU="msvSDListRequiredCategories" v:prompt="" v:val="VT4(Swimlane)"/>
+				<v:ud v:nameU="msvSDContainerExcludedCategories" v:prompt="" v:val="VT4(CFF Container;CFF List;Phase;NonCFF)"/>
+				<v:ud v:nameU="msvSDContainerStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="msvSDListSpacing" v:prompt="" v:val="VT0(0):24"/>
+				<v:ud v:nameU="msvSDListDirection" v:prompt="" v:val="VT0(2):26"/>
+				<v:ud v:nameU="msvSDListAlignment" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDListItemMaster" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDListNoReorder" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvLayoutIncludeSubshapes" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvSDMembersOnHiddenLayer" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="visHeadingHeight" v:prompt="" v:val="VT0(0.47244094488189):24"/>
+				<v:ud v:nameU="visRotateLabel" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(UACTME_M.vssx)"/>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="msvSDContainerStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="msvSDListDirection" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDListItemMaster" v:prompt="" v:val="VT0(254):26"/>
+				<v:ud v:nameU="visHeadingHeight" v:prompt="" v:val="VT0(0.47244094488189):24"/>
+			</v:userDefs>
+			<rect x="0" y="34.7658" width="429.52" height="599.882" class="st4"/>
+			<rect x="0" y="34.7658" width="429.52" height="599.882" class="st5"/>
+		</g>
+		<g id="group421-10" transform="translate(28.7215,-0.375)" v:mID="421" v:groupContext="group">
+			<v:userDefs>
+				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT4(Swimlane;DoNotContain)"/>
+				<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Container)"/>
+				<v:ud v:nameU="msvSDContainerMargin" v:prompt="" v:val="VT0(0.23622047244094):24"/>
+				<v:ud v:nameU="msvSDContainerResize" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDContainerNoHighlight" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvSDContainerNoRibbon" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="msvSDContainerStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="visDirection" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="HeadingSide" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDContainerStyleCount" v:prompt="" v:val="VT0(6):26"/>
+				<v:ud v:nameU="msvSDContainerRequiredCategories" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDContainerExcludedCategories" v:prompt=""
+						v:val="VT4(CFF Container;CFF List;Swimlane;Phase;NonCFF)"/>
+				<v:ud v:nameU="RTL" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(UACTME_M.vssx)"/>
+				<v:ud v:nameU="visRotateLabel" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visHeadingText" v:prompt="" v:val="VT4(Функция)"/>
+				<v:ud v:nameU="visCFFStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="msvSDContainerLocked" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvLayoutIncludeSubshapes" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvSDMembersOnHiddenLayer" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="SwimlaneListGUID" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visCFFSettings" v:prompt="" v:val="VT4()"/>
+				<v:ud v:nameU="visCFFSingleLaneShowAll" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="LineWeight" v:prompt="" v:val="VT0(0.010416666666667):3"/>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="msvSDContainerMargin" v:prompt="" v:val="VT0(0.23622047244094):24"/>
+				<v:ud v:nameU="visDirection" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="RTL" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visRotateLabel" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visHeadingText" v:prompt="" v:val="VT4(Apache Spark)"/>
+				<v:ud v:nameU="visCFFStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="SwimlaneListGUID" v:prompt="" v:val="VT15({28569F64-4B8F-4977-A671-187C5F6DA8E2}):41"/>
+				<v:ud v:nameU="visCFFSettings" v:prompt="" v:val="VT4(/stg1=1, /stg2=1, /stg3=1, /stg4=2, /stg5=0,2362, /stg6=0)"/>
+				<v:ud v:nameU="LineWeight" v:prompt="" v:val="VT0(0.010416666666667):3"/>
+			</v:userDefs>
+			<title>Дорожка (вертикальная).91</title>
+			<g id="shape422-11" v:mID="422" v:groupContext="shape">
+				<title>Лист.422</title>
+				<v:userDefs>
+					<v:ud v:nameU="FillForegnd" v:prompt="" v:val="VT5(#ffffff)"/>
+					<v:ud v:nameU="FillBkgnd" v:prompt="" v:val="VT5(#ffffff)"/>
+					<v:ud v:nameU="CFFStyle" v:prompt="" v:val="VT0(1):26"/>
+					<v:ud v:nameU="FillForegndTrans" v:prompt="" v:val="VT0(1):27"/>
+				</v:userDefs>
+				<rect x="0" y="34.7658" width="265.465" height="599.882" class="st1"/>
+			</g>
+			<g id="shape423-13" v:mID="423" v:groupContext="shape" transform="translate(0,-565.866)">
+				<title>Лист.423</title>
+				<desc>Apache Spark</desc>
+				<v:userDefs>
+					<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Heading)"/>
+					<v:ud v:nameU="msvSDContainerHeadingEdge" v:prompt="" v:val="VT4(Bottom)"/>
+					<v:ud v:nameU="visHeadingHeight" v:prompt="" v:val="VT0(0.47244094488189):24"/>
+					<v:ud v:nameU="HeadingPos" v:prompt="" v:val="VT0(2):26"/>
+					<v:ud v:nameU="HSide" v:prompt="" v:val="VT0(0):26"/>
+					<v:ud v:nameU="HTxtMargin" v:prompt="" v:val="VT0(0.059055118110236):24"/>
+					<v:ud v:nameU="CStyle" v:prompt="" v:val="VT0(1):26"/>
+					<v:ud v:nameU="InsetY" v:prompt="" v:val="VT0(0):26"/>
+					<v:ud v:nameU="InsetX" v:prompt="" v:val="VT0(0):26"/>
+					<v:ud v:nameU="Inset" v:prompt="" v:val="VT0(0):24"/>
+					<v:ud v:nameU="CFFStyle" v:prompt="" v:val="VT0(1):26"/>
+					<v:ud v:nameU="HeadingPos" v:prompt="" v:val="VT0(2):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="132.732" cy="617.64" width="265.47" height="34.0157"/>
+				<path d="M0 634.65 L265.46 634.65 L265.46 600.63 L0 600.63 L0 634.65 Z" class="st2"/>
+				<text x="98.91" y="621.24" class="st6" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Apache Spark</text>			</g>
+		</g>
+		<g id="group432-16" transform="translate(294.186,-0.375)" v:mID="432" v:groupContext="group">
+			<v:userDefs>
+				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT4(Swimlane;DoNotContain)"/>
+				<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Container)"/>
+				<v:ud v:nameU="msvSDContainerMargin" v:prompt="" v:val="VT0(0.29527559055118):24"/>
+				<v:ud v:nameU="msvSDContainerResize" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDContainerNoHighlight" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvSDContainerNoRibbon" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="msvSDContainerStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="visDirection" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="HeadingSide" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDContainerStyleCount" v:prompt="" v:val="VT0(6):26"/>
+				<v:ud v:nameU="msvSDContainerRequiredCategories" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDContainerExcludedCategories" v:prompt=""
+						v:val="VT4(CFF Container;CFF List;Swimlane;Phase;NonCFF)"/>
+				<v:ud v:nameU="RTL" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(xfunc_m.vss)"/>
+				<v:ud v:nameU="visRotateLabel" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visHeadingText" v:prompt="" v:val="VT4(Функция)"/>
+				<v:ud v:nameU="visCFFStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="msvSDContainerLocked" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvLayoutIncludeSubshapes" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvSDMembersOnHiddenLayer" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="SwimlaneListGUID" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visCFFSettings" v:prompt="" v:val="VT4()"/>
+				<v:ud v:nameU="visCFFSingleLaneShowAll" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="LineWeight" v:prompt="" v:val="VT0(0.010416666666667):3"/>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="msvSDContainerMargin" v:prompt="" v:val="VT0(0.23622047244094):24"/>
+				<v:ud v:nameU="visDirection" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="RTL" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visRotateLabel" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visHeadingText" v:prompt="" v:val="VT4(ClickHouse)"/>
+				<v:ud v:nameU="visCFFStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="SwimlaneListGUID" v:prompt="" v:val="VT15({28569F64-4B8F-4977-A671-187C5F6DA8E2}):41"/>
+				<v:ud v:nameU="visCFFSettings" v:prompt="" v:val="VT4(/stg1=1, /stg2=1, /stg3=1, /stg4=2, /stg5=0,2362, /stg6=0)"/>
+				<v:ud v:nameU="LineWeight" v:prompt="" v:val="VT0(0.010416666666667):3"/>
+			</v:userDefs>
+			<title>Дорожка (вертикальная).432</title>
+			<g id="shape433-17" v:mID="433" v:groupContext="shape">
+				<title>Лист.433</title>
+				<v:userDefs>
+					<v:ud v:nameU="FillForegnd" v:prompt="" v:val="VT5(#ffffff)"/>
+					<v:ud v:nameU="FillBkgnd" v:prompt="" v:val="VT5(#ffffff)"/>
+					<v:ud v:nameU="CFFStyle" v:prompt="" v:val="VT0(1):26"/>
+					<v:ud v:nameU="FillForegndTrans" v:prompt="" v:val="VT0(1):27"/>
+				</v:userDefs>
+				<rect x="0" y="34.7658" width="164.055" height="599.882" class="st1"/>
+			</g>
+			<g id="shape434-19" v:mID="434" v:groupContext="shape" transform="translate(0,-565.866)">
+				<title>Лист.434</title>
+				<desc>ClickHouse</desc>
+				<v:userDefs>
+					<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Heading)"/>
+					<v:ud v:nameU="msvSDContainerHeadingEdge" v:prompt="" v:val="VT4(Bottom)"/>
+					<v:ud v:nameU="visHeadingHeight" v:prompt="" v:val="VT0(0.39370078740157):24"/>
+					<v:ud v:nameU="HeadingPos" v:prompt="" v:val="VT0(2):26"/>
+					<v:ud v:nameU="HSide" v:prompt="" v:val="VT0(0):26"/>
+					<v:ud v:nameU="HTxtMargin" v:prompt="" v:val="VT0(0.059055118110236):24"/>
+					<v:ud v:nameU="CStyle" v:prompt="" v:val="VT0(1):26"/>
+					<v:ud v:nameU="InsetY" v:prompt="" v:val="VT0(0):26"/>
+					<v:ud v:nameU="InsetX" v:prompt="" v:val="VT0(0):26"/>
+					<v:ud v:nameU="Inset" v:prompt="" v:val="VT0(0):24"/>
+					<v:ud v:nameU="CFFStyle" v:prompt="" v:val="VT0(1):26"/>
+					<v:ud v:nameU="visHeadingHeight" v:prompt="" v:val="VT0(0.47244094488189):24"/>
+					<v:ud v:nameU="HeadingPos" v:prompt="" v:val="VT0(2):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="82.0276" cy="617.64" width="164.06" height="34.0157"/>
+				<path d="M0 634.65 L164.06 634.65 L164.06 600.63 L0 600.63 L0 634.65 Z" class="st2"/>
+				<text x="53.7" y="621.24" class="st6" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>ClickHouse</text>			</g>
+		</g>
+		<g id="shape428-22" v:mID="428" v:groupContext="shape" transform="translate(0.375,-0.375)">
+			<title>Список этапов.94</title>
+			<v:userDefs>
+				<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(List)"/>
+				<v:ud v:nameU="msvSDContainerRequiredCategories" v:prompt="" v:val="VT4(Phase)"/>
+				<v:ud v:nameU="msvSDListRequiredCategories" v:prompt="" v:val="VT4(Phase)"/>
+				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT4(CFF List;DoNotContain)"/>
+				<v:ud v:nameU="msvSDContainerMargin" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDContainerLocked" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvSDContainerNoHighlight" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="msvSDContainerNoRibbon" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="msvSDContainerResize" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDContainerStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="msvSDListSpacing" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDListDirection" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDListAlignment" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDListItemMaster" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDListNoReorder" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvLayoutIncludeSubshapes" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvSDMembersOnHiddenLayer" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="visHeadingHeight" v:prompt="" v:val="VT0(0.23622047244094):24"/>
+				<v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(UACTME_M.vssx)"/>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="msvSDContainerLocked" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="msvSDContainerStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="msvSDListDirection" v:prompt="" v:val="VT0(2):26"/>
+				<v:ud v:nameU="visHeadingHeight" v:prompt="" v:val="VT0(0.39370078740157):24"/>
+			</v:userDefs>
+			<rect x="0" y="68.7815" width="457.866" height="565.866" class="st7"/>
+		</g>
+		<g id="group429-24" transform="translate(0.375,-0.375013)" v:mID="429" v:groupContext="group">
+			<v:userDefs>
+				<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Container)"/>
+				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT4(Phase;DoNotContain)"/>
+				<v:ud v:nameU="msvSDContainerExcludedCategories" v:prompt=""
+						v:val="VT4(CFF Container;CFF List;Swimlane;Phase;NonCFF)"/>
+				<v:ud v:nameU="msvSDContainerLocked" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvSDContainerNoHighlight" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="msvSDContainerNoRibbon" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="msvSDContainerMargin" v:prompt="" v:val="VT0(0.23622047244094):24"/>
+				<v:ud v:nameU="msvSDContainerResize" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDMembersOnHiddenLayer" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="visCFFStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="msvSDContainerStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="msvLayoutIncludeSubshapes" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="ListDirection" v:prompt="" v:val="VT0(2):26"/>
+				<v:ud v:nameU="visShowPhase" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(UACTME_M.vssx)"/>
+				<v:ud v:nameU="LineWeight" v:prompt="" v:val="VT0(0.010416666666667):3"/>
+				<v:ud v:nameU="RTL" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="CFFVertical" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="msvSDContainerMargin" v:prompt="" v:val="VT0(0.23622047244094):24"/>
+				<v:ud v:nameU="visCFFStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="msvSDContainerStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="ListDirection" v:prompt="" v:val="VT0(2):26"/>
+				<v:ud v:nameU="visShowPhase" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="LineWeight" v:prompt="" v:val="VT0(0.010416666666667):3"/>
+				<v:ud v:nameU="RTL" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="CFFVertical" v:prompt="" v:val="VT0(1):26"/>
+			</v:userDefs>
+			<title>Разделитель (вертикальный).95</title>
+			<g id="shape430-25" v:mID="430" v:groupContext="shape" transform="translate(634.648,246.301) rotate(90)">
+				<title>Лист.430</title>
+				<v:userDefs>
+					<v:ud v:nameU="FlipX" v:prompt="" v:val="VT0(0):26"/>
+				</v:userDefs>
+			</g>
+			<g id="shape431-27" v:mID="431" v:groupContext="shape" transform="translate(-606.301,634.648) rotate(-90)">
+				<title>Лист.431</title>
+				<desc>TecCalculation (spark-streamer-2)</desc>
+				<v:userDefs>
+					<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Heading)"/>
+					<v:ud v:nameU="HeadingPos" v:prompt="" v:val="VT0(3):26"/>
+					<v:ud v:nameU="msvSDContainerHeadingEdge" v:prompt="" v:val="VT4(Right)"/>
+					<v:ud v:nameU="HAlign" v:prompt="" v:val="VT0(0):26"/>
+					<v:ud v:nameU="SwimlaneHeadingSize" v:prompt="" v:val="VT0(0.47244094488189):24"/>
+					<v:ud v:nameU="FirstHeadingExtend" v:prompt="" v:val="VT0(0):26"/>
+					<v:ud v:nameU="HeadingPos" v:prompt="" v:val="VT0(3):26"/>
+					<v:ud v:nameU="SwimlaneHeadingSize" v:prompt="" v:val="VT0(0.47244094488189):24"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+				<v:textRect cx="194.173" cy="620.474" width="388.35" height="28.3465"/>
+				<rect x="0" y="606.301" width="388.346" height="28.3465" class="st8"/>
+				<text x="2" y="616.87" class="st6" v:langID="1033"><v:paragraph/><v:tabList/>TecCalculation<v:newlineChar/><tspan
+							x="2" dy="1.2em" class="st9">(spark</tspan>-streamer-2)</text>			</g>
+		</g>
+		<g id="group492-31" transform="translate(0.375,-388.721)" v:mID="492" v:groupContext="group">
+			<v:userDefs>
+				<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Container)"/>
+				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT4(Phase;DoNotContain)"/>
+				<v:ud v:nameU="msvSDContainerExcludedCategories" v:prompt=""
+						v:val="VT4(CFF Container;CFF List;Swimlane;Phase;NonCFF)"/>
+				<v:ud v:nameU="msvSDContainerLocked" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="msvSDContainerNoHighlight" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="msvSDContainerNoRibbon" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="msvSDContainerMargin" v:prompt="" v:val="VT0(0.23622047244094):24"/>
+				<v:ud v:nameU="msvSDContainerResize" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDMembersOnHiddenLayer" v:prompt="" v:val="VT0(1):5"/>
+				<v:ud v:nameU="visCFFStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="msvSDContainerStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="msvLayoutIncludeSubshapes" v:prompt="" v:val="VT0(0):5"/>
+				<v:ud v:nameU="ListDirection" v:prompt="" v:val="VT0(2):26"/>
+				<v:ud v:nameU="visShowPhase" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="visMasterStencil" v:prompt="" v:val="VT4(UACTME_M.vssx)"/>
+				<v:ud v:nameU="LineWeight" v:prompt="" v:val="VT0(0.010416666666667):3"/>
+				<v:ud v:nameU="RTL" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="CFFVertical" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="msvSDContainerLocked" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="msvSDContainerMargin" v:prompt="" v:val="VT0(0.23622047244094):24"/>
+				<v:ud v:nameU="visCFFStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="msvSDContainerStyle" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="ListDirection" v:prompt="" v:val="VT0(2):26"/>
+				<v:ud v:nameU="visShowPhase" v:prompt="" v:val="VT0(1):26"/>
+				<v:ud v:nameU="LineWeight" v:prompt="" v:val="VT0(0.010416666666667):3"/>
+				<v:ud v:nameU="RTL" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="CFFVertical" v:prompt="" v:val="VT0(1):26"/>
+			</v:userDefs>
+			<title>Разделитель (вертикальный).492</title>
+			<g id="shape493-32" v:mID="493" v:groupContext="shape" transform="translate(634.648,457.128) rotate(90)">
+				<title>Лист.493</title>
+				<v:userDefs>
+					<v:ud v:nameU="FlipX" v:prompt="" v:val="VT0(0):26"/>
+				</v:userDefs>
+				<path d="M177.52 634.65 L177.52 176.78" class="st10"/>
+			</g>
+			<g id="shape494-35" v:mID="494" v:groupContext="shape" transform="translate(-606.301,634.648) rotate(-90)">
+				<title>Лист.494</title>
+				<desc>StreamReceiver (spark-stream-1)</desc>
+				<v:userDefs>
+					<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Heading)"/>
+					<v:ud v:nameU="HeadingPos" v:prompt="" v:val="VT0(3):26"/>
+					<v:ud v:nameU="msvSDContainerHeadingEdge" v:prompt="" v:val="VT4(Right)"/>
+					<v:ud v:nameU="HAlign" v:prompt="" v:val="VT0(0):26"/>
+					<v:ud v:nameU="SwimlaneHeadingSize" v:prompt="" v:val="VT0(0.47244094488189):24"/>
+					<v:ud v:nameU="FirstHeadingExtend" v:prompt="" v:val="VT0(0):26"/>
+					<v:ud v:nameU="HeadingPos" v:prompt="" v:val="VT0(3):26"/>
+					<v:ud v:nameU="SwimlaneHeadingSize" v:prompt="" v:val="VT0(0.47244094488189):24"/>
+					<v:ud v:nameU="FirstHeadingExtend" v:prompt="" v:val="VT0(0.47244094488189):24"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+				<v:textRect cx="105.768" cy="620.474" width="211.54" height="28.3465"/>
+				<rect x="0" y="606.301" width="211.535" height="28.3465" class="st8"/>
+				<text x="2" y="616.87" class="st6" v:langID="1033"><v:paragraph/><v:tabList/>StreamReceiver<v:newlineChar/><tspan
+							x="2" dy="1.2em" class="st9" v:langID="1049">(</tspan>spark-stream-1)</text>			</g>
+		</g>
+		<g id="shape453-39" v:mID="453" v:groupContext="shape" transform="translate(63.8711,-476.277)">
+			<title>Связь.329</title>
+			<desc>satxyz2Stream</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visDescription" v:val="VT4(Используйте для добавления процесса в схему системы.)"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="61.1015" cy="606.377" width="66.93" height="11.7022"/>
+			<rect x="0" y="606.301" width="28.3465" height="28.3465" class="st2"/>
+			<text x="31.67" y="609.38" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>satxyz2Stream</text>		</g>
+		<g id="shape458-42" v:mID="458" v:groupContext="shape" transform="translate(173.005,-54.942)">
+			<title>Связь.330</title>
+			<desc>runJobS4</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visDescription" v:val="VT4(Используйте для добавления процесса в схему системы.)"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="54.8504" cy="619.766" width="48.48" height="9.92125"/>
+			<rect x="0" y="606.301" width="28.3465" height="28.3465" class="st2"/>
+			<text x="35.96" y="622.77" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>runJobS4</text>		</g>
+		<g id="shape376-45" v:mID="376" v:groupContext="shape" v:layerMember="0" transform="translate(77.7608,-343.367)">
+			<title>Динамическая соединительная линия.333</title>
+			<path d="M0 634.65 L0 659.66 L17.55 659.66" class="st12"/>
+		</g>
+		<g id="shape377-51" v:mID="377" v:groupContext="shape" transform="translate(173.005,-304.178)">
+			<title>Связь.335</title>
+			<desc>runJobNt</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT4(Database;DbRelationshipNode)"/>
+				<v:ud v:nameU="RelationshipName" v:prompt="" v:val="VT4()"/>
+				<v:ud v:nameU="Identifying" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="RelationshipName" v:prompt="" v:val="VT4(runJobNt)"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="53.5748" cy="620.156" width="45.36" height="10.7008"/>
+			<path d="M14.17 634.65 L28.35 620.47 L14.17 606.3 L0 620.47 L14.17 634.65 Z" class="st2"/>
+			<text x="34.96" y="623.16" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>runJobNt</text>		</g>
+		<g id="shape378-54" v:mID="378" v:groupContext="shape" v:layerMember="0" transform="translate(327.847,-273.777)">
+			<title>Динамическая соединительная линия.336</title>
+			<path d="M0 634.65 L-140.67 634.65 L-140.67 654.19" class="st12"/>
+		</g>
+		<g id="shape455-59" v:mID="455" v:groupContext="shape" transform="translate(63.5876,-343.367)">
+			<title>Связь.337</title>
+			<desc>calcDNT</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visDescription" v:val="VT4(Используйте для добавления процесса в схему системы.)"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				<v:ud v:nameU="visAltDescription" v:val="VT4()"/>
+				<v:ud v:nameU="visAltText" v:val="VT4()"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="52.1417" cy="620.829" width="45.36" height="28.3465"/>
+			<rect x="0" y="606.301" width="28.3465" height="28.3465" class="st2"/>
+			<text x="33.82" y="623.83" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>calcDNT</text>		</g>
+		<g id="shape381-62" v:mID="381" v:groupContext="shape" transform="translate(173.005,-219.351)">
+			<title>Связь.340</title>
+			<desc>runJobDerivatives</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT4(Database;DbRelationshipNode)"/>
+				<v:ud v:nameU="RelationshipName" v:prompt="" v:val="VT4()"/>
+				<v:ud v:nameU="Identifying" v:prompt="" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="RelationshipName" v:prompt="" v:val="VT4(runJobDerivatives)"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="72.1417" cy="621.006" width="82.49" height="10.2756"/>
+			<path d="M14.17 634.65 L28.35 620.47 L14.17 606.3 L0 620.47 L14.17 634.65 Z" class="st2"/>
+			<text x="35.48" y="624.01" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>runJobDerivatives</text>		</g>
+		<g id="shape456-65" v:mID="456" v:groupContext="shape" transform="translate(173.005,-137.147)">
+			<title>Связь.341</title>
+			<desc>runJobXz1</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visDescription" v:val="VT4(Используйте для добавления процесса в схему системы.)"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="57.8268" cy="619.234" width="53.86" height="10.2756"/>
+			<rect x="0" y="606.301" width="28.3465" height="28.3465" class="st2"/>
+			<text x="35.89" y="622.23" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>runJobXz1</text>		</g>
+		<g id="shape384-68" v:mID="384" v:groupContext="shape" v:layerMember="0" transform="translate(187.178,-219.351)">
+			<title>Динамическая соединительная линия.343</title>
+			<path d="M0 634.65 L0 655.2 L134.13 655.2" class="st12"/>
+		</g>
+		<g id="shape385-73" v:mID="385" v:groupContext="shape" v:layerMember="0" transform="translate(187.178,-137.147)">
+			<title>Динамическая соединительная линия.344</title>
+			<path d="M0 634.65 L0 652.36 L134.13 652.36" class="st12"/>
+		</g>
+		<g id="group392-78" transform="translate(166.627,-510.966)" v:mID="392" v:groupContext="group">
+			<v:custProps>
+				<v:cp v:nameU="ShapeClass" v:lbl="ShapeClass" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="true"
+						v:ask="false" v:langID="1049" v:cal="0" v:val="VT4(Расположение)"/>
+				<v:cp v:nameU="ShapeType" v:lbl="ShapeType" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="true"
+						v:ask="false" v:langID="1049" v:cal="0" v:val="VT4(Облако)"/>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="ShapeClass" v:prompt="" v:val="VT0(5):26"/>
+				<v:ud v:nameU="SolSH" v:prompt="" v:val="VT15({BF0433D9-CD73-4EB5-8390-8653BE590246}):41"/>
+				<v:ud v:nameU="visLegendShape" v:prompt="" v:val="VT0(2):26"/>
+			</v:userDefs>
+			<title>Облако.351</title>
+			<desc>datapoint-raw-range</desc>
+			<g id="shape393-79" v:mID="393" v:groupContext="shape" transform="translate(0,-8.16407)">
+				<title>Лист.393</title>
+				<path d="M35.46 618.69 C35.24 616.88 33.48 615.46 31.31 615.46 C30.69 615.46 30.11 615.58 29.58 615.79 C28.56 614.01
+							 26.45 612.71 22.49 612.81 C17.34 612.95 11.24 615.11 10.01 618.94 C8.54 619.2 7.6 619.94 7.04 620.93
+							 C6.81 620.9 6.58 620.89 6.34 620.89 C2.95 620.89 0.34 623.19 0.19 626.03 C0 629.7 2.95 631.17 6.34 631.17
+							 C6.82 631.17 7.29 631.12 7.74 631.03 C8.45 631.46 9.37 631.72 10.37 631.72 C11.31 631.72 12.16 631.5
+							 12.84 631.12 C14.15 633.19 16.83 634.65 19.93 634.48 C23.18 634.3 25.14 633.66 26.29 632.66 C26.36 632.65
+							 26.43 632.65 26.51 632.64 C30.15 632.21 31.75 631.33 32.26 629.88 C32.36 629.88 32.46 629.89 32.55 629.89
+							 C37.28 629.89 41.1 628.6 41.1 624.1 C41.1 621.6 38.74 619.49 35.46 618.69 Z" class="st2"/>
+			</g>
+			<g id="shape392-81" v:mID="392" v:groupContext="groupContent">
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="23.1024" cy="597.585" width="91.58" height="20.0036"/>
+				<text x="-17.43" y="600.58" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>datapoint-raw-range</text>			</g>
+		</g>
+		<g id="group394-83" transform="translate(57.4931,-510.966)" v:mID="394" v:groupContext="group">
+			<v:custProps>
+				<v:cp v:nameU="ShapeClass" v:lbl="ShapeClass" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="true"
+						v:ask="false" v:langID="1049" v:cal="0" v:val="VT4(Расположение)"/>
+				<v:cp v:nameU="ShapeType" v:lbl="ShapeType" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="true"
+						v:ask="false" v:langID="1049" v:cal="0" v:val="VT4(Облако)"/>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="ShapeClass" v:prompt="" v:val="VT0(5):26"/>
+				<v:ud v:nameU="SolSH" v:prompt="" v:val="VT15({BF0433D9-CD73-4EB5-8390-8653BE590246}):41"/>
+				<v:ud v:nameU="visLegendShape" v:prompt="" v:val="VT0(2):26"/>
+			</v:userDefs>
+			<title>Облако.353</title>
+			<desc>datapoint-raw-satxyz2</desc>
+			<g id="shape395-84" v:mID="395" v:groupContext="shape" transform="translate(0,-8.16407)">
+				<title>Лист.395</title>
+				<path d="M35.46 618.69 C35.24 616.88 33.48 615.46 31.31 615.46 C30.69 615.46 30.11 615.58 29.58 615.79 C28.56 614.01
+							 26.45 612.71 22.49 612.81 C17.34 612.95 11.24 615.11 10.01 618.94 C8.54 619.2 7.6 619.94 7.04 620.93
+							 C6.81 620.9 6.58 620.89 6.34 620.89 C2.95 620.89 0.34 623.19 0.19 626.03 C0 629.7 2.95 631.17 6.34 631.17
+							 C6.82 631.17 7.29 631.12 7.74 631.03 C8.45 631.46 9.37 631.72 10.37 631.72 C11.31 631.72 12.16 631.5
+							 12.84 631.12 C14.15 633.19 16.83 634.65 19.93 634.48 C23.18 634.3 25.14 633.66 26.29 632.66 C26.36 632.65
+							 26.43 632.65 26.51 632.64 C30.15 632.21 31.75 631.33 32.26 629.88 C32.36 629.88 32.46 629.89 32.55 629.89
+							 C37.28 629.89 41.1 628.6 41.1 624.1 C41.1 621.6 38.74 619.49 35.46 618.69 Z" class="st2"/>
+			</g>
+			<g id="shape394-86" v:mID="394" v:groupContext="groupContent">
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="25.5864" cy="597.585" width="99.92" height="20.0036"/>
+				<text x="-19.12" y="600.58" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>datapoint-raw-satxyz2</text>			</g>
+		</g>
+		<g id="shape396-88" v:mID="396" v:groupContext="shape" v:layerMember="0" transform="translate(85.1309,-519.341)">
+			<title>Динамическая соединительная линия.356</title>
+			<path d="M-7.09 634.65 L-7.09 642.83" class="st12"/>
+		</g>
+		<g id="shape399-93" v:mID="399" v:groupContext="shape" v:layerMember="1" transform="translate(327.847,-405.729)">
+			<title>Хранилище данных.359</title>
+			<desc>rawdata.range</desc>
+			<v:custProps>
+				<v:cp v:nameU="Manufacturer" v:lbl="Изготовитель" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="ProductNumber" v:lbl="Код товара" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="PartNumber" v:lbl="Код позиции" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="ProductDescription" v:lbl="Описание товара" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="AssetNumber" v:lbl="Инвентарный номер" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="SerialNumber" v:lbl="Серийный номер" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="Location" v:lbl="Расположение" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="Building" v:lbl="Здание" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Room" v:lbl="Комната" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Department" v:lbl="Отдел" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(ClickHouse)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visDescription"
+						v:val="VT4(Используйте для добавления базы данных, источника данных или устройства накопления данных в схему системы.)"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(0,0,0,0)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.6929" cy="620.297" width="113.39" height="9.56693"/>
+			<path d="M0 605.95 L0 625.08 A56.6929 9.56693 -180 1 0 113.39 625.08 L113.39 605.95 A56.6929 9.56693 -180 1 0 -0 605.95
+						 Z" class="st14"/>
+			<path d="M0 605.95 L0 625.08 A56.6929 9.56693 -180 1 0 113.39 625.08 L113.39 605.95 A56.6929 9.56693 -180 1 0 -0 605.95"
+					class="st15"/>
+			<path d="M0 605.95 A56.6929 9.56693 -180 1 0 113.39 605.95" class="st15"/>
+			<text x="28.52" y="623.3" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>rawdata.range</text>		</g>
+		<g id="shape400-98" v:mID="400" v:groupContext="shape" v:layerMember="1" transform="translate(327.847,-471.316)">
+			<title>Хранилище данных.360</title>
+			<desc>rawdata.satxyz2</desc>
+			<v:custProps>
+				<v:cp v:nameU="Manufacturer" v:lbl="Изготовитель" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="ProductNumber" v:lbl="Код товара" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="PartNumber" v:lbl="Код позиции" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="ProductDescription" v:lbl="Описание товара" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="AssetNumber" v:lbl="Инвентарный номер" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="SerialNumber" v:lbl="Серийный номер" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="Location" v:lbl="Расположение" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="Building" v:lbl="Здание" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Room" v:lbl="Комната" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Department" v:lbl="Отдел" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(ClickHouse)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visDescription"
+						v:val="VT4(Используйте для добавления базы данных, источника данных или устройства накопления данных в схему системы.)"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(0,0,0,0)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.6929" cy="620.297" width="113.39" height="9.56693"/>
+			<path d="M0 605.95 L0 625.08 A56.6929 9.56693 -180 1 0 113.39 625.08 L113.39 605.95 A56.6929 9.56693 -180 1 0 -0 605.95
+						 Z" class="st14"/>
+			<path d="M0 605.95 L0 625.08 A56.6929 9.56693 -180 1 0 113.39 625.08 L113.39 605.95 A56.6929 9.56693 -180 1 0 -0 605.95"
+					class="st15"/>
+			<path d="M0 605.95 A56.6929 9.56693 -180 1 0 113.39 605.95" class="st15"/>
+			<text x="24.35" y="623.3" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>rawdata.satxyz2</text>		</g>
+		<g id="shape401-103" v:mID="401" v:groupContext="shape" v:layerMember="0" transform="translate(92.2175,-483.363)">
+			<title>Динамическая соединительная линия.362</title>
+			<path d="M0 627.56 L92.6 627.56 A2.3622 2.3622 0 0 1 97.32 627.56 L229.09 627.56" class="st12"/>
+		</g>
+		<g id="shape402-108" v:mID="402" v:groupContext="shape" v:layerMember="1" transform="translate(327.847,-17.3829)">
+			<title>Хранилище данных.363</title>
+			<desc>computed.s4</desc>
+			<v:custProps>
+				<v:cp v:nameU="Manufacturer" v:lbl="Изготовитель" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="ProductNumber" v:lbl="Код товара" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="PartNumber" v:lbl="Код позиции" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="ProductDescription" v:lbl="Описание товара" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="AssetNumber" v:lbl="Инвентарный номер" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="SerialNumber" v:lbl="Серийный номер" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="Location" v:lbl="Расположение" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="Building" v:lbl="Здание" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Room" v:lbl="Комната" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Department" v:lbl="Отдел" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(ClickHouse)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visDescription"
+						v:val="VT4(Используйте для добавления базы данных, источника данных или устройства накопления данных в схему системы.)"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(0,0,0,0)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.6929" cy="620.297" width="113.39" height="9.56693"/>
+			<path d="M0 605.95 L0 625.08 A56.6929 9.56693 -180 1 0 113.39 625.08 L113.39 605.95 A56.6929 9.56693 -180 1 0 -0 605.95
+						 Z" class="st14"/>
+			<path d="M0 605.95 L0 625.08 A56.6929 9.56693 -180 1 0 113.39 625.08 L113.39 605.95 A56.6929 9.56693 -180 1 0 -0 605.95"
+					class="st15"/>
+			<path d="M0 605.95 A56.6929 9.56693 -180 1 0 113.39 605.95" class="st15"/>
+			<text x="31.28" y="623.3" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>computed.s4</text>		</g>
+		<g id="shape403-113" v:mID="403" v:groupContext="shape" v:layerMember="0" transform="translate(187.178,-54.942)">
+			<title>Динамическая соединительная линия.364</title>
+			<path d="M0 634.65 L0 653.07 L134.13 653.07" class="st12"/>
+		</g>
+		<g id="shape404-118" v:mID="404" v:groupContext="shape" v:layerMember="1" transform="translate(327.847,-260.454)">
+			<title>Хранилище данных.365</title>
+			<desc>computed.NT</desc>
+			<v:custProps>
+				<v:cp v:nameU="Manufacturer" v:lbl="Изготовитель" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="ProductNumber" v:lbl="Код товара" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="PartNumber" v:lbl="Код позиции" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="ProductDescription" v:lbl="Описание товара" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="AssetNumber" v:lbl="Инвентарный номер" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="SerialNumber" v:lbl="Серийный номер" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="Location" v:lbl="Расположение" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="Building" v:lbl="Здание" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Room" v:lbl="Комната" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Department" v:lbl="Отдел" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(ClickHouse)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visDescription"
+						v:val="VT4(Используйте для добавления базы данных, источника данных или устройства накопления данных в схему системы.)"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(0,0,0,0)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.6929" cy="620.297" width="113.39" height="9.56693"/>
+			<path d="M0 605.95 L0 625.08 A56.6929 9.56693 -180 1 0 113.39 625.08 L113.39 605.95 A56.6929 9.56693 -180 1 0 -0 605.95
+						 Z" class="st14"/>
+			<path d="M0 605.95 L0 625.08 A56.6929 9.56693 -180 1 0 113.39 625.08 L113.39 605.95 A56.6929 9.56693 -180 1 0 -0 605.95"
+					class="st15"/>
+			<path d="M0 605.95 A56.6929 9.56693 -180 1 0 113.39 605.95" class="st15"/>
+			<text x="29.06" y="623.3" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>computed.NT</text>		</g>
+		<g id="shape405-123" v:mID="405" v:groupContext="shape" v:layerMember="0" transform="translate(187.178,-304.178)">
+			<title>Динамическая соединительная линия.366</title>
+			<path d="M0 634.65 L0 653.94 L134.13 653.94" class="st12"/>
+		</g>
+		<g id="shape406-128" v:mID="406" v:groupContext="shape" v:layerMember="1" transform="translate(327.847,-174.706)">
+			<title>Хранилище данных.367</title>
+			<desc>computed.NTDerivatives</desc>
+			<v:custProps>
+				<v:cp v:nameU="Manufacturer" v:lbl="Изготовитель" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="ProductNumber" v:lbl="Код товара" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="PartNumber" v:lbl="Код позиции" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="ProductDescription" v:lbl="Описание товара" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="AssetNumber" v:lbl="Инвентарный номер" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="SerialNumber" v:lbl="Серийный номер" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="Location" v:lbl="Расположение" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="Building" v:lbl="Здание" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Room" v:lbl="Комната" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Department" v:lbl="Отдел" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(ClickHouse)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visDescription"
+						v:val="VT4(Используйте для добавления базы данных, источника данных или устройства накопления данных в схему системы.)"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(0,0,0,0)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.6929" cy="620.297" width="113.39" height="9.56693"/>
+			<path d="M0 605.95 L0 625.08 A56.6929 9.56693 -180 1 0 113.39 625.08 L113.39 605.95 A56.6929 9.56693 -180 1 0 -0 605.95
+						 Z" class="st14"/>
+			<path d="M0 605.95 L0 625.08 A56.6929 9.56693 -180 1 0 113.39 625.08 L113.39 605.95 A56.6929 9.56693 -180 1 0 -0 605.95"
+					class="st15"/>
+			<path d="M0 605.95 A56.6929 9.56693 -180 1 0 113.39 605.95" class="st15"/>
+			<text x="6.01" y="623.3" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>computed.NTDerivatives</text>		</g>
+		<g id="shape407-133" v:mID="407" v:groupContext="shape" v:layerMember="0" transform="translate(327.847,-187.462)">
+			<title>Динамическая соединительная линия.368</title>
+			<path d="M0 634.65 L-140.67 634.65 L-140.67 650.08" class="st12"/>
+		</g>
+		<g id="shape408-138" v:mID="408" v:groupContext="shape" v:layerMember="1" transform="translate(327.847,-96.0443)">
+			<title>Хранилище данных.369</title>
+			<desc>computed.xz1</desc>
+			<v:custProps>
+				<v:cp v:nameU="Manufacturer" v:lbl="Изготовитель" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="ProductNumber" v:lbl="Код товара" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="PartNumber" v:lbl="Код позиции" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="ProductDescription" v:lbl="Описание товара" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="AssetNumber" v:lbl="Инвентарный номер" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="SerialNumber" v:lbl="Серийный номер" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="Location" v:lbl="Расположение" v:type="0" v:sortKey="1" v:invis="false" v:ask="false"
+						v:langID="1049" v:val="VT4()"/>
+				<v:cp v:nameU="Building" v:lbl="Здание" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Room" v:lbl="Комната" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Department" v:lbl="Отдел" v:type="0" v:sortKey="1" v:invis="false" v:ask="false" v:langID="1049"
+						v:val="VT4()"/>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(ClickHouse)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visDescription"
+						v:val="VT4(Используйте для добавления базы данных, источника данных или устройства накопления данных в схему системы.)"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(0,0,0,0)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.6929" cy="620.297" width="113.39" height="9.56693"/>
+			<path d="M0 605.95 L0 625.08 A56.6929 9.56693 -180 1 0 113.39 625.08 L113.39 605.95 A56.6929 9.56693 -180 1 0 -0 605.95
+						 Z" class="st14"/>
+			<path d="M0 605.95 L0 625.08 A56.6929 9.56693 -180 1 0 113.39 625.08 L113.39 605.95 A56.6929 9.56693 -180 1 0 -0 605.95"
+					class="st15"/>
+			<path d="M0 605.95 A56.6929 9.56693 -180 1 0 113.39 605.95" class="st15"/>
+			<text x="28.51" y="623.3" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>computed.xz1</text>		</g>
+		<g id="shape414-143" v:mID="414" v:groupContext="shape" v:layerMember="0" transform="translate(327.847,-109.033)">
+			<title>Динамическая соединительная линия.376</title>
+			<path d="M0 634.65 L-140.67 634.65 L-140.67 653.85" class="st12"/>
+		</g>
+		<g id="shape454-148" v:mID="454" v:groupContext="shape" transform="translate(173.005,-444.989)">
+			<title>Связь.378</title>
+			<desc>rangeStream</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visDescription" v:val="VT4(Используйте для добавления процесса в схему системы.)"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="60.6614" cy="619.561" width="59.53" height="14.5089"/>
+			<rect x="0" y="606.301" width="28.3465" height="28.3465" class="st2"/>
+			<text x="35.4" y="622.56" class="st11" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>rangeStream</text>		</g>
+		<g id="shape416-151" v:mID="416" v:groupContext="shape" v:layerMember="0" transform="translate(327.847,-417.777)">
+			<title>Динамическая соединительная линия</title>
+			<path d="M0 634.65 L-140.67 634.65 L-140.67 713.36" class="st12"/>
+		</g>
+		<g id="shape417-156" v:mID="417" v:groupContext="shape" v:layerMember="0" transform="translate(187.178,-417.777)">
+			<title>Динамическая соединительная линия.380</title>
+			<path d="M0 634.65 L-109.72 634.65 L-109.72 674.17" class="st12"/>
+		</g>
+		<g id="shape418-161" v:mID="418" v:groupContext="shape" v:layerMember="0" transform="translate(180.092,-519.341)">
+			<title>Динамическая соединительная линия.381</title>
+			<path d="M7.09 634.65 L7.09 674.11" class="st12"/>
+		</g>
+		<g id="shape419-166" v:mID="419" v:groupContext="shape" v:layerMember="0" transform="translate(187.178,-444.989)">
+			<title>Динамическая соединительная линия.419</title>
+			<path d="M0 634.65 L0 649.1 L134.13 649.1" class="st12"/>
+		</g>
+		<g id="shape420-171" v:mID="420" v:groupContext="shape" transform="translate(184.344,-414.942)">
+			<title> Точка соединения.420</title>
+			<v:userDefs>
+				<v:ud v:nameU="Max" v:val="VT0(0.078740157480315):24"/>
+				<v:ud v:nameU="CH1" v:val="VT0(5):26"/>
+				<v:ud v:nameU="LimSize" v:val="VT0(0):26"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 631.81 A2.83465 2.83465 0 0 1 5.67 631.81 A2.83465 2.83465 0 1 1 0 631.81 Z" class="st16"/>
+		</g>
+		<g id="shape482-173" v:mID="482" v:groupContext="shape" v:layerMember="2" transform="translate(736.503,302.123) rotate(90)">
+			<title>Хранилище данных 3</title>
+			<desc>DNT</desc>
+			<v:custProps>
+				<v:cp v:nameU="Cost" v:lbl="Стоимость" v:type="7" v:format="@" v:langID="1049"/>
+				<v:cp v:nameU="Duration" v:lbl="Длительность" v:type="2" v:langID="1049"/>
+				<v:cp v:nameU="Resources" v:lbl="Ресурсы" v:langID="1049"/>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="Scale" v:val="VT0(1):26"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="17.7165" cy="610.553" width="49.04" height="21.2598" transform="rotate(-90)"/>
+			<path d="M0 634.65 L28.35 634.65 L28.35 586.46 L0 586.46 L0 634.65 Z" class="st14"/>
+			<path d="M7.09 586.46 L7.09 634.65" class="st15"/>
+			<path d="M0 634.65 L28.35 634.65 L28.35 586.46 L0 586.46 L0 634.65" class="st15"/>
+			<text x="-620.28" y="20.72" transform="rotate(-90)" class="st17" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>DNT</text>		</g>
+		<g id="shape483-178" v:mID="483" v:groupContext="shape" v:layerMember="2" transform="translate(736.503,386.95) rotate(90)">
+			<title>Хранилище данных 3.483</title>
+			<desc>avgNt, delNt</desc>
+			<v:custProps>
+				<v:cp v:nameU="Cost" v:lbl="Стоимость" v:type="7" v:format="@" v:langID="1049"/>
+				<v:cp v:nameU="Duration" v:lbl="Длительность" v:type="2" v:langID="1049"/>
+				<v:cp v:nameU="Resources" v:lbl="Ресурсы" v:langID="1049"/>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="Scale" v:val="VT0(1):26"/>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="17.7165" cy="610.553" width="49.04" height="21.2598" transform="rotate(-90)"/>
+			<path d="M0 634.65 L28.35 634.65 L28.35 586.46 L0 586.46 L0 634.65 Z" class="st14"/>
+			<path d="M7.09 586.46 L7.09 634.65" class="st15"/>
+			<path d="M0 634.65 L28.35 634.65 L28.35 586.46 L0 586.46 L0 634.65" class="st15"/>
+			<text x="-623.75" y="14.72" transform="rotate(-90)" class="st17" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>avgNt,<v:newlineChar/><v:paragraph
+						v:horizAlign="1"/><tspan x="-621.39" dy="1.2em" class="st9">delNt</tspan></text>		</g>
+		<g id="shape484-184" v:mID="484" v:groupContext="shape" v:layerMember="0" transform="translate(150.044,-311.265)">
+			<title>Динамическая соединительная линия.484</title>
+			<path d="M0 627.56 L16.42 627.56" class="st12"/>
+		</g>
+		<g id="shape485-189" v:mID="485" v:groupContext="shape" v:layerMember="0" transform="translate(150.044,-226.438)">
+			<title>Динамическая соединительная линия.485</title>
+			<path d="M6.18 627.56 L6.54 627.56 L16.42 627.56" class="st18"/>
+		</g>
+		<g id="shape495-197" v:mID="495" v:groupContext="shape" transform="translate(532.052,564.509) rotate(135)">
+			<title>Лист.495</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape496-200" v:mID="496" v:groupContext="shape" transform="translate(555.863,588.32) rotate(135)">
+			<title>Лист.496</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape497-203" v:mID="497" v:groupContext="shape" transform="translate(693.627,647.847) rotate(135)">
+			<title>Лист.497</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape498-206" v:mID="498" v:groupContext="shape" transform="translate(640.902,564.509) rotate(135)">
+			<title>Лист.498</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape499-209" v:mID="499" v:groupContext="shape" transform="translate(693.627,660.887) rotate(135)">
+			<title>Лист.499</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape500-212" v:mID="500" v:groupContext="shape" transform="translate(693.343,793.572) rotate(135)">
+			<title>Лист.500</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape501-215" v:mID="501" v:groupContext="shape" transform="translate(693.627,804.887) rotate(135)">
+			<title>Лист.501</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape502-218" v:mID="502" v:groupContext="shape" transform="translate(694.761,879.154) rotate(135)">
+			<title>Лист.502</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape503-221" v:mID="503" v:groupContext="shape" transform="translate(694.761,890.493) rotate(135)">
+			<title>Лист.503</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape504-224" v:mID="504" v:groupContext="shape" transform="translate(693.343,959.399) rotate(135)">
+			<title>Лист.504</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape505-227" v:mID="505" v:groupContext="shape" transform="translate(693.627,969.863) rotate(135)">
+			<title>Лист.505</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape506-230" v:mID="506" v:groupContext="shape" transform="translate(691.926,1042.43) rotate(135)">
+			<title>Лист.506</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape507-233" v:mID="507" v:groupContext="shape" transform="translate(77.3356,-508.981)">
+			<title>Лист.507</title>
+			<desc>0.1 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="16.2992" cy="629.537" width="32.6" height="10.2205"/>
+			<rect x="0" y="624.427" width="32.5984" height="10.2205" class="st20"/>
+			<text x="5.85" y="631.94" class="st21" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>0.1 <tspan
+						class="st9" v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape509-237" v:mID="509" v:groupContext="shape" transform="translate(186.469,-508.682)">
+			<title>Лист.509</title>
+			<desc>50 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="14.1732" cy="629.537" width="28.35" height="10.2205"/>
+			<rect x="0" y="624.427" width="28.3465" height="10.2205" class="st20"/>
+			<text x="4.72" y="631.94" class="st21" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>50 <tspan class="st9"
+						v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape510-241" v:mID="510" v:groupContext="shape" transform="translate(241.745,-429.611)">
+			<title>Лист.510</title>
+			<desc>50 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="14.1732" cy="629.537" width="28.35" height="10.2205"/>
+			<rect x="0" y="624.427" width="28.3465" height="10.2205" class="st20"/>
+			<text x="4.72" y="631.94" class="st21" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>50 <tspan class="st9"
+						v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape511-245" v:mID="511" v:groupContext="shape" transform="translate(241.745,-416.855)">
+			<title>Лист.511</title>
+			<desc>50 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="14.1732" cy="629.537" width="28.35" height="10.2205"/>
+			<rect x="0" y="624.427" width="28.3465" height="10.2205" class="st20"/>
+			<text x="4.72" y="631.94" class="st21" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>50 <tspan class="st9"
+						v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape512-249" v:mID="512" v:groupContext="shape" transform="translate(104.265,-489.698)">
+			<title>Лист.512</title>
+			<desc>0.1 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="16.2992" cy="629.537" width="32.6" height="10.2205"/>
+			<rect x="0" y="624.427" width="32.5984" height="10.2205" class="st20"/>
+			<text x="5.85" y="631.94" class="st21" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>0.1 <tspan
+						class="st9" v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape513-253" v:mID="513" v:groupContext="shape" transform="translate(241.332,-284.186)">
+			<title>Лист.513</title>
+			<desc>50 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="14.1732" cy="629.537" width="28.35" height="10.2205"/>
+			<rect x="0" y="624.427" width="28.3465" height="10.2205" class="st20"/>
+			<text x="4.72" y="631.94" class="st21" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>50 <tspan class="st9"
+						v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape514-257" v:mID="514" v:groupContext="shape" transform="translate(241.745,-272.847)">
+			<title>Лист.514</title>
+			<desc>50 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="14.1732" cy="629.537" width="28.35" height="10.2205"/>
+			<rect x="0" y="624.427" width="28.3465" height="10.2205" class="st20"/>
+			<text x="4.72" y="631.94" class="st21" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>50 <tspan class="st9"
+						v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape515-261" v:mID="515" v:groupContext="shape" transform="translate(243.162,-197.729)">
+			<title>Лист.515</title>
+			<desc>50 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="14.1732" cy="629.537" width="28.35" height="10.2205"/>
+			<rect x="0" y="624.427" width="28.3465" height="10.2205" class="st20"/>
+			<text x="4.72" y="631.94" class="st21" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>50 <tspan class="st9"
+						v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape516-265" v:mID="516" v:groupContext="shape" transform="translate(243.162,-186.391)">
+			<title>Лист.516</title>
+			<desc>50 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="14.1732" cy="629.537" width="28.35" height="10.2205"/>
+			<rect x="0" y="624.427" width="28.3465" height="10.2205" class="st20"/>
+			<text x="4.72" y="631.94" class="st21" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>50 <tspan class="st9"
+						v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape517-269" v:mID="517" v:groupContext="shape" transform="translate(241.745,-118.54)">
+			<title>Лист.517</title>
+			<desc>1 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="14.1732" cy="629.537" width="28.35" height="10.2205"/>
+			<rect x="0" y="624.427" width="28.3465" height="10.2205" class="st20"/>
+			<text x="4" y="631.94" class="st21" v:langID="1033"><v:paragraph/><v:tabList/>1 <tspan class="st9" v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape518-273" v:mID="518" v:groupContext="shape" transform="translate(241.745,-108.438)">
+			<title>Лист.518</title>
+			<desc>1 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="14.1732" cy="629.537" width="28.35" height="10.2205"/>
+			<rect x="0" y="624.427" width="28.3465" height="10.2205" class="st20"/>
+			<text x="4" y="631.94" class="st21" v:langID="1033"><v:paragraph/><v:tabList/>1 <tspan class="st9" v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape519-277" v:mID="519" v:groupContext="shape" transform="translate(240.328,-35.5955)">
+			<title>Лист.519</title>
+			<desc>1 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="14.1732" cy="629.537" width="28.35" height="10.2205"/>
+			<rect x="0" y="624.427" width="28.3465" height="10.2205" class="st20"/>
+			<text x="4" y="631.94" class="st21" v:langID="1033"><v:paragraph/><v:tabList/>1 <tspan class="st9" v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape521-281" v:mID="521" v:groupContext="shape" transform="translate(532.052,745.926) rotate(135)">
+			<title>Лист.521</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape522-284" v:mID="522" v:groupContext="shape" transform="translate(75.9183,-326.147)">
+			<title>Лист.522</title>
+			<desc>50 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="14.1732" cy="629.537" width="28.35" height="10.2205"/>
+			<rect x="0" y="624.427" width="28.3465" height="10.2205" class="st20"/>
+			<text x="4.72" y="631.94" class="st21" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>50 <tspan class="st9"
+						v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape523-288" v:mID="523" v:groupContext="shape" transform="translate(610.501,760.954) rotate(135)">
+			<title>Лист.523</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape524-291" v:mID="524" v:groupContext="shape" transform="translate(147.281,-320.182)">
+			<title>Лист.524</title>
+			<desc>50 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="14.1732" cy="629.537" width="28.35" height="10.2205"/>
+			<rect x="0" y="624.427" width="28.3465" height="10.2205" class="st20"/>
+			<text x="4.72" y="631.94" class="st21" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>50 <tspan class="st9"
+						v:langID="1049">Гц</tspan></text>		</g>
+		<g id="shape525-295" v:mID="525" v:groupContext="shape" transform="translate(614.257,845.426) rotate(135)">
+			<title>Лист.525</title>
+			<path d="M0 634.65 L14.43 634.65" class="st19"/>
+		</g>
+		<g id="shape526-298" v:mID="526" v:groupContext="shape" transform="translate(151.036,-235.71)">
+			<title>Лист.526</title>
+			<desc>50 Гц</desc>
+			<v:custProps>
+				<v:cp v:nameU="Function" v:lbl="" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="1049" v:cal="0" v:val="VT4(Apache Spark)"/>
+			</v:custProps>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="14.1732" cy="629.537" width="28.35" height="10.2205"/>
+			<rect x="0" y="624.427" width="28.3465" height="10.2205" class="st20"/>
+			<text x="4.72" y="631.94" class="st21" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>50 <tspan class="st9"
+						v:langID="1049">Гц</tspan></text>		</g>
+	</g>
+</svg>
