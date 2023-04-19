@@ -1,13 +1,15 @@
-v16 clickhouse database layout
-=============================
+ClickHouse database layout v16.1
+================================
 
-### Таблицы для входных данных
+## Таблицы для входных данных
 
 Таблицы, формируемые `logreader`.
 
-#### rawdata.range
+### rawdata.range
 
 Источник: `logreader`  
+Частота дискретизации: 50 Гц  
+
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
@@ -27,9 +29,11 @@ CREATE TABLE rawdata.range (
 TTL d + INVERVAL 24 HOUR DELETE
 ```
 
-#### rawdata.ismredobs
+### rawdata.ismredobs
 
 Источник: `logreader`  
+Частота дискретизации: 1/60 Гц  
+
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
@@ -49,9 +53,11 @@ TTL d + INTERVAL 24 HOUR DELETE
 SETTINGS index_granularity=8192
 ```
 
-#### rawdata.ismdetobs
+### rawdata.ismdetobs
 
 Источник: `logreader`  
+Частота дискретизации: 50 Гц  
+
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
@@ -71,9 +77,11 @@ TTL d + INTERVAL 24 HOUR DELETE
 SETTINGS index_granularity=8192
 ```
 
-#### rawdata.ismrawtec
+### rawdata.ismrawtec
 
 Источник: `logreader`  
+Частота дискретизации: 1 Гц  
+
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
@@ -94,9 +102,11 @@ TTL d + INTERVAL 24 HOUR DELETE
 SETTINGS index_granularity=8192
 ```
 
-#### rawdata.satxyz2
+### rawdata.satxyz2
 
 Источник: `logreader`  
+Частота дискретизации: 1/10 Гц  
+
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
@@ -113,13 +123,12 @@ CREATE TABLE rawdata.satxyz2 (
 TTL d + INVERVAL 24 HOUR DELETE
 ```
 
-### Таблицы для расчетных данных
+## Таблицы для прореженных входных данных
 
-#### Односекундные таблицы
-
-##### computed.range
+### computed.range
 
 Источник: *rawdata.range*  
+Частота дискретизации: 1 Гц  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -149,9 +158,10 @@ GROUP BY
     freq
 ```
 
-##### computed.ismredobs
+### computed.ismredobs
 
 Источник: *rawdata.ismredobs*  
+Частота дискретизации: 1/60 Гц  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -173,9 +183,10 @@ SELECT
 FROM rawdata.ismredobs
 ```
 
-##### computed.ismdetobs
+### computed.ismdetobs
 
 Источник: *rawdata.ismdetobs*  
+Частота дискретизации: 50 Гц  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -198,9 +209,10 @@ SELECT
 FROM rawdata.ismdetobs
 ```
 
-##### computed.ismrawtec
+## computed.ismrawtec
 
 Источник: *rawdata.ismrawtec*  
+Частота дискретизации: 1 Гц  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -224,9 +236,10 @@ SELECT
 FROM rawdata.ismrawtec
 ```
 
-##### computed.satxyz2
+### computed.satxyz2
 
 Источник: *rawdata.satxyz2*  
+Частота дискретизации: 1/10 Гц  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -249,62 +262,13 @@ SELECT
 FROM rawdata.satxyz2
 ```
 
-##### computed.s4
+## Таблицы для расчетных данных
+
+### computed.NT
 
 Источник: *rawdata.range*  
+Частота дискретизации: 50 Гц  
 
-*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
-
-```sql
-CREATE TABLE computed.s4 (
-    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
-    sat String COMMENT 'Спутник',
-    sigcomb String COMMENT 'Комбинация сигналов, для которой рассчитано значение',
-    s4 Float64 COMMENT 'S4',
-    d Date MATERIALIZED toDate(round(time / 1000))
-) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
-TTL d + INTERVAL 1 MONTH DELETE
-```
-
-##### computed.s4cno
-
-Источник: *rawdata.range*  
-*Примечание:* Эта S4 считается для частот, а не для их комбинаций.  
-
-*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
-
-```sql
-CREATE TABLE computed.s4cno (
-    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
-    sat String COMMENT 'Спутник',
-    freq String COMMENT 'Частота, для которой рассчитано значение',
-    s4 Float64 COMMENT 'S4 cno,
-    d Date MATERIALIZED toDate(round(time / 1000))
-) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
-TTL d + INTERVAL 1 MONTH DELETE
-```
-
-##### computed.s4pwr
-
-Источник: *rawdata.ismdetobs*  
-*Примечание:* Эта S4 считается для частот, а не для их комбинаций.  
-
-*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
-
-```sql
-CREATE TABLE computed.s4pwr (
-    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
-    sat String COMMENT 'Спутник',
-    freq String COMMENT 'Частота, для которой рассчитано значение',
-    s4 Float64 COMMENT 'S4 pwr',
-    d Date MATERIALIZED toDate(round(time / 1000))
-) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
-TTL d + INTERVAL 1 MONTH DELETE
-```
-
-#### Обычные таблицы
-
-Источник: *rawdata.range*
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
@@ -322,7 +286,11 @@ CREATE TABLE computed.NT (
 TTL d + INTERVAL 1 MONTH DELETE;
 ```
 
-Источник: *computed.NT*
+### computed.NTDerivatives
+
+Источник: *computed.NT*  
+Частота дискретизации: 50 Гц  
+
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
@@ -339,9 +307,11 @@ CREATE TABLE computed.NTDerivatives (
 TTL d + INTERVAL 1 MONTH DELETE;
 ```
 
-#### Односекундные таблицы
+### computed.xz1
 
-Источник: *computed.NTDerivatives*
+Источник: *computed.NTDerivatives*  
+Частота дискретизации: 1 Гц  
+
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
@@ -361,9 +331,69 @@ CREATE TABLE computed.xz1 (
 TTL d + INTERVAL 1 MONTH DELETE;
 ```
 
-#### N - секундные таблицы
+### computed.s4
 
-Источник: *computed.NTDerivatives*
+Источник: *rawdata.range*  
+Частота дискретизации: 1 Гц  
+
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE TABLE computed.s4 (
+    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+    sat String COMMENT 'Спутник',
+    sigcomb String COMMENT 'Комбинация сигналов',
+    s4 Float64 COMMENT 'Значение S4',
+    d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
+TTL d + INTERVAL 1 MONTH DELETE
+```
+
+### computed.s4cno
+
+Источник: *rawdata.range*  
+Частота дискретизации: 1 Гц  
+
+*Примечание:* Эта S4 считается для частот, а не для их комбинаций.  
+
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE TABLE computed.s4cno (
+    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+    sat String COMMENT 'Спутник',
+    freq String COMMENT 'Частота, для которой рассчитано значение',
+    s4 Float64 COMMENT 'S4 cno,
+    d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
+TTL d + INTERVAL 1 MONTH DELETE
+```
+
+### computed.s4pwr
+
+Источник: *rawdata.ismdetobs*  
+Частота дискретизации: 1 Гц  
+
+*Примечание:* Эта S4 считается для частот, а не для их комбинаций.  
+
+*Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
+
+```sql
+CREATE TABLE computed.s4pwr (
+    time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+    sat String COMMENT 'Спутник',
+    freq String COMMENT 'Частота, для которой рассчитано значение',
+    s4 Float64 COMMENT 'S4 pwr',
+    d Date MATERIALIZED toDate(round(time / 1000))
+) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
+TTL d + INTERVAL 1 MONTH DELETE
+```
+
+### computed.Tc
+
+Источник: *computed.NTDerivatives*  
+Частота дискретизации:   
+
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
@@ -377,9 +407,9 @@ CREATE TABLE computed.Tc (
 TTL d + INTERVAL 1 MONTH DELETE
 ```
 
-### Таблицы для прочего
+## Прочие таблицы
 
-#### misc.dcb
+### misc.dcb
 
 Спутниковые поправки TEC (DCB)
 
