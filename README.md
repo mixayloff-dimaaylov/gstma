@@ -24,12 +24,38 @@ docker-compose --profile default build
 
 2. Указать настройки для кластера
 
-Настройки указываются в `.env`-файла Docker Compose через переменные среды:
+Настройки указываются в `docker-compose.override.yml`-файла Docker Compose через
+переменные среды:
 
-```sh
-# Физический адрес необходим NovAtelLogReader при обращении к Kafka
-# если NovAtelLogReader расположен на другом хосте
-echo "KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://<ip_адрес>:9092" >> .env
+```yaml
+version: "3.4"
+
+services:
+  kafka:
+    environment:
+      # Физический адрес необходим NovAtelLogReader при обращении к Kafka
+      # если NovAtelLogReader расположен на другом хосте
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://<ip_адрес>:9092
+
+  spark-teccalculationv2:
+    environment:
+      # Координаты приёмника
+      REC_LAT: '45.0409515'
+      REC_LON: '41.9108996'
+      REC_ALT: '652.1387'
+
+  reporter:
+    environment:
+      # Часовой пояс для скриншотов
+      REPORTER_TZ: 'Europe/Moscow'
+    volumes:
+      # Раздел для сохранения скриншотов
+      - '/data/grafana-reporter/archives/:/usr/src/app/archives'
+
+  reporter-webdriver:
+    environment:
+      # Часовой пояс для скриншотов
+      WEBDRIVER_TZ: 'Europe/Moscow'
 ```
 
 3. Запустить кластер 
