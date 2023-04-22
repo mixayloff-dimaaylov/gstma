@@ -1,5 +1,6 @@
 # docker-compose environment file
 .env
+docker-compose.override.yml
 
 # JupyterLab checkpointing
 **/.ipynb_checkpoints/
