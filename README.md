@@ -65,10 +65,10 @@ docker-compose --profile default up -d
 4. Установить NovAtelLogReader и направить трафик вычислительному кластеру по
    указанному адресу
 
-Дополнительная документация по развертыванию в папке [docs/deployment/][docs].
+Дополнительная документация по развертыванию в папке [docs/appnotes/][docs].
 
 [clickhouse-grafana]: https://github.com/mixayloff-dimaaylov/clickhouse-grafana
-[docs]: ./docs/deploynment/cicd-branches.md
+[docs]: ./docs/appnotes/
 [logserver-spark]: https://github.com/mixayloff-dimaaylov/logserver-spark
 [NovAtelLogReader]: https://github.com/mixayloff-dimaaylov/NovAtelLogReader
 [satmap-panel]: https://github.com/mixayloff-dimaaylov/satmap-panel
