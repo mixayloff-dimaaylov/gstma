@@ -2,12 +2,10 @@
 
 ## Дочерние репозитории
 
+- [NovAtelLogReader][NovAtelLogReader]
+- [logserver-spark][logserver-spark]
 - [clickhouse-grafana][clickhouse-grafana]
 - [satmap-panel][satmap-panel]
-- [clickhouse-proxy][clickhouse-proxy]
-- [grafana][grafana]
-- [logserver-spark][logserver-spark]
-- [NovAtelLogReader][NovAtelLogReader]
 
 ## Установка через docker-compose
 
@@ -70,9 +68,7 @@ docker-compose --profile default up -d
 Дополнительная документация по развертыванию в папке [docs/deployment/][docs].
 
 [clickhouse-grafana]: https://github.com/mixayloff-dimaaylov/clickhouse-grafana
-[satmap-panel]: https://github.com/mixayloff-dimaaylov/satmap-panel
-[clickhouse-proxy]: https://github.com/mixayloff-dimaaylov/clickhouse-proxy
-[grafana]: https://github.com/stig888881/grafana
-[logserver-spark]: https://github.com/mixayloff-dimaaylov/ionosphere
+[docs]: ./docs/deploynment/cicd-branches.md
+[logserver-spark]: https://github.com/mixayloff-dimaaylov/logserver-spark
 [NovAtelLogReader]: https://github.com/mixayloff-dimaaylov/NovAtelLogReader
-[docs]: https://github.com/mixayloff-dimaaylov/ionosphere_iif/tree/master/docs/deploynment/cicd-branches.md
+[satmap-panel]: https://github.com/mixayloff-dimaaylov/satmap-panel
