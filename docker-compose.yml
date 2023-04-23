@@ -57,10 +57,6 @@ services:
     environment:
       KAFKA_HOST: 'ionosphere-iif-kafka'
       CH_HOST: 'ionosphere-iif-clickhouse'
-    volumes:
-      - type: bind
-        source: ./image_content/config/spark/opt/spark/conf/log4j.properties
-        target: /spark/conf/log4j.properties
     depends_on:
       - kafka
       - clickhouse
