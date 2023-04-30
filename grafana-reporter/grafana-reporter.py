@@ -40,20 +40,20 @@ from zipfile import ZipFile, ZIP_DEFLATED
 
 # Defauls
 ## Clickhouse
-CH_HOST = 'ionosphere-iif-clickhouse'
+CH_HOST = 'gstma-clickhouse'
 CH_PORT = '8123'
 CH_LOGIN = 'ionuser'
 CH_PASSWORD = 'password'
 
 ## Grafana
-GF_HOST = 'ionosphere-iif-grafana'
+GF_HOST = 'gstma-grafana'
 GF_PORT = '3000'
 GF_URL = f"http://{GF_HOST}:{GF_PORT}/d/0F2yyfCWz3/sutochnyi-monitoring?orgId=1"
 GF_USERNAME = "admin"
 GF_PASSWORD = "admin"
 
 ## WebDriver
-WD_HOST = "ionosphere-iif-reporter-webdriver"
+WD_HOST = "gstma-reporter-webdriver"
 WD_PORT = "4444"
 
 ## Other

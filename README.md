@@ -1,4 +1,7 @@
-# ionosphere_iif
+# GSTMA - GISTM Small-scale TEC Monitor and Analyzer
+
+GSTMA - система мониторинга мелкомасштабного ПЭС, основанная на фреймворке
+Apache Spark, и прочее вспомогательное ПО.
 
 ## Дочерние репозитории
 
@@ -15,8 +18,8 @@
 1. Склонировать репозиторий и собрать контейнеры кластера
 
 ```sh
-git clone --recurse-submodules https://github.com/mixayloff-dimaaylov/ionosphere_iif.git
-cd ionosphere_iif/
+git clone --recurse-submodules https://github.com/mixayloff-dimaaylov/gstma.git
+cd gstma/
 docker-compose --profile default build
 ```
 
