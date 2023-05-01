@@ -1,6 +1,6 @@
 # Change Log
 
-## _unreleased_
+## [0.3.0] - 2023-05-01
 
 ### Changed
 
@@ -154,4 +154,5 @@
 
 :seedling: Initial release.
 
+[0.3.0]: https://github.com/mixayloff-dimaaylov/gstma/releases/tag/0.3.0
 [0.2.0]: https://github.com/mixayloff-dimaaylov/gstma/releases/tag/0.2.0
