@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# v16
+# v17
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
@@ -287,6 +287,8 @@ CREATE TABLE IF NOT EXISTS computed.NTDerivatives (
   sigcomb String,
   f1 Float64,
   f2 Float64,
+  avgNTcurved Float64,
+  delNTcurved Float64,
   avgNT Float64,
   delNT Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
