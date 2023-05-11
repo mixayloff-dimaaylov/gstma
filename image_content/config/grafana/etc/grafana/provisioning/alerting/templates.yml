@@ -1,0 +1,50 @@
+# config file version
+apiVersion: 1
+
+# List of templates to import or update
+templates:
+  # <int> organization ID, default = 1
+  - orgID: 1
+    # <string, required> name of the template, must be unique
+    name: "Telegram template"
+    # <string, required> content of the the template
+    template: |
+      {{- define "telegram.S4.firing" -}}
+      <b>Превышение S4</b>
+
+      Статус: {{ .Status }}
+      Начало: {{ .StartsAt }}
+      Метки:
+      {{- range .Labels.SortedPairs }}
+        {{ .Name }}: {{ .Value -}}
+      {{ end }}
+      Значения:
+      {{- range $k, $v := .Values }} {{ $k }}={{ $v }}{{ end }}
+      {{- end -}}
+
+      {{- define "telegram.S4.ok" -}}
+      <b>Минимальный S4</b>
+
+      Статус: {{ .Status }}
+      Конец: {{ .EndsAt }}
+      Метки:
+      {{- range .Labels.SortedPairs }}
+        {{ .Name }}: {{ .Value -}}
+      {{ end }}
+      Значения:
+      {{- range $k, $v := .Values }} {{ $k }}={{ $v }}{{ end }}
+      {{- end -}}
+
+      {{ define "telegram.S4" }}
+      {{ range .Alerts }}
+        {{- if eq .Status "firing" -}}
+          {{ template "telegram.S4.firing" . }}
+        {{- else -}}
+          {{ template "telegram.S4.ok" . }}
+        {{- end }}
+
+      Дашборд: {{ .DashboardURL }}
+      Панель: {{ .PanelURL }}
+
+      {{ end }}
+      {{ end }}

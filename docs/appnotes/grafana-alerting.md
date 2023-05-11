@@ -52,7 +52,7 @@ contactPoints:
           chatid: "NNN"
           bottoken: "NNN:XXX"
           message: |
-            {{ template "default.message" . }}
+            {{ template "telegram.S4" . }}
 ```
 
 2. Создать _notification policy_ для перенаправления интересующих уведомлений в
