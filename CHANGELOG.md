@@ -1,5 +1,21 @@
 # Change Log
 
+## _unreleased_
+
+### Changed
+
+- **dependencies:** Обновление Grafana с `9.1.3` до `9.5.1`
+  ([#58](https://github.com/mixayloff-dimaaylov/gstma/pull/58))
+
+### Added
+
+- **grafana:** Добавлены правила и шаблоны уведомлений обнаружения превышений
+  $S_4$ и отсутствия данных при помощи _Grafana Unified Alerting_
+  ([#58](https://github.com/mixayloff-dimaaylov/gstma/pull/58))
+
+- **docs:** Добавлена справка по подключению _Grafana Unified Alerting_ к
+  Telegram ([#58](https://github.com/mixayloff-dimaaylov/gstma/pull/58))
+
 ## [0.3.0] - 2023-05-01
 
 ### Changed

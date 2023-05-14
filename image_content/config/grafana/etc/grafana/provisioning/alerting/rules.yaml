@@ -1,0 +1,155 @@
+# config file version
+apiVersion: 1
+
+# List of rule groups to import or update
+groups:
+  # <int> organization ID, default = 1
+  - orgId: 1
+    # <string, required> name of the rule group
+    name: 1m
+    # <string, required> name of the folder the rule group will be stored in
+    folder: S4
+    # <duration, required> interval that the rule group should evaluated at
+    interval: 1m
+    # <list, required> list of rules that are part of the rule group
+    rules:
+      # <string, required> unique identifier for the rule
+      - uid: ddf5dbd9-c1b5-43b0-94ef-960637c1beb9
+        # <string, required> title of the rule that will be displayed in the UI
+        title: S4
+        # <string, required> which query should be used for the condition
+        condition: C
+        # <list, required> list of query objects that should be executed on each
+        #                  evaluation - should be obtained trough the API
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: PDEE91DDB90597936
+            model:
+              aggregator: sum
+              database: computed
+              datasource:
+                type: vertamedia-clickhouse-datasource
+                uid: PDEE91DDB90597936
+              dateColDataType: d
+              dateLoading: false
+              dateTimeColDataType: time
+              dateTimeType: TIMESTAMPMS
+              datetimeLoading: false
+              downsampleAggregator: avg
+              downsampleFillPolicy: none
+              extrapolate: true
+              format: time_series
+              formattedQuery: SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t
+              hide: false
+              interval: ""
+              intervalFactor: 1
+              intervalMs: 1000
+              maxDataPoints: 43200
+              query: |-
+                  SELECT
+                      (intDiv(time, 60000) * 60000) as t,
+                      sat,
+                      sigcomb,
+                      avg(s4) s4
+                  FROM computed.s4
+
+                  WHERE t / 1000 = toStartOfMinute(dateadd(minute, - 1, toTimeZone(now(), 'UTC')))
+
+                  GROUP BY
+                      t,
+                      sat,
+                      sigcomb
+                  ORDER BY
+                      t,
+                      sat,
+                      sigcomb
+              rawQuery: true
+              refId: A
+              round: 0s
+              skip_comments: true
+              table: s4
+              tableLoading: false
+          - refId: B
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: []
+                  reducer:
+                    params: []
+                    type: avg
+                  type: query
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0.2
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: []
+                  reducer:
+                    params: []
+                    type: avg
+                  type: query
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        # <string> UID of a dashboard that the alert rule should be linked to
+        dashboardUid: 0F2yyfCWz3
+        # <int> ID of the panel that the alert rule should be linked to
+        panelId: 33
+        # <string> the state the alert rule will have when no data is returned
+        #          possible values: "NoData", "Alerting", "OK", default = NoData
+        noDataState: NoData
+        execErrState: Error
+        # <string> the state the alert rule will have when the query execution
+        #          failed - possible values: "Error", "Alerting", "OK"
+        #          default = Alerting
+        # <duration, required> for how long should the alert fire before alerting
+        for: 1m
+        # <map<string, string>> a map of strings to pass around any data
+        annotations:
+          __dashboardUid__: 0F2yyfCWz3
+          __panelId__: "33"
+        # <map<string, string> a map of strings that can be used to filter and
+        #                      route alerts
+        labels:
+          S4: "1"
+        isPaused: false
