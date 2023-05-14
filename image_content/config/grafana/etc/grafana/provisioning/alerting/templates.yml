@@ -10,7 +10,7 @@ templates:
     # <string, required> content of the the template
     template: |
       {{- define "telegram.S4.firing" -}}
-      <b>Превышение S4</b>
+      🛰 <b>Превышение S4</b>
 
       Статус: {{ .Status }}
       Начало: {{ .StartsAt }}
@@ -23,7 +23,7 @@ templates:
       {{- end -}}
 
       {{- define "telegram.S4.ok" -}}
-      <b>Минимальный S4</b>
+      🔬 <b>Минимальный S4</b>
 
       Статус: {{ .Status }}
       Конец: {{ .EndsAt }}
@@ -56,7 +56,7 @@ templates:
     # <string, required> content of the the template
     template: |
       {{- define "nodata.firing" -}}
-      <b>Нет данных!</b>
+      ❗ <b>Нет данных!</b>
 
       Статус: {{ .Status }}
       Начало: {{ .StartsAt }}
@@ -67,7 +67,7 @@ templates:
       {{- end -}}
 
       {{- define "nodata.ok" -}}
-      <b>Данные пошли!</b>
+      ✔️ <b>Данные пошли!</b>
 
       Статус: {{ .Status }}
       Конец: {{ .EndsAt }}
