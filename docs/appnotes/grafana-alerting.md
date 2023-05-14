@@ -82,7 +82,9 @@ policies:
     #        alerts as-is. This is unlikely to be what you want, unless you have
     #        a very low alert volume or your upstream notification system performs
     #        its own grouping.
-    group_by: ['...']
+    group_by:
+      - alertname
+      - sat
     # <list> a list of matchers that an alert has to fulfill to match the node
     matchers:
       - S4 =~ ".*"
