@@ -137,7 +137,7 @@ groups:
         panelId: 33
         # <string> the state the alert rule will have when no data is returned
         #          possible values: "NoData", "Alerting", "OK", default = NoData
-        noDataState: OK
+        noDataState: NoData
         execErrState: Error
         # <string> the state the alert rule will have when the query execution
         #          failed - possible values: "Error", "Alerting", "OK"

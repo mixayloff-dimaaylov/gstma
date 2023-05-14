@@ -52,7 +52,18 @@ contactPoints:
           chatid: "NNN"
           bottoken: "NNN:XXX"
           message: |
-            {{ template "telegram.S4" . }}
+            {{- $$global := . -}}
+            {{- with (index .GroupLabels "alertname") }}
+              {{- if eq . "DatasourceNoData" -}}
+                {{- template "nodata" $$global -}}
+              {{ else if eq . "S4" }}
+                {{- template "telegram.S4" $$global -}}
+              {{ else }}
+                {{- template "default.message" $$global -}}
+              {{- end -}}
+            {{ else }}
+              {{- template "default.message" $$global -}}
+            {{- end -}}
 ```
 
 2. Создать _notification policy_ для перенаправления интересующих уведомлений в
