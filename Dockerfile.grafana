@@ -47,7 +47,7 @@ RUN if [ "3" -eq `ls -la ./node_modules/ | wc -l` ]; then npm install --producti
     npm run build:prod && \
     npm run test:docker
 
-FROM grafana/grafana:9.1.3 as grafana
+FROM grafana/grafana:9.5.1 as grafana
 COPY --from=build-satmap-panel /home/node/satmap-panel/ /var/lib/grafana/plugins/satmap-panel/
 COPY --from=build-datasource-frontend /home/node/clickhouse-grafana/dist/ /var/lib/grafana/plugins/vertamedia-clickhouse-datasource/
 
