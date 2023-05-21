@@ -7,6 +7,9 @@
 - **dependencies:** Обновление Grafana с `9.1.3` до `9.5.1`
   ([#58](https://github.com/mixayloff-dimaaylov/gstma/pull/58))
 
+- **breaking(API):** Версия таблиц ClickHouse обновлена с 16.1 до 17
+  ([#60](https://github.com/mixayloff-dimaaylov/gstma/pull/60))
+
 ### Added
 
 - **grafana:** Добавлены правила и шаблоны уведомлений обнаружения превышений
@@ -18,6 +21,13 @@
 
 - **docs:** Добавлены схем алгоритма расчетов и используемого технологического
   стека ([#59](https://github.com/mixayloff-dimaaylov/gstma/pull/59))
+
+- Добавлен расчет вертикального ПЭС $N_T$
+  ([#60](https://github.com/mixayloff-dimaaylov/gstma/pull/60))
+
+### Fixed
+
+### Removed
 
 ## [0.3.0] - 2023-05-01
 

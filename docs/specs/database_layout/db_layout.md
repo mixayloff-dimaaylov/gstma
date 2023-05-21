@@ -1,4 +1,4 @@
-ClickHouse database layout v16.1
+ClickHouse database layout v17
 ================================
 
 ## Таблицы для входных данных
@@ -300,8 +300,10 @@ CREATE TABLE computed.NTDerivatives (
     sigcomb String COMMENT 'Комбинация сигналов',
     f1 Float64 COMMENT 'Частота 1',
     f2 Float64 COMMENT 'Частота 2',
-    avgNT Float64 COMMENT 'Среднее значение ПЭС',
-    delNT Float64 COMMENT 'Значение флуктуаций ПЭС',
+    avgNTcurved Float64 COMMENT 'Среднее значение наклонного ПЭС',
+    delNTcurved Float64 COMMENT 'Значение флуктуаций наклонного ПЭС',
+    avgNT Float64 COMMENT 'Среднее значение вертикального ПЭС',
+    delNT Float64 COMMENT 'Значение флуктуаций вертикального ПЭС',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 
 TTL d + INTERVAL 1 MONTH DELETE;

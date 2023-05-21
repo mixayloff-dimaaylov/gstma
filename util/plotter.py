@@ -3,21 +3,21 @@
 
 # Пример взаимодействия с ClickHouse
 # ==================================
-#
+# 
 # На [основе][altinity].
-#
+# 
 # [altinity]: https://altinity.com/blog/2019/2/25/clickhouse-and-python-jupyter-notebooks
 
 # ## LICENSE
 
 # Copyright 2023 mixayloff-dimaaylov at github dot com
-#
+# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-#
-#     htt://www.apache.org/licenses/LICENSE-2.0
-#
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@
 # limitations under the License.
 
 # ## Установка зависимостей
-#
+# 
 # Установить пакеты для работы с ClickHouse и ipywidgets:
 
 # In[ ]:
@@ -394,7 +394,8 @@ def comb_dfs(values):
     df_ismredobs = to_datetime(values['ismredobs'])
 
     # SATXYZ2
-    df_satxyz2 = values['satxyz2']
+    df_satxyz2 = to_datetime(values['satxyz2'])
+    df_satxyz2.elevation = np.deg2rad(df_satxyz2.elevation)
 
     sat = df_range.sat[0]
     sat_system = re.search('^([A-Z]+)[0-9]+$', sat).group(1)
@@ -423,6 +424,7 @@ def comb_dfs(values):
 def perf_cal(values):
     df_range = values['range']
     df_ismdetobs = values['ismdetobs']
+    df_satxyz2 = values['satxyz2']
 
     # Преобразования частот в числовые значения
     df_range['rdcb'] = df_range.apply(lambda x: rdcbs[(x['system'], x['freq1'], x['freq2'])], axis=1)
@@ -445,8 +447,11 @@ def perf_cal(values):
       * adr_adr(df_range.adr1, df_range.adr2, df_range.f1, df_range.f2)
     df_range['NTadr'] = df_range.NTadr_wo_DNT + DNT + df_range.rdcb
 
-    df_range['avgNT'] = avgNT(df_range.NTadr)
-    df_range['delNT'] = delNT(df_range.NTadr)
+    df_range['avgNTcurved'] = avgNT(df_range.NTadr)
+    df_range['delNTcurved'] = delNT(df_range.NTadr)
+
+    df_range['avgNT'] = np.sin(df_satxyz2.elevation) * avgNT(df_range.NTadr)
+    df_range['delNT'] = np.sin(df_satxyz2.elevation) * delNT(df_range.NTadr)
 
     df_range['sigNT'] = pd.Series(sigNT(df_range.delNT)).shift(59, fill_value=0.0)
     df_range['sigPhi'] = sigPhi(df_range.sigNT, df_range.f2)
@@ -533,6 +538,8 @@ def plot_build(values):
         (df_range.time, df_range.NTpsr,       "N_T (P_1 - P_2)"),
         (df_range.time, df_range.NTadr,       "N_T (adr_1 - adr_2)"),
         (df_ismrawtec.time, df_ismrawtec.tec, "ISMRAWTEC's TEC"),
+        (df_range.time, df_range.avgNTcurved, "\overline{{N_T curved}}"),
+        (df_range.time, df_range.delNTcurved, "\Delta N_T curved"),
         (df_range.time, df_range.avgNT,       "\overline{{N_T}}"),
         (df_range.time, df_range.delNT,       "\Delta N_T"),
         (df_range.time, df_range.sigNT,       "\sigma N_T"),

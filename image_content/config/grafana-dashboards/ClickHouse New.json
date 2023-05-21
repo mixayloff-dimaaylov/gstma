@@ -26,7 +26,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
-  "id": 1,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -947,6 +947,24 @@
                 "value": "ADR"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": ".*curved.*"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              }
+            ]
           }
         ]
       },
@@ -993,8 +1011,36 @@
           "interval": "",
           "intervalFactor": 1,
           "query": "$columns(\n    'TEC average %sat  %sigcomb',\n    avg(avgNT) avgNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)    ",
-          "rawQuery": "SELECT t, groupArray((concat('TEC average ', sat, '  ', sigcomb), avgNT)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, avg(avgNT) avgNT FROM computed.NTDerivatives\nWHERE \"d\" >= toDate(1679300990) AND \"d\" <= toDate(1679301290) AND time >= toUInt64(1679300990 * 1000) AND time <= toUInt64(1679301290 * 1000) AND\n    sat = 'GPS6'\n    and sigcomb in ('L1CA+L2C','L1CA+L5Q','L1CA+L2P_codeless') GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('TEC average ', sat, '  ', sigcomb), avgNT)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, avg(avgNT) avgNT FROM computed.NTDerivatives\nWHERE \"d\" >= toDate(1683302562) AND \"d\" <= toDate(1683302862) AND time >= toUInt64(1683302562 * 1000) AND time <= toUInt64(1683302862 * 1000) AND\n    sat = 'GLONASS3'\n    and sigcomb in ('L1CA+L2CA','L1CA+L2P') GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
           "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "NTDerivatives",
+          "tableLoading": false
+        },
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'TEC average (curved) %sat  %sigcomb',\n    avg(avgNTcurved) avgNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)    ",
+          "rawQuery": "SELECT t, groupArray((concat('TEC average (curved) ', sat, '  ', sigcomb), avgNT)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, avg(avgNTcurved) avgNT FROM computed.NTDerivatives\nWHERE \"d\" >= toDate(1683302562) AND \"d\" <= toDate(1683302862) AND time >= toUInt64(1683302562 * 1000) AND time <= toUInt64(1683302862 * 1000) AND\n    sat = 'GLONASS3'\n    and sigcomb in ('L1CA+L2CA','L1CA+L2P') GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "B",
           "round": "0s",
           "skip_comments": true,
           "table": "NTDerivatives",
@@ -1355,7 +1401,7 @@
           "interval": "",
           "intervalFactor": 1,
           "query": "$columns(\n    'TEC deviation %sat %sigcomb',\n    any(delNT) delNT)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    and sigcomb in ($sigcomb)    ",
-          "rawQuery": "SELECT t, groupArray((concat('TEC deviation ', sat, ' ', sigcomb), delNT)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, any(delNT) delNT FROM computed.NTDerivatives\nWHERE \"d\" >= toDate(1679300952) AND \"d\" <= toDate(1679301252) AND time >= toUInt64(1679300952 * 1000) AND time <= toUInt64(1679301252 * 1000) AND\n    sat = 'GPS6'\n    and sigcomb in ('L1CA+L2C','L1CA+L2P_codeless','L1CA+L5Q') GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "rawQuery": "SELECT t, groupArray((concat('TEC deviation ', sat, ' ', sigcomb), delNT)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, any(delNT) delNT FROM computed.NTDerivatives\nWHERE \"d\" >= toDate(1683301655) AND \"d\" <= toDate(1683301955) AND time >= toUInt64(1683301655 * 1000) AND time <= toUInt64(1683301955 * 1000) AND\n    sat = 'GLONASS3'\n    and sigcomb in ('L1CA+L2CA','L1CA+L2P') GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
           "skip_comments": true,
@@ -3486,8 +3532,8 @@
       {
         "current": {
           "selected": false,
-          "text": "GPS6",
-          "value": "GPS6"
+          "text": "GPS2",
+          "value": "GPS2"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -3513,8 +3559,8 @@
       {
         "current": {
           "selected": false,
-          "text": "GPS6",
-          "value": "GPS6"
+          "text": "GLONASS3",
+          "value": "GLONASS3"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -3649,6 +3695,6 @@
   "timezone": "",
   "title": "ClickHouse New",
   "uid": "0F2yyfCWz",
-  "version": 3,
+  "version": 1,
   "weekStart": ""
 }
