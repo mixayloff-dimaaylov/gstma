@@ -16,6 +16,9 @@
 - **docs:** Добавлена справка по подключению _Grafana Unified Alerting_ к
   Telegram ([#58](https://github.com/mixayloff-dimaaylov/gstma/pull/58))
 
+- **docs:** Добавлены схем алгоритма расчетов и используемого технологического
+  стека ([#59](https://github.com/mixayloff-dimaaylov/gstma/pull/59))
+
 ## [0.3.0] - 2023-05-01
 
 ### Changed
