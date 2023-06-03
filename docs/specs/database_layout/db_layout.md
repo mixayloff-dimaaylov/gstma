@@ -1,4 +1,4 @@
-ClickHouse database layout v17
+ClickHouse database layout v18
 ================================
 
 ## Таблицы для входных данных
@@ -113,7 +113,9 @@ SETTINGS index_granularity=8192
 CREATE TABLE rawdata.satxyz2 (
   time UInt64,
   geopoint UInt64,
+  geopointStr String COMMENT Подспутниковая точка в формате строкового GeoHash,
   ionpoint UInt64,
+  ionpointStr String COMMENT Подионосферная точка в формате строкового GeoHash,
   elevation Float64,
   sat String,
   system String,
@@ -253,7 +255,9 @@ POPULATE AS
 SELECT
     time,
     geopoint,
+    geopointStr,
     ionpoint,
+    ionpointStr,
     elevation,
     sat,
     system,
