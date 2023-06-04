@@ -26,7 +26,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
-  "id": 4,
+  "id": 8,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -55,6 +55,149 @@
       ],
       "title": "Данные",
       "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "dB"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "^Elevation.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 1
+      },
+      "id": 5,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.1.3",
+      "targets": [
+        {
+          "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'Elevation %sat',\n    avg(elevation) elevation)\nFROM $table\nWHERE\n    sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('Elevation ', sat), elevation)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, avg(elevation) elevation FROM computed.satxyz2\nWHERE \"d\" >= toDate(1679301197) AND \"d\" <= toDate(1679301497) AND time >= toUInt64(1679301197 * 1000) AND time <= toUInt64(1679301497 * 1000) AND\n    sat = 'GPS6' GROUP BY t, sat ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "satxyz2",
+          "tableLoading": false
+        },
+        {
+          "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'C/No %sat %freq',\n    avg(cno) cno)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    AND freq IN ($freq)",
+          "rawQuery": "SELECT t, groupArray((concat('C/No ', sat, ' ', freq), cno)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, freq, avg(cno) cno FROM computed.range\nWHERE \"d\" >= toDate(1679301197) AND \"d\" <= toDate(1679301497) AND time >= toUInt64(1679301197 * 1000) AND time <= toUInt64(1679301497 * 1000) AND\n    sat = 'GPS6'\n    AND freq IN ('L1CA') GROUP BY t, sat, freq ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
+          "refId": "B",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "range",
+          "tableLoading": false
+        }
+      ],
+      "title": "C/No и угол возвышения",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -142,7 +285,7 @@
       "gridPos": {
         "h": 6,
         "w": 12,
-        "x": 0,
+        "x": 12,
         "y": 1
       },
       "id": 2,
@@ -191,149 +334,6 @@
         }
       ],
       "title": "ПЭС",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "vertamedia-clickhouse-datasource",
-        "uid": "PDEE91DDB90597936"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "dB"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "^Elevation.*"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "degree"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 1
-      },
-      "id": 5,
-      "links": [],
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "9.1.3",
-      "targets": [
-        {
-          "database": "computed",
-          "datasource": {
-            "type": "vertamedia-clickhouse-datasource",
-            "uid": "PDEE91DDB90597936"
-          },
-          "dateColDataType": "d",
-          "dateLoading": false,
-          "dateTimeColDataType": "time",
-          "dateTimeType": "TIMESTAMPMS",
-          "datetimeLoading": false,
-          "extrapolate": true,
-          "format": "time_series",
-          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
-          "intervalFactor": 1,
-          "query": "$columns(\n    'Elevation %sat',\n    avg(elevation) elevation)\nFROM $table\nWHERE\n    sat = '$satgraph'",
-          "rawQuery": "SELECT t, groupArray((concat('Elevation ', sat), elevation)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, avg(elevation) elevation FROM computed.satxyz2\nWHERE \"d\" >= toDate(1679301197) AND \"d\" <= toDate(1679301497) AND time >= toUInt64(1679301197 * 1000) AND time <= toUInt64(1679301497 * 1000) AND\n    sat = 'GPS6' GROUP BY t, sat ORDER BY t, sat) GROUP BY t ORDER BY t",
-          "refId": "A",
-          "round": "0s",
-          "skip_comments": true,
-          "table": "satxyz2",
-          "tableLoading": false
-        },
-        {
-          "database": "computed",
-          "datasource": {
-            "type": "vertamedia-clickhouse-datasource",
-            "uid": "PDEE91DDB90597936"
-          },
-          "dateColDataType": "d",
-          "dateLoading": false,
-          "dateTimeColDataType": "time",
-          "dateTimeType": "TIMESTAMPMS",
-          "datetimeLoading": false,
-          "extrapolate": true,
-          "format": "time_series",
-          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
-          "intervalFactor": 1,
-          "query": "$columns(\n    'C/No %sat %freq',\n    avg(cno) cno)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    AND freq IN ($freq)",
-          "rawQuery": "SELECT t, groupArray((concat('C/No ', sat, ' ', freq), cno)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, freq, avg(cno) cno FROM computed.range\nWHERE \"d\" >= toDate(1679301197) AND \"d\" <= toDate(1679301497) AND time >= toUInt64(1679301197 * 1000) AND time <= toUInt64(1679301497 * 1000) AND\n    sat = 'GPS6'\n    AND freq IN ('L1CA') GROUP BY t, sat, freq ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
-          "refId": "B",
-          "round": "0s",
-          "skip_comments": true,
-          "table": "range",
-          "tableLoading": false
-        }
-      ],
-      "title": "C/No и угол возвышения",
       "type": "timeseries"
     },
     {
@@ -635,43 +635,136 @@
       "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "colorize": false,
-      "colors": [
-        "#5b94ff",
-        "#58ef5b",
-        "#fff882",
-        "#ff5b5b"
-      ],
       "datasource": {
         "type": "vertamedia-clickhouse-datasource",
         "uid": "PDEE91DDB90597936"
       },
-      "fontSize": "80%",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Возвышение/"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L1"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L2"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
-        "h": 16,
+        "h": 6,
         "w": 12,
         "x": 0,
         "y": 13
       },
-      "heatmap": true,
-      "heatmapField": "S4",
-      "id": 7,
-      "legend": {
-        "show": false
-      },
-      "legendOnMap": true,
+      "id": 30,
       "links": [],
-      "maxDataPoints": 2,
-      "nullPointMode": "connected",
-      "polar": false,
-      "polarCenter": {
-        "lat": 45.040638,
-        "lng": 41.910311
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "satTag": "sat",
+      "pluginVersion": "9.1.3",
       "targets": [
         {
+          "aggregator": "sum",
           "database": "computed",
           "datasource": {
             "type": "vertamedia-clickhouse-datasource",
@@ -682,26 +775,25 @@
           "dateTimeColDataType": "time",
           "dateTimeType": "TIMESTAMPMS",
           "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "extrapolate": true,
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
-          "interval": "1s",
+          "hide": false,
+          "interval": "",
           "intervalFactor": 1,
-          "query": "$columns(\n    'ПИТ sat=%sat',\n    any(ionpoint) g)\nFROM $table\nWHERE sat IN ($satvis)",
-          "rawQuery": "SELECT t, groupArray((concat('ПИТ sat=', sat), g)) as groupArr FROM ( SELECT intDiv(time, 1000) * 1000 as t, sat, any(ionpoint) g FROM computed.satxyz2 WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND  sat IN ('GLONASS1') GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "query": "$columns(\n    'S4 %sat %freq',\n    avg(totals4) totals4)\nFROM $table\nWHERE\n    freq IN ($freq)\n    AND sat = '$satgraph'",
+          "rawQuery": "SELECT t, groupArray((concat('S4 ', sat, ' ', freq), totals4)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, freq, avg(totals4) totals4 FROM computed.ismredobs\nWHERE \"d\" >= toDate(1679301350) AND \"d\" <= toDate(1679301650) AND time >= toUInt64(1679301350 * 1000) AND time <= toUInt64(1679301650 * 1000) AND\n    freq IN ('L1CA')\n    AND sat = 'GPS6' GROUP BY t, sat, freq ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
           "refId": "A",
           "round": "0s",
-          "table": "satxyz2",
+          "skip_comments": true,
+          "table": "ismredobs",
           "tableLoading": false
         }
       ],
-      "thresholds": [
-        0.2,
-        0.3,
-        0.4
-      ],
-      "title": "Подионосферная точка",
-      "trace": true,
-      "type": "satmap-panel"
+      "title": "S4 приёмника",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -974,7 +1066,7 @@
       "gridPos": {
         "h": 6,
         "w": 12,
-        "x": 12,
+        "x": 0,
         "y": 19
       },
       "id": 26,
@@ -1136,7 +1228,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 25
+        "y": 19
       },
       "id": 33,
       "links": [],
@@ -1187,43 +1279,102 @@
       "type": "timeseries"
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "id": 34,
+      "panels": [],
+      "title": "Row title",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "colorize": false,
+      "colors": [
+        "#5b94ff",
+        "#58ef5b",
+        "#fff882",
+        "#ff5b5b"
+      ],
       "datasource": {
         "type": "vertamedia-clickhouse-datasource",
         "uid": "PDEE91DDB90597936"
       },
+      "fontSize": "80%",
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 0,
+        "y": 26
+      },
+      "heatmap": true,
+      "heatmapField": "S4",
+      "id": 7,
+      "legend": {
+        "show": false
+      },
+      "legendOnMap": true,
+      "links": [],
+      "maxDataPoints": 2,
+      "nullPointMode": "connected",
+      "polar": false,
+      "polarCenter": {
+        "lat": 45.040638,
+        "lng": 41.910311
+      },
+      "satTag": "sat",
+      "targets": [
+        {
+          "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "1s",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'ПИТ sat=%sat',\n    any(ionpoint) g)\nFROM $table\nWHERE sat IN ($satvis)",
+          "rawQuery": "SELECT t, groupArray((concat('ПИТ sat=', sat), g)) as groupArr FROM ( SELECT intDiv(time, 1000) * 1000 as t, sat, any(ionpoint) g FROM computed.satxyz2 WHERE d >= toDate(1656762638574/1000) AND time >= 1656762638574 AND  sat IN ('GLONASS1') GROUP BY t, sat  ORDER BY t, sat) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "satxyz2",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [
+        0.2,
+        0.3,
+        0.4
+      ],
+      "title": "Подионосферная точка",
+      "trace": true,
+      "type": "satmap-panel"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "P57AE33C30A383E23"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
             }
           },
           "mappings": [],
@@ -1235,121 +1386,172 @@
                 "value": null
               },
               {
+                "color": "#EAB839",
+                "value": 0.3
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 0.5
               }
             ]
           },
           "unit": "none"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/Возвышение/"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "hidden"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "ADR"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ADR GPS5 L1"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "hidden"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "ADR"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ADR GPS5 L2"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "hidden"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "ADR"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 16,
         "w": 12,
         "x": 12,
-        "y": 31
+        "y": 26
       },
-      "id": 30,
+      "id": 35,
       "links": [],
+      "maxDataPoints": 2,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+        "basemap": {
+          "config": {},
+          "name": "Layer 0",
+          "opacity": 1,
+          "tooltip": true,
+          "type": "osm-standard"
         },
+        "controls": {
+          "mouseWheelZoom": true,
+          "showAttribution": true,
+          "showDebug": true,
+          "showMeasure": true,
+          "showScale": true,
+          "showZoom": true
+        },
+        "layers": [
+          {
+            "config": {
+              "nightColor": "#797887ba",
+              "show": "to",
+              "sun": true
+            },
+            "filterData": {
+              "id": "byRefId",
+              "options": "A"
+            },
+            "name": "День/ночи",
+            "opacity": 0.4,
+            "tooltip": true,
+            "type": "dayNight"
+          },
+          {
+            "config": {
+              "showLegend": true,
+              "style": {
+                "color": {
+                  "fixed": "dark-green"
+                },
+                "opacity": 0.4,
+                "rotation": {
+                  "fixed": 0,
+                  "max": 360,
+                  "min": -360,
+                  "mode": "mod"
+                },
+                "size": {
+                  "fixed": 5,
+                  "max": 15,
+                  "min": 2
+                },
+                "symbol": {
+                  "fixed": "img/icons/marker/x-mark.svg",
+                  "mode": "fixed"
+                },
+                "text": {
+                  "field": "sat",
+                  "fixed": "",
+                  "mode": "field"
+                },
+                "textConfig": {
+                  "fontSize": 12,
+                  "offsetX": 0,
+                  "offsetY": 0,
+                  "textAlign": "left",
+                  "textBaseline": "top"
+                }
+              }
+            },
+            "location": {
+              "geohash": "ionpoint",
+              "mode": "geohash"
+            },
+            "name": "Спутники",
+            "opacity": 0.4,
+            "tooltip": true,
+            "type": "markers"
+          },
+          {
+            "config": {
+              "blur": 30,
+              "radius": 17,
+              "weight": {
+                "field": "s4",
+                "fixed": 1,
+                "max": 1,
+                "min": 0
+              }
+            },
+            "filterData": {
+              "id": "byRefId",
+              "options": "A"
+            },
+            "location": {
+              "geohash": "ionpoint",
+              "mode": "geohash"
+            },
+            "name": "S4",
+            "opacity": 1,
+            "tooltip": true,
+            "type": "heatmap"
+          }
+        ],
         "tooltip": {
-          "mode": "multi",
-          "sort": "none"
+          "mode": "details"
+        },
+        "view": {
+          "allLayers": false,
+          "id": "coords",
+          "lastOnly": false,
+          "lat": 44.119188,
+          "layer": "Спутники",
+          "lon": 43.802861,
+          "padding": 10,
+          "shared": true,
+          "zoom": 4.97
         }
       },
-      "pluginVersion": "9.1.3",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
-          "aggregator": "sum",
-          "database": "computed",
           "datasource": {
-            "type": "vertamedia-clickhouse-datasource",
-            "uid": "PDEE91DDB90597936"
+            "type": "grafana-clickhouse-datasource",
+            "uid": "P57AE33C30A383E23"
           },
-          "dateColDataType": "d",
-          "dateLoading": false,
-          "dateTimeColDataType": "time",
-          "dateTimeType": "TIMESTAMPMS",
-          "datetimeLoading": false,
-          "downsampleAggregator": "avg",
-          "downsampleFillPolicy": "none",
-          "extrapolate": true,
-          "format": "time_series",
-          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
-          "hide": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "query": "$columns(\n    'S4 %sat %freq',\n    avg(totals4) totals4)\nFROM $table\nWHERE\n    freq IN ($freq)\n    AND sat = '$satgraph'",
-          "rawQuery": "SELECT t, groupArray((concat('S4 ', sat, ' ', freq), totals4)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, freq, avg(totals4) totals4 FROM computed.ismredobs\nWHERE \"d\" >= toDate(1679301350) AND \"d\" <= toDate(1679301650) AND time >= toUInt64(1679301350 * 1000) AND time <= toUInt64(1679301650 * 1000) AND\n    freq IN ('L1CA')\n    AND sat = 'GPS6' GROUP BY t, sat, freq ORDER BY t, sat, freq) GROUP BY t ORDER BY t",
-          "refId": "A",
-          "round": "0s",
-          "skip_comments": true,
-          "table": "ismredobs",
-          "tableLoading": false
+          "expand": true,
+          "meta": {
+            "builderOptions": {
+              "fields": [],
+              "limit": 100,
+              "mode": "list"
+            }
+          },
+          "queryType": "sql",
+          "rawSql": "SELECT\n  sat,\n  (time / 1000) * 1000               AS time,\n  anyLast(ionpointStr)               AS ionpoint,\n  anyLast(s4.s4)                     AS s4,\n  anyLast(elevation)                 AS elevation,\n\n  (geohashDecode(ionpoint) AS tpl).1 AS latitude,\n  tpl.2                              AS longitude\nFROM\n  computed.\"satxyz2\" AS xyz\nINNER JOIN computed.s4\nON\n  s4.sat == xyz.sat\n  AND s4.time == xyz.time\nWHERE\n  xyz.time BETWEEN ($__to - 1000) AND $__to\nGROUP BY\n  sat,\n  time\nORDER BY\n  time",
+          "refId": "A"
         }
       ],
-      "title": "S4 приёмника",
-      "type": "timeseries"
+      "title": "Тепловая карта S4",
+      "type": "geomap"
     }
   ],
-  "refresh": false,
-  "schemaVersion": 37,
+  "refresh": "",
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1357,8 +1559,8 @@
       {
         "current": {
           "selected": false,
-          "text": "GPS6",
-          "value": "GPS6"
+          "text": "GPS5",
+          "value": "GPS5"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -1384,8 +1586,8 @@
       {
         "current": {
           "selected": false,
-          "text": "GPS6",
-          "value": "GPS6"
+          "text": "GPS5",
+          "value": "GPS5"
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
