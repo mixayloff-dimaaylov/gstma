@@ -92,6 +92,9 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.grafana
+    environment:
+      # Official plugins to install
+      GF_INSTALL_PLUGINS: "grafana-clickhouse-datasource 3.1.0"
     ports:
       - 3000:3000
     volumes:

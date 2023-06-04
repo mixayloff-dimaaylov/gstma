@@ -7,14 +7,26 @@
 - **dependencies:** Обновление Grafana с `9.1.3` до `9.5.1`
   ([#58](https://github.com/mixayloff-dimaaylov/gstma/pull/58))
 
-- **breaking(API):** Версия таблиц ClickHouse обновлена с 16.1 до 17
-  ([#60](https://github.com/mixayloff-dimaaylov/gstma/pull/60))
+- **breaking(API):** Версия таблиц ClickHouse обновлена с 16.1 до 18
+  ([#60](https://github.com/mixayloff-dimaaylov/gstma/pull/60),
+  [#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62))
 
 ### Added
+
+- **grafana:** Добавлена поддержку тепловых карт плагина GeoMap, официальный
+  _datasource_-плагин Grafana ClickHouse и тепловая карты индекса мерцаний $S_4$
+  ([#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62)).
+
+  Плагин Grafana ClickHouse поставляет дополнительные дашборды для мониторинга
+  состояния ClickHouse.
 
 - **grafana:** Добавлены правила и шаблоны уведомлений обнаружения превышений
   $S_4$ и отсутствия данных при помощи _Grafana Unified Alerting_
   ([#58](https://github.com/mixayloff-dimaaylov/gstma/pull/58))
+
+- **grafana:** Добавлена поддержку тепловых карт плагина GeoMap и тепловая карты
+  индекса мерцаний $S_4$
+  ([#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62))
 
 - **docs:** Добавлена справка по подключению _Grafana Unified Alerting_ к
   Telegram ([#58](https://github.com/mixayloff-dimaaylov/gstma/pull/58))
@@ -24,6 +36,10 @@
 
 - Добавлен расчет вертикального ПЭС $N_T$
   ([#60](https://github.com/mixayloff-dimaaylov/gstma/pull/60))
+
+- **logserver-spark:** Добавлены колонки `geopointStr`, `ionpointStr` со
+  строковым GeoHash в таблице `rawdata.satxyz2` для работы плагина Grafana
+  GeoMap ([#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62))
 
 ### Fixed
 

@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# v17
+# v18
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
@@ -104,7 +104,9 @@ clickhouse-client <<EOL123
 CREATE TABLE IF NOT EXISTS rawdata.satxyz2 (
   time UInt64,
   geopoint UInt64,
+  geopointStr String,
   ionpoint UInt64,
+  ionpointStr String,
   elevation Float64,
   sat String,
   system String,
@@ -211,7 +213,9 @@ POPULATE AS
 SELECT
     time,
     geopoint,
+    geopointStr,
     ionpoint,
+    ionpointStr,
     elevation,
     sat,
     system,
