@@ -15,7 +15,8 @@
 
 - **grafana:** Добавлена поддержку тепловых карт плагина GeoMap, официальный
   _datasource_-плагин Grafana ClickHouse и тепловая карты индекса мерцаний $S_4$
-  ([#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62)).
+  ([#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62),
+  [#63](https://github.com/mixayloff-dimaaylov/gstma/pull/63)).
 
   Плагин Grafana ClickHouse поставляет дополнительные дашборды для мониторинга
   состояния ClickHouse.

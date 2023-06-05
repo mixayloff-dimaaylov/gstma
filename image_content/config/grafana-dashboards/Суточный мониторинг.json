@@ -26,7 +26,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
-  "id": 8,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1542,7 +1542,7 @@
             }
           },
           "queryType": "sql",
-          "rawSql": "SELECT\n  sat,\n  (time / 1000) * 1000               AS time,\n  anyLast(ionpointStr)               AS ionpoint,\n  anyLast(s4.s4)                     AS s4,\n  anyLast(elevation)                 AS elevation,\n\n  (geohashDecode(ionpoint) AS tpl).1 AS latitude,\n  tpl.2                              AS longitude\nFROM\n  computed.\"satxyz2\" AS xyz\nINNER JOIN computed.s4\nON\n  s4.sat == xyz.sat\n  AND s4.time == xyz.time\nWHERE\n  xyz.time BETWEEN ($__to - 1000) AND $__to\nGROUP BY\n  sat,\n  time\nORDER BY\n  time",
+          "rawSql": "SELECT\n  sat,\n  (time / 1000) * 1000               AS time,\n  anyLast(ionpointStr)               AS ionpoint,\n  anyLast(s4.s4)                     AS s4,\n  anyLast(elevation)                 AS elevation,\n\n  (geohashDecode(ionpoint) AS tpl).1 AS latitude,\n  tpl.2                              AS longitude\nFROM\n  computed.\"satxyz2\" AS xyz\nINNER JOIN (\n  SELECT\n    time,\n    sat,\n    s4\n  FROM\n    computed.s4\n  WHERE\n    time BETWEEN ($__to - 1000) AND $__to) AS s4\nON\n  s4.sat == xyz.sat\n  AND s4.time == xyz.time\nWHERE\n  xyz.time BETWEEN ($__to - 1000) AND $__to\nGROUP BY\n  sat,\n  time\nORDER BY\n  time",
           "refId": "A"
         }
       ],
@@ -1730,6 +1730,6 @@
   "timezone": "",
   "title": "Суточный мониторинг",
   "uid": "0F2yyfCWz3",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
