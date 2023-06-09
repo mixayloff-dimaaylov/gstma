@@ -35,6 +35,10 @@
 - **docs:** Добавлены схем алгоритма расчетов и используемого технологического
   стека ([#59](https://github.com/mixayloff-dimaaylov/gstma/pull/59))
 
+- **docs:** Документирование используемых схем топиков Apache Kafka. Теперь
+  файлы AVRO-схем Kafka будут храниться в этом репозитории
+  ([#64](https://github.com/mixayloff-dimaaylov/gstma/pull/64))
+
 - Добавлен расчет вертикального ПЭС $N_T$
   ([#60](https://github.com/mixayloff-dimaaylov/gstma/pull/60))
 
