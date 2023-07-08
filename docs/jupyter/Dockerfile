@@ -39,6 +39,7 @@ RUN curl -Lo coursier https://git.io/coursier-cli && \
 USER $NB_USER
 
 # Install JupyterLab extensions
-# git already installed
-RUN mamba install -y -c conda-forge jupyterlab-git && \
+# git, jupyterlab-lsp already installed
+RUN mamba install -y -c conda-forge jupyterlab-git jupyterlab-lsp python-lsp-server \
+    pylsp-mypy && \
     jupyter labextension install jupyterlab-plotly
