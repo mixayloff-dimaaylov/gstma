@@ -11,6 +11,10 @@
   ([#60](https://github.com/mixayloff-dimaaylov/gstma/pull/60),
   [#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62))
 
+- **docs:** Добавлена справка по использованию Monocker для мониторинга
+  состояния кластера в Telegram
+  ([#65](https://github.com/mixayloff-dimaaylov/gstma/pull/65))
+
 ### Added
 
 - **grafana:** Добавлена поддержку тепловых карт плагина GeoMap, официальный
