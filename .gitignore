@@ -4,7 +4,3 @@ docker-compose.override.yml
 
 # JupyterLab checkpointing
 **/.ipynb_checkpoints/
-
-# Orgmode ODT export files
-docs/jupyter/ltxmathml/
-docs/jupyter/*.odt
