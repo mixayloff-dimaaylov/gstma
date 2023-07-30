@@ -15,6 +15,9 @@
   состояния кластера в Telegram
   ([#65](https://github.com/mixayloff-dimaaylov/gstma/pull/65))
 
+- **docs:** Добавлен блокнот расчетов помехоустойчивости
+  ([#66](https://github.com/mixayloff-dimaaylov/gstma/pull/66))
+
 ### Added
 
 - **grafana:** Добавлена поддержку тепловых карт плагина GeoMap, официальный
