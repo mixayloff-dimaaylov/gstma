@@ -1,6 +1,6 @@
 #+title: Статья
 #+created: [2022-04-19 Вт 16:14]
-#+last_modified: [2022-05-06 Пт 01:43]
+#+last_modified: [2022-05-07 Сб 11:55]
 
 #+options: user:nil tex:t
 #+language: ru
@@ -523,8 +523,8 @@
 ** Исходные данные
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 15:36]
-   :HASH:                  1925968050565708229
-   :LAST_MODIFIED:         [2022-05-05 Чт 14:51]
+   :HASH:                  -144895528921908603
+   :LAST_MODIFIED:         [2022-05-06 Пт 18:55]
    :END:
 
 *Параметры ионосферы:*
@@ -539,29 +539,30 @@
 
   <<main-input>>
 
-  #              N_m, эл/м^3, betta,      sigma_delta_N = betta * N_m, эл/м^3
-  params_nigth = [2.4 * 1e11, 1e-2,       2.4 * 1e9]
-  params_day   = [1.4 * 1e12, 3 * 1e-3,   4.2 * 1e9]
-  params_evi   = [1.4 * 1e12, 3.6 * 1e-2, 5.0 * 1e10]
-  params_ivil  = [1.0 * 1e13, 5.0 * 1e-1, 5.0 * 1e12]
-  params_ivib  = [5.0 * 1e13, 1.0,        5.0 * 1e13]
+  #                  N_m, эл/м^3, betta,      sigma_delta_N = betta * N_m, эл/м^3
+  ion_params_nigth = [2.4 * 1e11, 1e-2,       2.4 * 1e9]
+  ion_params_day   = [1.4 * 1e12, 3 * 1e-3,   4.2 * 1e9]
+  ion_params_evi   = [1.4 * 1e12, 3.6 * 1e-2, 5.0 * 1e10]
+  ion_params_ivil  = [1.0 * 1e13, 5.0 * 1e-1, 5.0 * 1e12]
+  ion_params_ivib  = [5.0 * 1e13, 1.0,        5.0 * 1e13]
+  labels = ("1", "2", "3", "4", "5")
 
-  params = np.vstack((params_nigth,
-                      params_day,
-                      params_evi,
-                      params_ivil,
-                      params_ivib))
+  ion_params = np.vstack((ion_params_nigth,
+                          ion_params_day,
+                          ion_params_evi,
+                          ion_params_ivil,
+                          ion_params_ivib))
 
   l_s = 200
 
   def calc_sigma_d_nt(l_s, z_e, sigma_d_n):
       return np.sqrt(np.sqrt(pi) * l_s * z_e) * sigma_d_n
 
-  sigma_d_nts = calc_sigma_d_nt(l_s, z_e, params[:, 2]).reshape(5, 1)
+  sigma_d_nts = calc_sigma_d_nt(l_s, z_e, ion_params[:, 2]).reshape(5, 1)
 
-  params = np.hstack((params, sigma_d_nts))
+  ion_params = np.hstack((ion_params, sigma_d_nts))
 
-  params
+  ion_params
 #+end_src
 
 #+RESULTS: P_err-input-1
@@ -594,8 +595,8 @@
 ** СКО флуктуаций фазового фронта волны на выходе неоднородного слоя \sigma_\phi
    :PROPERTIES:
    :CREATED:               [2022-04-20 Ср 17:27]
-   :HASH:                  2278285889053276975
-   :LAST_MODIFIED:         [2022-05-06 Пт 00:40]
+   :HASH:                  -930509957712330017
+   :LAST_MODIFIED:         [2022-05-06 Пт 02:41]
    :END:
 
 $\sigma_{\phi} = {
@@ -623,7 +624,7 @@ $\sigma_{\phi} = {
 
 #+name: P_err-1
 #+begin_src python
-  sigma_d_nts = params[:, 3]
+  sigma_d_nts = ion_params[:, 3]
   sigma_phis = sigma_phi(f_0, sigma_d_nts, theta_0)
   fig, ax = plt.subplots()
 
@@ -755,8 +756,8 @@ $d_1^2 = {
 ** Полоса диспертности F_Д
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:07]
-   :HASH:                  489943098168764122
-   :LAST_MODIFIED:         [2022-05-06 Пт 00:40]
+   :HASH:                  -193795019730327841
+   :LAST_MODIFIED:         [2022-05-06 Пт 02:41]
    :END:
 
 $F_{д} = {
@@ -785,7 +786,7 @@ $F_{Д} = {
 
 #+name: P_err-4
 #+begin_src python
-  N_ms = params[:, 0]
+  N_ms = ion_params[:, 0]
   F_ds = F_d(f_0, N_ms, z_e, theta_0)
 
   fig, ax = plt.subplots()
@@ -909,7 +910,7 @@ $\eta_{ч} = {
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 14:23]
    :HASH:                  -2139145442157611198
-   :LAST_MODIFIED:         [2022-05-05 Чт 23:36]
+   :LAST_MODIFIED:         [2022-05-06 Пт 18:55]
    :END:
 
 $\eta_{д} = {
@@ -942,8 +943,8 @@ $\eta_{д} = {
 ** Построение графиков вероятности ошибки
    :PROPERTIES:
    :CREATED:               [2022-04-21 Чт 13:56]
-   :HASH:                  -1227538128272245758
-   :LAST_MODIFIED:         [2022-05-06 Пт 01:10]
+   :HASH:                  -1016992275611509189
+   :LAST_MODIFIED:         [2022-05-07 Сб 11:15]
    :END:
 
 $P_{ош} = {
@@ -951,8 +952,9 @@ $P_{ош} = {
 }$
 
 #+name: P_err-10
-#+begin_src python :results table replace value org
+#+begin_src python :results table replace value raw
   sim_params = np.vstack((
+      sigma_d_nts.reshape(1, 5),
       sigma_phis.reshape(1, 5),
       gamma_2s.reshape(1, 5),
       F_ks.reshape(1, 5),
@@ -967,33 +969,30 @@ $P_{ош} = {
 #+end_src
 
 #+RESULTS: P_err-10
-#+begin_src org
-|   0.0956520422 |    0.167391074 |     1.99275088 |     199.275088 |     1992.75088 |
-|     108.798584 |     35.1914196 |   0.0192157973 |            0.0 |            0.0 |
-|   2912482810.0 |   1664275890.0 |    139799175.0 |     1397991.75 |     139799.175 |
-|     17746556.7 |     7347772.54 |     7347772.54 |     2749284.74 |     1229517.51 |
-| 9.27044097e-07 | 1.62232717e-06 | 1.93134187e-05 |  0.00193134187 |   0.0193134187 |
-|  0.00015214219 | 0.000367458299 | 0.000367458299 | 0.000982073613 |  0.00219598336 |
-| 4.35382576e-14 | 1.33335914e-13 | 1.88968132e-11 | 1.88968132e-07 | 1.88968132e-05 |
-|    0.999999667 |    0.999999417 |    0.999993065 |    0.999324719 |    0.994903839 |
-| 0.000238984393 | 0.000577202146 | 0.000577202146 |  0.00154263762 |  0.00344944259 |
-#+end_src
+| 31952048700000.0 | 55916085300000.0 | 665667682000000.0 | 6.65667682e+16 | 6.65667682e+17 |
+|     0.0956520422 |      0.167391074 |        1.99275088 |     199.275088 |     1992.75088 |
+|       108.798584 |       35.1914196 |      0.0192157973 |            0.0 |            0.0 |
+|     2912482810.0 |     1664275890.0 |       139799175.0 |     1397991.75 |     139799.175 |
+|       17746556.7 |       7347772.54 |        7347772.54 |     2749284.74 |     1229517.51 |
+|   9.27044097e-07 |   1.62232717e-06 |    1.93134187e-05 |  0.00193134187 |   0.0193134187 |
+|    0.00015214219 |   0.000367458299 |    0.000367458299 | 0.000982073613 |  0.00219598336 |
+|   4.35382576e-14 |   1.33335914e-13 |    1.88968132e-11 | 1.88968132e-07 | 1.88968132e-05 |
+|      0.999999667 |      0.999999417 |       0.999993065 |    0.999324719 |    0.994903839 |
+|   0.000238984393 |   0.000577202146 |    0.000577202146 |  0.00154263762 |  0.00344944259 |
 
 #+name: P_err-11
 #+begin_src python
   h2s = np.linspace(1.0, 1e6, 1000000)
   P_errs = P_err(h2s.reshape(-1, 1).T,
-                 sim_params[1].reshape(-1, 1),
-                 sim_params[6].reshape(-1, 1),
+                 sim_params[2].reshape(-1, 1),
                  sim_params[7].reshape(-1, 1),
+                 sim_params[8].reshape(-1, 1),
                  np.array([1.0] * 5).reshape(-1, 1)) # TODO: fix eta_d
 
   fig, ax = plt.subplots()
 
-  for i in P_errs:
-      print("---\n")
-      print(i)
-      ax.plot(h2s, i)
+  for i, l in zip(P_errs, labels):
+      ax.plot(h2s, i, label=l)
 
   fname = 'static/P_err.png'
   plt.xscale("log")
@@ -1013,6 +1012,337 @@ $P_{ош} = {
 #+attr_org: :width 500px
 #+RESULTS: P_err-11
 [[file:static/P_err.png]]
+
+* Сравнение графиков вероятностей
+  :PROPERTIES:
+  :CREATED:               [2022-05-06 Пт 02:13]
+  :HASH:                  -739019523289791013
+  :LAST_MODIFIED:         [2022-05-07 Сб 11:18]
+  :header-args:python:    :noweb yes :exports results :results file graphics :session session3
+  :END:
+
+#+name: P_err-func-vect
+#+begin_src python :noeval :tangle no
+  def calc_sigma_d_nt(l_s, z_e, sigma_d_n):
+      return np.sqrt(np.sqrt(pi) * l_s * z_e) * sigma_d_n
+
+
+  def P_err_vect(ion_params, sig_params, l_s):
+      f_0 =     sig_params.f_0
+      R_T =     sig_params.R_T
+      T_S =     sig_params.T_S
+      theta_0 = sig_params.theta_0
+      theta_0 = sig_params.theta_0
+      B_S =     sig_params.B_S
+      F_0 =     sig_params.F_0
+
+      sigma_d_nts = ion_params[:, 3]
+      sigma_phis = sigma_phi(f_0, sigma_d_nts, theta_0)
+      gamma_2s = gamma2(sigma_phis)
+      F_ks = F_k_old(f_0, sigma_d_nts, theta_0, z, z_e, l_s)
+      N_ms = ion_params[:, 0]
+      F_ds = F_d(f_0, N_ms, z_e, theta_0)
+      F_0_over_F_k = F_0 / F_ks
+      F_0_over_F_d = F_0 / F_ds
+      eta_ms = eta_m(T_S, F_ks)
+      eta_chs = eta_ch(F_0, F_ks)
+      eta_ds = eta_d(F_0, F_ds)
+
+      sim_params = np.vstack((
+          sigma_d_nts.reshape(1, 5),
+          sigma_phis.reshape(1, 5),
+          gamma_2s.reshape(1, 5),
+          F_ks.reshape(1, 5),
+          F_ds.reshape(1, 5),
+          F_0_over_F_k.reshape(1, 5),
+          F_0_over_F_d.reshape(1, 5),
+          eta_ms.reshape(1, 5),
+          eta_chs.reshape(1, 5),
+          eta_ds.reshape(1, 5)))
+
+      h2s = np.linspace(1.0, 1e6, 1000000)
+      P_errs = P_err(h2s.reshape(-1, 1).T,
+                     sim_params[2].reshape(-1, 1),
+                     sim_params[7].reshape(-1, 1),
+                     sim_params[8].reshape(-1, 1),
+                     np.array([1.0] * 5).reshape(-1, 1)) # TODO: fix eta_d
+
+      return (h2s, P_errs, sim_params)
+#+end_src
+
+** Случай 1
+   :PROPERTIES:
+   :CREATED:               [2022-05-06 Пт 03:03]
+   :HASH:                  -631550842122210693
+   :LAST_MODIFIED:         [2022-05-07 Сб 11:55]
+   :END:
+
+#+begin_src python :noweb yes
+  <<defs>>
+
+  <<main-input>>
+
+  <<P_err-func-vect>>
+
+  from types import SimpleNamespace
+
+  #                  N_m, эл/м^3, betta,      sigma_delta_N = betta * N_m, эл/м^3
+  ion_params_nigth = [2.4 * 1e11, 1e-2,       2.4 * 1e9]
+  ion_params_day   = [1.4 * 1e12, 3 * 1e-3,   4.2 * 1e9]
+  ion_params_evi   = [1.4 * 1e12, 3.6 * 1e-2, 5.0 * 1e10]
+  ion_params_ivil  = [1.0 * 1e13, 5.0 * 1e-1, 5.0 * 1e12]
+  ion_params_ivib  = [5.0 * 1e13, 1.0,        5.0 * 1e13]
+  labels = ("1", "2", "3", "4", "5")
+
+  l_s = 200
+
+  ion_params = np.vstack((ion_params_nigth,
+                          ion_params_day,
+                          ion_params_evi,
+                          ion_params_ivil,
+                          ion_params_ivib))
+
+  sigma_d_nts = calc_sigma_d_nt(l_s, z_e, ion_params[:, 2]).reshape(5, 1)
+
+  ion_params = np.hstack((ion_params, sigma_d_nts))
+
+  sig_params = dict()
+  sig_params["f_0"]     = 400 * 1e6                             # Гц
+  sig_params["R_T"]     = 2.7 * 1e3                             # бит/с
+  sig_params["T_S"]     = 1.0 / sig_params["R_T"]               # c/бит
+  sig_params["theta_0"] = 60.0                                  # градусов
+  sig_params["theta_0"] = np.radians(sig_params["theta_0"])     # NumPy использует радианы по-умолчанию
+  sig_params["B_S"]     = 1.0                                   # простые сигналы
+  sig_params["F_0"]     = sig_params["B_S"] / sig_params["T_S"] # ширина спектра
+  sig_params = SimpleNamespace(**sig_params)
+
+  h2s, P_errs, sim_params = P_err_vect(ion_params, sig_params, l_s)
+
+  fig, ax = plt.subplots()
+
+  for i, l in zip(P_errs, labels):
+      ax.plot(h2s, i, label=l)
+
+  fname = 'static/P_err-1.png'
+  plt.xscale("log")
+  plt.yscale("log")
+  plt.ylim(top=1e0, bottom=1e-6)
+
+  ax.set_title(r"$P_{err}(h^2)$")
+  ax.set_xlabel(r"$h^2$")
+  ax.set_ylabel(r"$P_{err}$")
+  ax.legend()
+
+  fig.set_size_inches(10, 10)
+  plt.savefig(fname)
+  fname
+#+end_src
+
+#+attr_org: :width 500px
+#+RESULTS:
+[[file:static/P_err-1.png]]
+
+#+begin_src python :results table replace value raw
+  sim_params
+#+end_src
+
+#+RESULTS:
+|                     |                         |                  |                  |                   |                |                |
+|---------------------+-------------------------+------------------+------------------+-------------------+----------------+----------------|
+| СКС "Гонец"         | Волны (сигнала)         |      1 (НИ-ночь) |      2 (НИ-день) |           3 (ЕВИ) |  4 (Слаб. ИВИ) | 5 (Сильн. ИВИ) |
+|---------------------+-------------------------+------------------+------------------+-------------------+----------------+----------------|
+| $f_0$ = 400 Мгц     | $\sigma_{\Delta N_{t}}$ | 31952048700000.0 | 55916085300000.0 | 665667682000000.0 | 6.65667682e+16 | 6.65667682e+17 |
+|                     | $\sigma_{\phi}$         |     0.0956520422 |      0.167391074 |        1.99275088 |     199.275088 |     1992.75088 |
+| $R_т2$ = 2.7 кбит/с | $\gamma^2$              |       108.798584 |       35.1914196 |      0.0192157973 |            0.0 |            0.0 |
+|                     | $F_К$                   |     2912482810.0 |     1664275890.0 |       139799175.0 |     1397991.75 |     139799.175 |
+| $F_0$ = 2.7 кГц     | $F_Д$                   |       17746556.7 |       7347772.54 |        7347772.54 |     2749284.74 |     1229517.51 |
+|                     | $F_0 / F_К$             |   9.27044097e-07 |   1.62232717e-06 |    1.93134187e-05 |  0.00193134187 |   0.0193134187 |
+| $\theta_0$ = 60 deg | $F_0 / F_Д$             |    0.00015214219 |   0.000367458299 |    0.000367458299 | 0.000982073613 |  0.00219598336 |
+|                     | $\eta_М$                |   4.35382576e-14 |   1.33335914e-13 |    1.88968132e-11 | 1.88968132e-07 | 1.88968132e-05 |
+|                     | $\eta_Ч$                |      0.999999667 |      0.999999417 |       0.999993065 |    0.999324719 |    0.994903839 |
+|                     | $\eta_Д$                |   0.000238984393 |   0.000577202146 |    0.000577202146 |  0.00154263762 |  0.00344944259 |
+
+** Случай 2
+   :PROPERTIES:
+   :CREATED:               [2022-05-06 Пт 03:03]
+   :HASH:                  1479761016062962455
+   :LAST_MODIFIED:         [2022-05-07 Сб 11:54]
+   :END:
+
+#+begin_src python :noweb yes
+  <<defs>>
+
+  <<main-input>>
+
+  <<P_err-func-vect>>
+
+  from types import SimpleNamespace
+
+  #                  N_m, эл/м^3, betta,      sigma_delta_N = betta * N_m, эл/м^3
+  ion_params_nigth = [2.4 * 1e11, 1e-2,       2.4 * 1e9]
+  ion_params_day   = [1.4 * 1e12, 3 * 1e-3,   4.2 * 1e9]
+  ion_params_evi   = [1.4 * 1e12, 3.6 * 1e-2, 5.0 * 1e10]
+  ion_params_ivil  = [1.0 * 1e13, 5.0 * 1e-1, 5.0 * 1e12]
+  ion_params_ivib  = [5.0 * 1e13, 1.0,        5.0 * 1e13]
+
+  l_s = 200
+
+  ion_params = np.vstack((ion_params_nigth,
+                          ion_params_day,
+                          ion_params_evi,
+                          ion_params_ivil,
+                          ion_params_ivib))
+
+  sigma_d_nts = calc_sigma_d_nt(l_s, z_e, ion_params[:, 2]).reshape(5, 1)
+
+  ion_params = np.hstack((ion_params, sigma_d_nts))
+
+  sig_params = dict()
+  sig_params["f_0"]     = 400 * 1e6                             # Гц
+  sig_params["R_T"]     = 9.6 * 1e3                             # бит/с
+  sig_params["T_S"]     = 1.0 / sig_params["R_T"]               # c/бит
+  sig_params["theta_0"] = 60.0                                  # градусов
+  sig_params["theta_0"] = np.radians(sig_params["theta_0"])     # NumPy использует радианы по-умолчанию
+  sig_params["B_S"]     = 1.0                                   # простые сигналы
+  sig_params["F_0"]     = sig_params["B_S"] / sig_params["T_S"] # ширина спектра
+  sig_params = SimpleNamespace(**sig_params)
+
+  h2s, P_errs, sim_params = P_err_vect(ion_params, sig_params, l_s)
+
+  fig, ax = plt.subplots()
+
+  for i in P_errs:
+      ax.plot(h2s, i)
+
+  fname = 'static/P_err-2.png'
+  plt.xscale("log")
+  plt.yscale("log")
+  plt.ylim(top=1e0, bottom=1e-6)
+
+  ax.set_title(r"$P_{err}(h^2)$")
+  ax.set_xlabel(r"$h^2$")
+  ax.set_ylabel(r"$P_{err}$")
+  ax.legend()
+
+  fig.set_size_inches(10, 10)
+  plt.savefig(fname)
+  fname
+#+end_src
+
+#+attr_org: :width 500px
+#+RESULTS:
+[[file:static/P_err-2.png]]
+
+#+begin_src python :results table replace value raw
+  sim_params
+#+end_src
+
+#+RESULTS:
+|                     |                         |                  |                  |                   |                |                |
+|---------------------+-------------------------+------------------+------------------+-------------------+----------------+----------------|
+| СКС "Гонец"         | Волны (сигнала)         |      1 (НИ-ночь) |      2 (НИ-день) |           3 (ЕВИ) |  4 (Слаб. ИВИ) | 5 (Сильн. ИВИ) |
+|---------------------+-------------------------+------------------+------------------+-------------------+----------------+----------------|
+| $f_0$ = 400 Мгц     | $\sigma_{\Delta N_{t}}$ | 31952048700000.0 | 55916085300000.0 | 665667682000000.0 | 6.65667682e+16 | 6.65667682e+17 |
+|                     | $\sigma_{\phi}$         |     0.0956520422 |      0.167391074 |        1.99275088 |     199.275088 |     1992.75088 |
+| $R_т2$ = 2.7 кбит/с | $\gamma^2$              |       108.798584 |       35.1914196 |      0.0192157973 |            0.0 |            0.0 |
+|                     | $F_К$                   |     2912482810.0 |     1664275890.0 |       139799175.0 |     1397991.75 |     139799.175 |
+| $F_0$ = 2.7 кГц     | $F_Д$                   |       17746556.7 |       7347772.54 |        7347772.54 |     2749284.74 |     1229517.51 |
+|                     | $F_0 / F_К$             |   3.29615679e-06 |   5.76827438e-06 |    6.86699331e-05 |  0.00686699331 |   0.0686699331 |
+| $\theta_0$ = 60 deg | $F_0 / F_Д$             |   0.000540950009 |     0.0013065184 |      0.0013065184 |  0.00349181729 |  0.00780794083 |
+|                     | $\eta_М$                |   5.50409578e-13 |   1.68562933e-12 |    2.38893046e-10 | 2.38893046e-06 | 0.000238893046 |
+|                     | $\eta_Ч$                |      0.999998816 |      0.999997928 |       0.999975359 |    0.997766256 |    0.998605883 |
+|                     | $\eta_Д$                |   0.000849722287 |     0.0020522743 |      0.0020522743 |  0.00548493378 |   0.0122646848 |
+
+** Случай 3
+   :PROPERTIES:
+   :CREATED:               [2022-05-06 Пт 03:03]
+   :HASH:                  1480462761244190367
+   :LAST_MODIFIED:         [2022-05-07 Сб 11:54]
+   :END:
+
+#+begin_src python :noweb yes
+  <<defs>>
+
+  <<main-input>>
+
+  <<P_err-func-vect>>
+
+  from types import SimpleNamespace
+
+  #                  N_m, эл/м^3, betta,      sigma_delta_N = betta * N_m, эл/м^3
+  ion_params_nigth = [2.4 * 1e11, 1e-2,       2.4 * 1e9]
+  ion_params_day   = [1.4 * 1e12, 3 * 1e-3,   4.2 * 1e9]
+  ion_params_evi   = [1.4 * 1e12, 3.6 * 1e-2, 5.0 * 1e10]
+  ion_params_ivil  = [1.0 * 1e13, 5.0 * 1e-1, 5.0 * 1e12]
+  ion_params_ivib  = [5.0 * 1e13, 1.0,        5.0 * 1e13]
+
+  l_s = 200
+
+  ion_params = np.vstack((ion_params_nigth,
+                          ion_params_day,
+                          ion_params_evi,
+                          ion_params_ivil,
+                          ion_params_ivib))
+
+  sigma_d_nts = calc_sigma_d_nt(l_s, z_e, ion_params[:, 2]).reshape(5, 1)
+
+  ion_params = np.hstack((ion_params, sigma_d_nts))
+
+  sig_params = dict()
+  sig_params["f_0"]     = 400 * 1e6                             # Гц
+  sig_params["R_T"]     = 64.0 * 1e3                            # бит/с
+  sig_params["T_S"]     = 1.0 / sig_params["R_T"]               # c/бит
+  sig_params["theta_0"] = 60.0                                  # градусов
+  sig_params["theta_0"] = np.radians(sig_params["theta_0"])     # NumPy использует радианы по-умолчанию
+  sig_params["B_S"]     = 1.0                                   # простые сигналы
+  sig_params["F_0"]     = sig_params["B_S"] / sig_params["T_S"] # ширина спектра
+  sig_params = SimpleNamespace(**sig_params)
+
+  h2s, P_errs, sim_params = P_err_vect(ion_params, sig_params, l_s)
+
+  fig, ax = plt.subplots()
+
+  for i in P_errs:
+      ax.plot(h2s, i)
+
+  fname = 'static/P_err-3.png'
+  plt.xscale("log")
+  plt.yscale("log")
+  plt.ylim(top=1e0, bottom=1e-6)
+
+  ax.set_title(r"$P_{err}(h^2)$")
+  ax.set_xlabel(r"$h^2$")
+  ax.set_ylabel(r"$P_{err}$")
+  ax.legend()
+
+  fig.set_size_inches(10, 10)
+  plt.savefig(fname)
+  fname
+#+end_src
+
+#+attr_org: :width 500px
+#+RESULTS:
+[[file:static/P_err-3.png]]
+
+#+begin_src python :results table replace value raw
+  sim_params
+#+end_src
+
+#+RESULTS:
+|                     |                         |                  |                  |                   |                |                |
+|---------------------+-------------------------+------------------+------------------+-------------------+----------------+----------------|
+| СКС "Гонец"         | Волны (сигнала)         |      1 (НИ-ночь) |      2 (НИ-день) |           3 (ЕВИ) |  4 (Слаб. ИВИ) | 5 (Сильн. ИВИ) |
+|---------------------+-------------------------+------------------+------------------+-------------------+----------------+----------------|
+| $f_0$ = 400 Мгц     | $\sigma_{\Delta N_{t}}$ | 31952048700000.0 | 55916085300000.0 | 665667682000000.0 | 6.65667682e+16 | 6.65667682e+17 |
+|                     | $\sigma_{\phi}$         |     0.0956520422 |      0.167391074 |        1.99275088 |     199.275088 |     1992.75088 |
+| $R_т2$ = 2.7 кбит/с | $\gamma^2$              |       108.798584 |       35.1914196 |      0.0192157973 |            0.0 |            0.0 |
+|                     | $F_К$                   |     2912482810.0 |     1664275890.0 |       139799175.0 |     1397991.75 |     139799.175 |
+| $F_0$ = 2.7 кГц     | $F_Д$                   |       17746556.7 |       7347772.54 |        7347772.54 |     2749284.74 |     1229517.51 |
+|                     | $F_0 / F_К$             |   2.19743786e-05 |   3.84551625e-05 |    0.000457799554 |   0.0457799554 |    0.457799554 |
+| $\theta_0$ = 60 deg | $F_0 / F_Д$             |    0.00360633339 |    0.00871012264 |     0.00871012264 |   0.0232787819 |   0.0520529389 |
+|                     | $\eta_М$                |   2.44626479e-11 |   7.49168592e-11 |    1.06174687e-08 | 0.000106174687 |   0.0106174687 |
+|                     | $\eta_Ч$                |       0.99999211 |      0.999986195 |       0.999836604 |    0.993899399 |     1.86980817 |
+|                     | $\eta_Д$                |    0.00566481524 |     0.0139818286 |      0.0136818286 |   0.0365662199 |   0.0817642689 |
 
 * COMMENT Local variables
   :PROPERTIES:
