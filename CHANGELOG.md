@@ -36,6 +36,9 @@
   индекса мерцаний $S_4$
   ([#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62))
 
+- **plotter:** Добавлена кнопка загрузки файлов выгрузок через интерфейс
+  браузера ([#67](https://github.com/mixayloff-dimaaylov/gstma/pull/67))
+
 - **docs:** Добавлена справка по подключению _Grafana Unified Alerting_ к
   Telegram ([#58](https://github.com/mixayloff-dimaaylov/gstma/pull/58))
 
