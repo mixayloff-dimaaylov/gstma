@@ -210,6 +210,15 @@ def s_4_pwr(df):
 # In[ ]:
 
 
+import io
+
+tables = ["ismdetobs", "ismrawtec", "ismredobs", "range", "satxyz2"]
+
+glob_files = lambda p, t: glob.glob(f"{p}/rawdata_{t}_*.csv")
+parse_csv = lambda b: pd.read_csv(io.BytesIO(b))
+match_name = lambda n: re.search('^rawdata_([a-z0-9]+)+', n).group(1)
+check_tbl = lambda n: n in tables
+
 def to_datetime(df):
     res = df
     res['time'] = pd.to_datetime(df['time'], unit='ms', utc=True)
@@ -327,19 +336,11 @@ def read_csvs(_from):
     _path = f"./rawdump/{_date}"
 
     # glob SHOULD sort them in synchronous order
-    files_range = glob.glob(f"{_path}/rawdata_range_*.csv")
-    files_ismdetobs = glob.glob(f"{_path}/rawdata_ismdetobs_*.csv")
-    files_ismrawtec = glob.glob(f"{_path}/rawdata_ismrawtec_*.csv")
-    files_ismredobs = glob.glob(f"{_path}/rawdata_ismredobs_*.csv")
-    files_satxyz2 = glob.glob(f"{_path}/rawdata_satxyz2_*.csv")
+    globs = tuple(glob_files(_path, t) for t in tables)
 
-    return ({"range": pd.read_csv(r),
-             "ismdetobs": pd.read_csv(rd),
-             "ismrawtec": pd.read_csv(rt),
-             "ismredobs": pd.read_csv(rrd),
-             "satxyz2": pd.read_csv(xyz)}
-            for r, rd, rt, rrd, xyz in zip(
-                files_range, files_ismdetobs, files_ismrawtec, files_ismredobs, files_satxyz2))
+    groups = ({match_name(ii):pd.read_csv(ii) for ii in i} for i in zip(*globs))
+
+    return groups
 
 
 # ### Расчеты
@@ -611,18 +612,35 @@ if not is_ipython() and __name__ == '__main__':
 # In[ ]:
 
 
-from ipywidgets import interact, IntText, Dropdown
+from ipywidgets import IntText, Button, Dropdown, FileUpload, Label, Stack, Box, jslink
 
-_satw = Dropdown(
-    description="Спутник:")
-_fromw = IntText(
-    description="Начальное время:",
-    min=0)
-_tow = IntText(
-    description="Конечное время:",
-    min=0)
-_secondaryfreqw = Dropdown(
-    description="Secondaryfreq:")
+def VBox(*pargs, **kwargs):
+    """Displays multiple widgets vertically using the flexible box model."""
+    box = Box(*pargs, **kwargs)
+    box.layout.display = 'flex'
+    box.layout.flex_flow = 'column'
+    box.layout.align_items = 'stretch'
+    return box
+
+def HBox(*pargs, **kwargs):
+    """Displays multiple widgets horizontally using the flexible box model."""
+    box = Box(*pargs, **kwargs)
+    box.layout.display = 'flex'
+    box.layout.align_items = 'stretch'
+    return box
+
+style = {'description_width': 'initial'}
+
+
+# #### Виджеты для режима с заданием параметров выгрузки:
+
+# In[ ]:
+
+
+_satw = Dropdown(style=style)
+_fromw = IntText(style=style, min=0)
+_tow = IntText(style=style, min=0)
+_secondaryfreqw = Dropdown(style=style)
 
 
 def update_sat(*args):
@@ -661,14 +679,59 @@ _tow.observe(update_sat, 'value')
 _satw.observe(update_secondaryfreq, 'value')
 
 
+# Разметка:
+
+# In[ ]:
+
+
+_sat_paramsw = HBox([
+    VBox([Label("Спутник:"),
+          Label("Начальное время:"),
+          Label("Конечное время:"),
+          Label("Secondaryfreq:")]),
+    VBox([_satw, _fromw, _tow, _secondaryfreqw])
+])
+
+
+# #### Виджеты для режима с подгрузкой файла:
+
+# In[ ]:
+
+
+_filesw = FileUpload(description="Файлы", multiple=True, style=style)
+
+
+# #### Итоговый виджет:
+
+# In[ ]:
+
+
+_working_modew = Dropdown(
+    description="Режим работы:",
+    options=["Выгрузка по параметрам спутника", "Загрузка файла с данными"],
+    style=style
+)
+
+_widget_stackw = Stack([_sat_paramsw, _filesw])
+
+_start_buttonw = Button(description="Старт", style=style)
+
+_global_boxw = VBox([_working_modew, _widget_stackw, _start_buttonw])
+
+jslink((_working_modew, 'index'), (_widget_stackw, 'selected_index'))
+
+
 # ### Получение данных и расчеты
 
 # In[ ]:
 
 
-@interact(_sat=_satw, _from=_fromw, _to=_tow,
-          _secondaryfreq=_secondaryfreqw).options(manual=True)
-def jupyter_main(_sat, _from, _to, _secondaryfreq):
+def dump_mode():
+    _sat=_satw.value
+    _from=_fromw.value
+    _to=_tow.value
+    _secondaryfreq=_secondaryfreqw.value
+
     for values in dump_csvs(sql_con,
                             _sat, _from, _to, _secondaryfreq):
         if values['range'].empty:
@@ -677,4 +740,34 @@ def jupyter_main(_sat, _from, _to, _secondaryfreq):
 
         for sigcomb in comb_dfs(values):
             plot_build(perf_cal(sigcomb))
+
+
+def file_mode():
+    values = {match_name(i.name):parse_csv(i.content) for i in _filesw.value}
+
+    for f in values:
+        if not check_tbl(f):
+            print(f"Неизвестное имя таблицы: {f}")
+            return
+        elif values['range'].empty:
+            print("Выгрузка пуста!")
+            return
+
+    for sigcomb in comb_dfs(values):
+        plot_build(perf_cal(sigcomb))
+
+
+def jupyter_main(btn):
+    _mode = _working_modew.value
+    if _mode == "Выгрузка по параметрам спутника":
+        dump_mode()
+    elif _mode == "Загрузка файла с данными":
+        file_mode()
+    else:
+        print("Некорректный режим работы.")
+        exit(1)
+
+
+_start_buttonw.on_click(jupyter_main)
+display(_global_boxw)
 
