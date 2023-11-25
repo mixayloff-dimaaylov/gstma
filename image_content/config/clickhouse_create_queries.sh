@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# v18
+# v19
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
@@ -173,14 +173,18 @@ TTL d + INTERVAL 1 MONTH DELETE
 POPULATE AS
 SELECT
     time,
-    power,
+    avg(power) AS power,
     sat,
-    system,
+    any(system) AS system,
     freq,
-    glofreq,
-    prn,
-    d
+    any(glofreq) AS glofreq,
+    any(prn) AS prn,
+    any(d) AS d
 FROM rawdata.ismdetobs
+GROUP BY
+    (intDiv(time, 1000) * 1000) AS time,
+    sat,
+    freq
 EOL123
 
 clickhouse-client <<EOL123
@@ -222,6 +226,8 @@ SELECT
     prn,
     d
 FROM rawdata.satxyz2
+WHERE
+    time = intDiv(time, 1000) * 1000
 EOL123
 
 clickhouse-client <<EOL123

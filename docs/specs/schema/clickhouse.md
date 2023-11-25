@@ -1,4 +1,4 @@
-ClickHouse database layout v18
+ClickHouse database layout v19
 ================================
 
 ## Таблицы для входных данных
@@ -105,7 +105,7 @@ SETTINGS index_granularity=8192
 ### rawdata.satxyz2
 
 Источник: `logreader`  
-Частота дискретизации: 1/10 Гц  
+Частота дискретизации: 50 Гц  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -188,7 +188,7 @@ FROM rawdata.ismredobs
 ### computed.ismdetobs
 
 Источник: *rawdata.ismdetobs*  
-Частота дискретизации: 50 Гц  
+Частота дискретизации: 1 Гц  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -201,17 +201,21 @@ TTL d + INTERVAL 1 MONTH DELETE
 POPULATE AS
 SELECT
     time,
-    power,
+    avg(power) AS power,
     sat,
-    system,
+    any(system) AS system,
     freq,
-    glofreq,
-    prn,
-    d
+    any(glofreq) AS glofreq,
+    any(prn) AS prn,
+    any(d) AS d
 FROM rawdata.ismdetobs
+GROUP BY
+    (intDiv(time, 1000) * 1000) AS time,
+    sat,
+    freq
 ```
 
-## computed.ismrawtec
+### computed.ismrawtec
 
 Источник: *rawdata.ismrawtec*  
 Частота дискретизации: 1 Гц  
@@ -241,7 +245,7 @@ FROM rawdata.ismrawtec
 ### computed.satxyz2
 
 Источник: *rawdata.satxyz2*  
-Частота дискретизации: 1/10 Гц  
+Частота дискретизации: 1 Гц  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -264,6 +268,8 @@ SELECT
     prn,
     d
 FROM rawdata.satxyz2
+WHERE
+    time = intDiv(time, 1000) * 1000
 ```
 
 ## Таблицы для расчетных данных
