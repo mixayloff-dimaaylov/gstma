@@ -353,3 +353,7 @@ CREATE TABLE IF NOT EXISTS misc.sdcb (
 ORDER BY (system, sat, sigcomb)
 SETTINGS index_granularity=8192
 EOL123
+
+clickhouse-client <<EOL123
+ALTER TABLE system.query_log MODIFY TTL event_date + INTERVAL 14 DAY;
+EOL123
