@@ -7,9 +7,10 @@
 - **dependencies:** Обновление Grafana с `9.1.3` до `9.5.1`
   ([#58](https://github.com/mixayloff-dimaaylov/gstma/pull/58))
 
-- **breaking(API):** Версия таблиц ClickHouse обновлена с 16.1 до 18
+- **breaking(API):** Версия таблиц ClickHouse обновлена с 16.1 до 19
   ([#60](https://github.com/mixayloff-dimaaylov/gstma/pull/60),
-  [#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62))
+  [#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62),
+  [#68](https://github.com/mixayloff-dimaaylov/gstma/pull/68))
 
 - **docs:** Добавлена справка по использованию Monocker для мониторинга
   состояния кластера в Telegram
@@ -57,6 +58,9 @@
   GeoMap ([#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62))
 
 ### Fixed
+
+- **clickhouse:** Оптимизация используемого ClickHouse дискового пространства
+  ([#68](https://github.com/mixayloff-dimaaylov/gstma/pull/68))
 
 ### Removed
 

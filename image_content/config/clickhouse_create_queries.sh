@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# v18
+# v19
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
@@ -146,21 +146,8 @@ GROUP BY
 EOL123
 
 clickhouse-client <<EOL123
-CREATE MATERIALIZED VIEW IF NOT EXISTS computed.ismredobs
-ENGINE = MergeTree
-PARTITION BY toYYYYMM(d)
-ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 MONTH DELETE
-POPULATE AS
-SELECT
-    time,
-    totals4,
-    sat,
-    system,
-    freq,
-    glofreq,
-    prn,
-    d
+CREATE VIEW IF NOT EXISTS computed.ismredobs
+AS SELECT *, d
 FROM rawdata.ismredobs
 EOL123
 
@@ -173,33 +160,23 @@ TTL d + INTERVAL 1 MONTH DELETE
 POPULATE AS
 SELECT
     time,
-    power,
+    avg(power) AS power,
     sat,
-    system,
+    any(system) AS system,
     freq,
-    glofreq,
-    prn,
-    d
+    any(glofreq) AS glofreq,
+    any(prn) AS prn,
+    any(d) AS d
 FROM rawdata.ismdetobs
+GROUP BY
+    (intDiv(time, 1000) * 1000) AS time,
+    sat,
+    freq
 EOL123
 
 clickhouse-client <<EOL123
-CREATE MATERIALIZED VIEW IF NOT EXISTS computed.ismrawtec
-ENGINE = MergeTree
-PARTITION BY toYYYYMM(d)
-ORDER BY (time, sat, primaryfreq, secondaryfreq)
-TTL d + INTERVAL 1 MONTH DELETE
-POPULATE AS
-SELECT
-    time,
-    tec,
-    sat,
-    system,
-    primaryfreq,
-    secondaryfreq,
-    glofreq,
-    prn,
-    d
+CREATE VIEW IF NOT EXISTS computed.ismrawtec
+AS SELECT *, d
 FROM rawdata.ismrawtec
 EOL123
 
@@ -210,18 +187,10 @@ PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat)
 TTL d + INTERVAL 1 MONTH DELETE
 POPULATE AS
-SELECT
-    time,
-    geopoint,
-    geopointStr,
-    ionpoint,
-    ionpointStr,
-    elevation,
-    sat,
-    system,
-    prn,
-    d
+SELECT *, d
 FROM rawdata.satxyz2
+WHERE
+    time = intDiv(time, 1000) * 1000
 EOL123
 
 clickhouse-client <<EOL123
@@ -346,4 +315,8 @@ CREATE TABLE IF NOT EXISTS misc.sdcb (
 ) ENGINE = ReplacingMergeTree()
 ORDER BY (system, sat, sigcomb)
 SETTINGS index_granularity=8192
+EOL123
+
+clickhouse-client <<EOL123
+ALTER TABLE system.query_log MODIFY TTL event_date + INTERVAL 14 DAY;
 EOL123

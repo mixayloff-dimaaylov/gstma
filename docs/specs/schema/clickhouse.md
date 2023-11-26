@@ -1,4 +1,4 @@
-ClickHouse database layout v18
+ClickHouse database layout v19
 ================================
 
 ## Таблицы для входных данных
@@ -105,7 +105,7 @@ SETTINGS index_granularity=8192
 ### rawdata.satxyz2
 
 Источник: `logreader`  
-Частота дискретизации: 1/10 Гц  
+Частота дискретизации: 50 Гц  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -164,31 +164,20 @@ GROUP BY
 
 Источник: *rawdata.ismredobs*  
 Частота дискретизации: 1/60 Гц  
+Привязка к существующей таблице  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
-CREATE MATERIALIZED VIEW computed.ismredobs
-ENGINE = MergeTree
-PARTITION BY toYYYYMM(d)
-ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 MONTH DELETE
-SELECT
-    time,
-    totals4,
-    sat,
-    system,
-    freq,
-    glofreq,
-    prn,
-    d
+CREATE VIEW computed.ismredobs
+AS SELECT *, d
 FROM rawdata.ismredobs
 ```
 
 ### computed.ismdetobs
 
 Источник: *rawdata.ismdetobs*  
-Частота дискретизации: 50 Гц  
+Частота дискретизации: 1 Гц  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -201,47 +190,38 @@ TTL d + INTERVAL 1 MONTH DELETE
 POPULATE AS
 SELECT
     time,
-    power,
+    avg(power) AS power,
     sat,
-    system,
+    any(system) AS system,
     freq,
-    glofreq,
-    prn,
-    d
+    any(glofreq) AS glofreq,
+    any(prn) AS prn,
+    any(d) AS d
 FROM rawdata.ismdetobs
+GROUP BY
+    (intDiv(time, 1000) * 1000) AS time,
+    sat,
+    freq
 ```
 
-## computed.ismrawtec
+### computed.ismrawtec
 
 Источник: *rawdata.ismrawtec*  
 Частота дискретизации: 1 Гц  
+Привязка к существующей таблице  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
-CREATE MATERIALIZED VIEW computed.ismrawtec
-ENGINE = MergeTree
-PARTITION BY toYYYYMM(d)
-ORDER BY (time, sat, primaryfreq, secondaryfreq)
-TTL d + INTERVAL 1 MONTH DELETE
-POPULATE AS
-SELECT
-    time,
-    tec,
-    sat,
-    system,
-    primaryfreq,
-    secondaryfreq,
-    glofreq,
-    prn,
-    d
+CREATE VIEW computed.ismrawtec
+AS SELECT *, d
 FROM rawdata.ismrawtec
 ```
 
 ### computed.satxyz2
 
 Источник: *rawdata.satxyz2*  
-Частота дискретизации: 1/10 Гц  
+Частота дискретизации: 1 Гц  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -252,18 +232,10 @@ PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat)
 TTL d + INTERVAL 1 MONTH DELETE
 POPULATE AS
-SELECT
-    time,
-    geopoint,
-    geopointStr,
-    ionpoint,
-    ionpointStr,
-    elevation,
-    sat,
-    system,
-    prn,
-    d
+SELECT *, d
 FROM rawdata.satxyz2
+WHERE
+    time = intDiv(time, 1000) * 1000
 ```
 
 ## Таблицы для расчетных данных
