@@ -232,17 +232,7 @@ PARTITION BY toYYYYMM(d)
 ORDER BY (time, sat)
 TTL d + INTERVAL 1 MONTH DELETE
 POPULATE AS
-SELECT
-    time,
-    geopoint,
-    geopointStr,
-    ionpoint,
-    ionpointStr,
-    elevation,
-    sat,
-    system,
-    prn,
-    d
+SELECT *, d
 FROM rawdata.satxyz2
 WHERE
     time = intDiv(time, 1000) * 1000
