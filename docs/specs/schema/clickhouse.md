@@ -164,24 +164,13 @@ GROUP BY
 
 Источник: *rawdata.ismredobs*  
 Частота дискретизации: 1/60 Гц  
+Привязка к существующей таблице  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
-CREATE MATERIALIZED VIEW computed.ismredobs
-ENGINE = MergeTree
-PARTITION BY toYYYYMM(d)
-ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 MONTH DELETE
-SELECT
-    time,
-    totals4,
-    sat,
-    system,
-    freq,
-    glofreq,
-    prn,
-    d
+CREATE VIEW computed.ismredobs
+AS SELECT *, d
 FROM rawdata.ismredobs
 ```
 
@@ -219,26 +208,13 @@ GROUP BY
 
 Источник: *rawdata.ismrawtec*  
 Частота дискретизации: 1 Гц  
+Привязка к существующей таблице  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
 ```sql
-CREATE MATERIALIZED VIEW computed.ismrawtec
-ENGINE = MergeTree
-PARTITION BY toYYYYMM(d)
-ORDER BY (time, sat, primaryfreq, secondaryfreq)
-TTL d + INTERVAL 1 MONTH DELETE
-POPULATE AS
-SELECT
-    time,
-    tec,
-    sat,
-    system,
-    primaryfreq,
-    secondaryfreq,
-    glofreq,
-    prn,
-    d
+CREATE VIEW computed.ismrawtec
+AS SELECT *, d
 FROM rawdata.ismrawtec
 ```
 

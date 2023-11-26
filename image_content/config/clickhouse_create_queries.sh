@@ -146,21 +146,8 @@ GROUP BY
 EOL123
 
 clickhouse-client <<EOL123
-CREATE MATERIALIZED VIEW IF NOT EXISTS computed.ismredobs
-ENGINE = MergeTree
-PARTITION BY toYYYYMM(d)
-ORDER BY (time, sat, freq)
-TTL d + INTERVAL 1 MONTH DELETE
-POPULATE AS
-SELECT
-    time,
-    totals4,
-    sat,
-    system,
-    freq,
-    glofreq,
-    prn,
-    d
+CREATE VIEW IF NOT EXISTS computed.ismredobs
+AS SELECT *, d
 FROM rawdata.ismredobs
 EOL123
 
@@ -188,22 +175,8 @@ GROUP BY
 EOL123
 
 clickhouse-client <<EOL123
-CREATE MATERIALIZED VIEW IF NOT EXISTS computed.ismrawtec
-ENGINE = MergeTree
-PARTITION BY toYYYYMM(d)
-ORDER BY (time, sat, primaryfreq, secondaryfreq)
-TTL d + INTERVAL 1 MONTH DELETE
-POPULATE AS
-SELECT
-    time,
-    tec,
-    sat,
-    system,
-    primaryfreq,
-    secondaryfreq,
-    glofreq,
-    prn,
-    d
+CREATE VIEW IF NOT EXISTS computed.ismrawtec
+AS SELECT *, d
 FROM rawdata.ismrawtec
 EOL123
 
