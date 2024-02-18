@@ -65,6 +65,9 @@
 - **clickhouse:** Оптимизация используемого ClickHouse дискового пространства
   ([#68](https://github.com/mixayloff-dimaaylov/gstma/pull/68))
 
+- **logserver-spark:** Исправлен расчет параметра Райса $\\gamma$
+  ([#70](https://github.com/mixayloff-dimaaylov/gstma/pull/70))
+
 ### Removed
 
 ## [0.3.0] - 2023-05-01
