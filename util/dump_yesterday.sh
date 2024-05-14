@@ -9,6 +9,8 @@ print_help() {
 		'Usage:' \
 		'' \
 		" ${_script} [-h]" \
+        ' ${_script} [<date>]' \
+        '   <date> - target date to dump data, (yesterday by-default)' \
 		'   -h - print this help and exit'
 }
 
