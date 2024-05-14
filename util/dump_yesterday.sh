@@ -48,7 +48,7 @@ export TZ=UTC
 _script="$(basename "${0}")"
 _host='clickhouse'
 _dump_path='/datadump'
-_date="$(date -d 'yesterday')"
+_date="$(date -uI -d 'yesterday')"
 _date_to="${_date}"
 
 while getopts ':h' _opt ; do
