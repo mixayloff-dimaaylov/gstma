@@ -51,7 +51,6 @@ _script="$(basename "${0}")"
 _host='clickhouse'
 _dump_path='/datadump'
 _date="$(date -uI -d 'yesterday')"
-_date_to="${_date}"
 
 while getopts ':h' _opt ; do
 	case "${_opt}" in
@@ -67,15 +66,10 @@ done
 
 shift $((OPTIND-1))
 
-[ "${#}" -gt '2' ] && errexit "Not exact number of arguments.\n" '1'
+[ "${#}" -gt '1' ] && errexit "Not exact number of arguments.\n" '1'
 
 if [ "${#}" -gt '0' ] ; then
     _date="${1}"
-    _date_to="${_date}"
-fi
-
-if [ "${#}" -gt '1' ] ; then
-    _date_to="${2}"
 fi
 
 if [ ! -d "${_dump_path}" ] ; then
