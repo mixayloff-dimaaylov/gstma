@@ -18,9 +18,10 @@ util/dump_yesterday.sh
 ```sh
 docker run --rm -it \
        -v '/data/historical-datasets/Сияния на юге:/datadump' \
+       -v ${PWD}/util/dump_yesterday.sh:${PWD}/util/dump_yesterday.sh \
        -w '/datadump' \
        --network=gstma_default \
-       --entrypoint util/dump_yesterday.sh \
+       --entrypoint ${PWD}/util/dump_yesterday.sh \
        yandex/clickhouse-server:20.7
 ```
 

@@ -9,6 +9,8 @@ print_help() {
 		'Usage:' \
 		'' \
 		" ${_script} [-h]" \
+        ' ${_script} [<date>]' \
+        '   <date> - target date to dump data, (yesterday by-default)' \
 		'   -h - print this help and exit'
 }
 
@@ -48,8 +50,12 @@ export TZ=UTC
 _script="$(basename "${0}")"
 _host='clickhouse'
 _dump_path='/datadump'
-_date="$(date -d 'yesterday')"
-_date_to="${_date}"
+_date="$(date -uI -d 'yesterday')"
+
+# Handle clickhouse-client exit code 0
+# Ref: https://superuser.com/questions/1829830/behavior-of-sigint-with-bash
+# Ref: https://www.cons.org/cracauer/sigint.html
+trap 'exit 130' SIGINT
 
 while getopts ':h' _opt ; do
 	case "${_opt}" in
@@ -65,15 +71,10 @@ done
 
 shift $((OPTIND-1))
 
-[ "${#}" -gt '2' ] && errexit "Not exact number of arguments.\n" '1'
+[ "${#}" -gt '1' ] && errexit "Not exact number of arguments.\n" '1'
 
 if [ "${#}" -gt '0' ] ; then
     _date="${1}"
-    _date_to="${_date}"
-fi
-
-if [ "${#}" -gt '1' ] ; then
-    _date_to="${2}"
 fi
 
 if [ ! -d "${_dump_path}" ] ; then
