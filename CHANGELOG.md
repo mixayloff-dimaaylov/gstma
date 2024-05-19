@@ -41,7 +41,8 @@
   браузера ([#67](https://github.com/mixayloff-dimaaylov/gstma/pull/67))
 
 - **utils:** Добавлен скрипт для выгрузки данных в формате Parquet
-  ([#69](https://github.com/mixayloff-dimaaylov/gstma/pull/69))
+  ([#69](https://github.com/mixayloff-dimaaylov/gstma/pull/69),
+   [#71](https://github.com/mixayloff-dimaaylov/gstma/pull/71))
 
 - **docs:** Добавлена справка по подключению _Grafana Unified Alerting_ к
   Telegram ([#58](https://github.com/mixayloff-dimaaylov/gstma/pull/58))
