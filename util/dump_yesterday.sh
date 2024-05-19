@@ -52,6 +52,11 @@ _host='clickhouse'
 _dump_path='/datadump'
 _date="$(date -uI -d 'yesterday')"
 
+# Handle clickhouse-client exit code 0
+# Ref: https://superuser.com/questions/1829830/behavior-of-sigint-with-bash
+# Ref: https://www.cons.org/cracauer/sigint.html
+trap 'exit 130' SIGINT
+
 while getopts ':h' _opt ; do
 	case "${_opt}" in
 		h)
