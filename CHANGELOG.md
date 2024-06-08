@@ -73,6 +73,9 @@
 - **logserver-spark:** Исправлен расчет параметра Райса $\\gamma$
   ([#70](https://github.com/mixayloff-dimaaylov/gstma/pull/70))
 
+- **grafana:** Проблемы производительности дашборда TEC
+  ([#74](https://github.com/mixayloff-dimaaylov/gstma/pull/74))
+
 ### Removed
 
 ## [0.3.0] - 2023-05-01
