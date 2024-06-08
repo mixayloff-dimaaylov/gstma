@@ -40,6 +40,9 @@
 - **plotter:** Добавлена кнопка загрузки файлов выгрузок через интерфейс
   браузера ([#67](https://github.com/mixayloff-dimaaylov/gstma/pull/67))
 
+- **jupyter:** Установлены pylsp, MyPy и Git-клиент для удобства работы
+  ([#73](https://github.com/mixayloff-dimaaylov/gstma/pull/73))
+
 - **utils:** Добавлен скрипт для выгрузки данных в формате Parquet
   ([#69](https://github.com/mixayloff-dimaaylov/gstma/pull/69),
    [#71](https://github.com/mixayloff-dimaaylov/gstma/pull/71))
