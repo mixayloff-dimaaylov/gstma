@@ -1,1 +1,5 @@
 * !text !filter !merge !diff
+
+# Filter-out JupyterLab's code block's outputs
+# Ref: https://timstaley.co.uk/posts/making-git-and-jupyter-notebooks-play-nice/
+*.ipynb filter=nbstrip_full diff=ipynb

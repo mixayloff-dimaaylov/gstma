@@ -219,6 +219,7 @@ parse_csv = lambda b: pd.read_csv(io.BytesIO(b))
 match_name = lambda n: re.search('^rawdata_([a-z0-9]+)+', n).group(1)
 check_tbl = lambda n: n in tables
 
+
 def to_datetime(df):
     res = df
     res['time'] = pd.to_datetime(df['time'], unit='ms', utc=True)
@@ -304,8 +305,8 @@ def dump_csvs(sql_con, _sat, _from, _to, _secondaryfreq):
     df_ismredobs = dump_ismredobs(sql_con, _sat, _from, _to)
     df_satxyz2 = dump_satxyz2(sql_con, _sat, _from, _to)
 
-    csv_params = {"sep":",", "encoding":"utf-8",
-                  "index":False, "header":True, "lineterminator":"\n"}
+    csv_params = {"sep": ",", "encoding": "utf-8",
+                  "index": False, "header": True, "lineterminator": "\n"}
 
     _date = str(dt.datetime.fromtimestamp(_from/1000).date())
     _path = f"./rawdump/{_date}"
@@ -329,8 +330,8 @@ def dump_csvs(sql_con, _sat, _from, _to, _secondaryfreq):
                   "satxyz2": df_satxyz2})]
 
 
-# Searches CSV files in ./rawdump/<_from_date> dir and returns them as list of tuples, for
-# each (satellite, from, to, secondaryfreq)
+# Searches CSV files in ./rawdump/<_from_date> dir and returns them as list of
+# tuples, for each (satellite, from, to, secondaryfreq)
 def read_csvs(_from):
     _date = str(dt.datetime.fromtimestamp(_from/1000).date())
     _path = f"./rawdump/{_date}"
@@ -338,7 +339,7 @@ def read_csvs(_from):
     # glob SHOULD sort them in synchronous order
     globs = tuple(glob_files(_path, t) for t in tables)
 
-    groups = ({match_name(ii):pd.read_csv(ii) for ii in i} for i in zip(*globs))
+    groups = ({match_name(ii): pd.read_csv(ii) for ii in i} for i in zip(*globs))
 
     return groups
 
@@ -373,14 +374,16 @@ def comb_dfs(values):
                                      "adr": "adr2", "psr": "psr2",
                                      "cno": "cno2", "locktime": "locktime2"})
 
-        return pd.merge(df_f1, df_f2, how="inner", on=["time", "sat", "system", "prn"])
+        return pd.merge(df_f1, df_f2, how="inner",
+                        on=["time", "sat", "system", "prn"])
 
     def comb_redobs(base, df_f1, f2):
         df_f2 = base[base["freq"] == f2] \
                     .rename(columns={"freq": "freq2", "glofreq": "glofreq2",
                                      "totals4": "totals4_2"})
 
-        return pd.merge(df_f1, df_f2, how="inner", on=["time", "sat", "system", "prn"])
+        return pd.merge(df_f1, df_f2, how="inner",
+                        on=["time", "sat", "system", "prn"])
 
     # RANGE
     df_range = to_datetime(values['range'])
@@ -398,8 +401,8 @@ def comb_dfs(values):
     df_satxyz2 = to_datetime(values['satxyz2'])
     df_satxyz2.elevation = np.deg2rad(df_satxyz2.elevation)
 
-    sat = df_range.sat[0]
-    sat_system = re.search('^([A-Z]+)[0-9]+$', sat).group(1)
+    # sat = df_range.sat[0]
+    # sat_system = re.search('^([A-Z]+)[0-9]+$', sat).group(1)
 
     # sigcombing
     df_f1 = df_range[df_range["freq"] == "L1CA"] \
@@ -442,10 +445,10 @@ def perf_cal(values):
     DNT = multiplier(df_range.f1, df_range.f2) * _DNT
 
     df_range['NTpsr'] = multiplier(df_range.f1, df_range.f2) \
-                           * df_range.p + df_range.rdcb
+                          * df_range.p + df_range.rdcb
 
     df_range['NTadr_wo_DNT'] = multiplier(df_range.f1, df_range.f2) \
-      * adr_adr(df_range.adr1, df_range.adr2, df_range.f1, df_range.f2)
+        * adr_adr(df_range.adr1, df_range.adr2, df_range.f1, df_range.f2)
     df_range['NTadr'] = df_range.NTadr_wo_DNT + DNT + df_range.rdcb
 
     df_range['avgNTcurved'] = avgNT(df_range.NTadr)
@@ -454,7 +457,8 @@ def perf_cal(values):
     df_range['avgNT'] = np.sin(df_satxyz2.elevation) * avgNT(df_range.NTadr)
     df_range['delNT'] = np.sin(df_satxyz2.elevation) * delNT(df_range.NTadr)
 
-    df_range['sigNT'] = pd.Series(sigNT(df_range.delNT)).shift(59, fill_value=0.0)
+    df_range['sigNT'] = pd.Series(sigNT(df_range.delNT)) \
+                          .shift(59, fill_value=0.0)
     df_range['sigPhi'] = sigPhi(df_range.sigNT, df_range.f2)
     df_range['gamma'] = gamma(df_range.sigPhi)
     df_range['Fc'] = F_c(df_range.sigPhi, df_range.f1)
@@ -477,7 +481,7 @@ def plot_build(values):
     df_ismdetobsr = values['df_ismdetobs_resampled']
     df_ismrawtec = values['ismrawtec']
     df_ismredobs = values['ismredobs']
-    df_satxyz2 = values['satxyz2']
+    # df_satxyz2 = values['satxyz2']
 
     df_range.drop(index=df_range.index[:200],inplace=True)
     df_range = df_range.reset_index()
@@ -536,22 +540,22 @@ def plot_build(values):
     # First plot with TECU
     gfig, gax = init_plot()
     for xs, ys, yname in (
-        (df_range.time, df_range.NTpsr,       "N_T (P_1 - P_2)"),
-        (df_range.time, df_range.NTadr,       "N_T (adr_1 - adr_2)"),
-        (df_ismrawtec.time, df_ismrawtec.tec, "ISMRAWTEC's TEC"),
-        (df_range.time, df_range.avgNTcurved, "\overline{{N_T curved}}"),
-        (df_range.time, df_range.delNTcurved, "\Delta N_T curved"),
-        (df_range.time, df_range.avgNT,       "\overline{{N_T}}"),
-        (df_range.time, df_range.delNT,       "\Delta N_T"),
-        (df_range.time, df_range.sigNT,       "\sigma N_T"),
-        (df_range.time, df_range.sigPhi,      "\sigma \\varphi")):
+            (df_range.time, df_range.NTpsr,       "N_T (P_1 - P_2)"),
+            (df_range.time, df_range.NTadr,       "N_T (adr_1 - adr_2)"),
+            (df_ismrawtec.time, df_ismrawtec.tec, "ISMRAWTEC's TEC"),
+            (df_range.time, df_range.avgNTcurved, "\\overline{{N_T curved}}"),
+            (df_range.time, df_range.delNTcurved, "\\Delta N_T curved"),
+            (df_range.time, df_range.avgNT,       "\\overline{{N_T}}"),
+            (df_range.time, df_range.delNT,       "\\Delta N_T"),
+            (df_range.time, df_range.sigNT,       "\\sigma N_T"),
+            (df_range.time, df_range.sigPhi,      "\\sigma \\varphi")):
         dumpplot(gax, xs, ys, yname, "TECU")
     gax.set_ylabel("TECU")
     plot_finalize(gfig, gax, "ПЭСы")
 
     # Other plots:
     gfig, gax = init_plot()
-    dumpplot(gax, df_range.time, df_range.gamma, "\gamma", "")
+    dumpplot(gax, df_range.time, df_range.gamma, "\\gamma", "")
     gax.set_ylabel("")
     plot_finalize(gfig, gax, "Параметр Райса")
 
@@ -567,11 +571,11 @@ def plot_build(values):
 
     gfig, gax = init_plot()
     for xs, ys, yname in (
-        (df_range.time, df_range.s4,                "S_4"),
-        #(df_range.time, df_range.s4cno,             "S_{4 CNo}"),
-        (df_ismdetobsr.time, df_ismdetobsr.s4pwr,   "S_{4 PWR}"),
-        (df_ismredobs.time, df_ismredobs.totals4_1, "S_{4 RAW}"),
-        (df_ismredobs.time, df_ismredobs.totals4_2, "S_{4 RAW}")):
+            (df_range.time, df_range.s4,                "S_4"),
+            # df_range.time, df_range.s4cno,             "S_{4 CNo}"),
+            (df_ismdetobsr.time, df_ismdetobsr.s4pwr,   "S_{4 PWR}"),
+            (df_ismredobs.time, df_ismredobs.totals4_1, "S_{4 RAW}"),
+            (df_ismredobs.time, df_ismredobs.totals4_2, "S_{4 RAW}")):
         dumpplot(gax, xs, ys, yname, "")
     gax.set_ylabel("")
     plot_finalize(gfig, gax, "Индекс мерцаний")
@@ -614,6 +618,7 @@ if not is_ipython() and __name__ == '__main__':
 
 from ipywidgets import IntText, Button, Dropdown, FileUpload, Label, Stack, Box, jslink
 
+
 def VBox(*pargs, **kwargs):
     """Displays multiple widgets vertically using the flexible box model."""
     box = Box(*pargs, **kwargs)
@@ -622,12 +627,14 @@ def VBox(*pargs, **kwargs):
     box.layout.align_items = 'stretch'
     return box
 
+
 def HBox(*pargs, **kwargs):
     """Displays multiple widgets horizontally using the flexible box model."""
     box = Box(*pargs, **kwargs)
     box.layout.display = 'flex'
     box.layout.align_items = 'stretch'
     return box
+
 
 style = {'description_width': 'initial'}
 
@@ -644,8 +651,8 @@ _secondaryfreqw = Dropdown(style=style)
 
 
 def update_sat(*args):
-    if (_fromw.value > 0) and (_tow.value > 0) \
-        and (_fromw.value < _tow.value):
+    if ((_fromw.value > 0) and (_tow.value > 0)
+            and (_fromw.value < _tow.value)):
         df = read_sql_chunked(f"""
 SELECT DISTINCT(sat)
 FROM
@@ -659,8 +666,8 @@ WHERE
 
 
 def update_secondaryfreq(*args):
-    if (_fromw.value > 0) and (_tow.value > 0) \
-        and (_fromw.value < _tow.value) and (_satw.value != ""):
+    if ((_fromw.value > 0) and (_tow.value > 0)
+            and (_fromw.value < _tow.value) and (_satw.value != "")):
         df = read_sql_chunked(f"""
 SELECT DISTINCT(secondaryfreq)
 FROM
@@ -727,10 +734,10 @@ jslink((_working_modew, 'index'), (_widget_stackw, 'selected_index'))
 
 
 def dump_mode():
-    _sat=_satw.value
-    _from=_fromw.value
-    _to=_tow.value
-    _secondaryfreq=_secondaryfreqw.value
+    _sat = _satw.value
+    _from = _fromw.value
+    _to = _tow.value
+    _secondaryfreq = _secondaryfreqw.value
 
     for values in dump_csvs(sql_con,
                             _sat, _from, _to, _secondaryfreq):
@@ -743,7 +750,7 @@ def dump_mode():
 
 
 def file_mode():
-    values = {match_name(i.name):parse_csv(i.content) for i in _filesw.value}
+    values = {match_name(i.name): parse_csv(i.content) for i in _filesw.value}
 
     for f in values:
         if not check_tbl(f):

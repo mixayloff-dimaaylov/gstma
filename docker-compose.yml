@@ -117,8 +117,7 @@ services:
       # Default Jupyter Lab WEB-interface port
       - 8888:8888
     volumes:
-      - './docs/jupyter/:/home/jovyan/work'
-      - './:/home/jovyan/gstma:ro'
+      - './:/home/jovyan/gstma'
 
   reporter:
     container_name: gstma-reporter
