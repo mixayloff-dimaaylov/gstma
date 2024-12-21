@@ -1,4 +1,4 @@
-ClickHouse database layout v19
+ClickHouse database layout v20
 ================================
 
 ## Таблицы для входных данных
@@ -302,6 +302,8 @@ CREATE TABLE computed.xz1 (
     sigNT Float64 COMMENT 'Значение СКО флуктуаций ПЭС',
     sigPhi Float64 COMMENT 'Значение СКО флуктуаций фазы на фазовом экране',
     gamma Float64 COMMENT 'Значение параметра Райса (глубины общих замираний)',
+    Fd Float64 COMMENT 'Значение полосы дисперсионности',
+    Fk Float64 COMMENT 'Значение полосы когерентности',
     Fc Float64 COMMENT 'Значение интервала частотной корреляции',
     Pc Float64 COMMENT 'Значение интервала пространственной корреляции',
     d Date MATERIALIZED toDate(round(time / 1000))
