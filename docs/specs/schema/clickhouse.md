@@ -306,6 +306,7 @@ CREATE TABLE computed.xz1 (
     Fk Float64 COMMENT 'Значение полосы когерентности',
     Fc Float64 COMMENT 'Значение интервала частотной корреляции',
     Pc Float64 COMMENT 'Значение интервала пространственной корреляции',
+    Perror Float64 COMMENT 'Значение вероятности ошибки',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 
 TTL d + INTERVAL 1 MONTH DELETE;

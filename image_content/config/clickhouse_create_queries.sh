@@ -286,6 +286,7 @@ CREATE TABLE IF NOT EXISTS computed.xz1 (
   Fk Float64,
   Fc Float64,
   Pc Float64,
+  Perror Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree()
 PARTITION BY toYYYYMM(d)
