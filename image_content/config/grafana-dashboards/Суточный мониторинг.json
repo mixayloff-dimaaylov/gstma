@@ -26,7 +26,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
-  "id": 2,
+  "id": 6,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1279,12 +1279,172 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "PDEE91DDB90597936"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Возвышение/"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L1"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ADR GPS5 L2"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "ADR"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 25
+      },
+      "id": 36,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.1.3",
+      "targets": [
+        {
+          "aggregator": "sum",
+          "database": "computed",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "PDEE91DDB90597936"
+          },
+          "dateColDataType": "d",
+          "dateLoading": false,
+          "dateTimeColDataType": "time",
+          "dateTimeType": "TIMESTAMPMS",
+          "datetimeLoading": false,
+          "downsampleAggregator": "avg",
+          "downsampleFillPolicy": "none",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "$columns(\n    'Perror %sat %sigcomb',\n    avg(Perror) Perror)\nFROM $table\nWHERE\n    sat = '$satgraph'\n    AND sigcomb IN ($sigcomb)",
+          "rawQuery": "SELECT t, groupArray((concat('Perror ', sat, ' ', sigcomb), Perror)) AS groupArr FROM ( SELECT (intDiv(time, (1)) * (1)) AS t, sat, sigcomb, avg(Perror) Perror FROM computed.xz1\nWHERE \"d\" >= toDate(1736600684) AND \"d\" <= toDate(1736600858) AND time >= toUInt64(1736600684 * 1000) AND time <= toUInt64(1736600858 * 1000) AND\n    sat = 'GPS6'\n    AND sigcomb IN ('L1CA+L2C','L1CA+L2P_codeless','L1CA+L5Q') GROUP BY t, sat, sigcomb ORDER BY t, sat, sigcomb) GROUP BY t ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "xz1",
+          "tableLoading": false
+        }
+      ],
+      "title": "Вероятность ошибки",
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 25
+        "y": 31
       },
       "id": 34,
       "panels": [],
@@ -1309,7 +1469,7 @@
         "h": 16,
         "w": 12,
         "x": 0,
-        "y": 26
+        "y": 32
       },
       "heatmap": true,
       "heatmapField": "S4",
@@ -1403,7 +1563,7 @@
         "h": 16,
         "w": 12,
         "x": 12,
-        "y": 26
+        "y": 32
       },
       "id": 35,
       "links": [],
@@ -1550,7 +1710,7 @@
       "type": "geomap"
     }
   ],
-  "refresh": "",
+  "refresh": false,
   "schemaVersion": 38,
   "style": "dark",
   "tags": [],
@@ -1558,9 +1718,10 @@
     "list": [
       {
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "GPS5",
-          "value": "GPS5"
+          "text": "None",
+          "value": ""
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -1585,9 +1746,10 @@
       },
       {
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "GPS5",
-          "value": "GPS5"
+          "text": "None",
+          "value": ""
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -1612,9 +1774,10 @@
       },
       {
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "L1CA",
-          "value": "L1CA"
+          "text": "None",
+          "value": ""
         },
         "datasource": {
           "type": "vertamedia-clickhouse-datasource",
@@ -1730,6 +1893,6 @@
   "timezone": "",
   "title": "Суточный мониторинг",
   "uid": "0F2yyfCWz3",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
