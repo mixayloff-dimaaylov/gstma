@@ -6,7 +6,6 @@ Apache Spark, и прочее вспомогательное ПО.
 ## Дочерние репозитории
 
 - [NovAtelLogReader][NovAtelLogReader]
-- [logserver-spark][logserver-spark]
 - [clickhouse-grafana][clickhouse-grafana]
 - [satmap-panel][satmap-panel]
 
@@ -72,6 +71,5 @@ docker-compose --profile default up -d
 
 [clickhouse-grafana]: https://github.com/mixayloff-dimaaylov/clickhouse-grafana
 [docs]: ./docs/appnotes/
-[logserver-spark]: https://github.com/mixayloff-dimaaylov/logserver-spark
 [NovAtelLogReader]: https://github.com/mixayloff-dimaaylov/NovAtelLogReader
 [satmap-panel]: https://github.com/mixayloff-dimaaylov/satmap-panel
