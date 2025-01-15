@@ -306,6 +306,9 @@ CREATE TABLE computed.xz1 (
     Fk Float64 COMMENT 'Значение полосы когерентности',
     Fc Float64 COMMENT 'Значение интервала частотной корреляции',
     Pc Float64 COMMENT 'Значение интервала пространственной корреляции',
+    eta_ch Float64 COMMENT 'Степени ЧСЗ',
+    eta_d Float64 COMMENT 'Степени ДИ',
+    eta_m Float64 COMMENT 'Степени МСИ',
     Perror Float64 COMMENT 'Значение вероятности ошибки',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 

@@ -504,9 +504,15 @@ object TecCalculationV2 extends Serializable {
         .withColumn("Fk", Fk($"sigPhi", $"f0"))
         .withColumn("Fc", fc($"sigPhi", $"f0"))
         .withColumn("Pc", pc($"sigPhi"))
-        .withColumn("Perror", Perror($"R_T", $"B_S", $"cno1", $"gamma", $"Fd", $"Fk"))
+        .withColumn("T_S", lit(1.0) / $"R_T")
+        .withColumn("F_0", $"B_S" / $"T_S")
+        .withColumn("eta_ch", eta_ch($"F_0", $"Fk"))
+        .withColumn("eta_d", eta_d($"F_0", $"Fd"))
+        .withColumn("eta_m", eta_m($"T_S", $"Fk"))
+        .withColumn("Perror", Perror($"cno1", $"gamma", $"eta_ch", $"eta_d", $"eta_m"))
         .select("time", "sat", "sigcomb", "f1", "f2",
-                "sigNT", "sigPhi", "gamma", "Fd", "Fk", "Fc", "Pc", "Perror")
+          "sigNT", "sigPhi", "gamma", "Fd", "Fk", "Fc", "Pc",
+          "eta_ch", "eta_d", "eta_m", "Perror")
 
     jdbcSink(xz1, "computed.xz1").start()
 

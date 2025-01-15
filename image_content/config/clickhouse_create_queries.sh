@@ -286,6 +286,9 @@ CREATE TABLE IF NOT EXISTS computed.xz1 (
   Fk Float64,
   Fc Float64,
   Pc Float64,
+  eta_ch Float64,
+  eta_d Float64,
+  eta_m Float64,
   Perror Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree()
