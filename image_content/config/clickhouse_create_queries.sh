@@ -319,3 +319,14 @@ CREATE TABLE IF NOT EXISTS misc.sdcb (
 ORDER BY (system, sat, sigcomb)
 SETTINGS index_granularity=8192
 EOL123
+
+clickhouse-client <<EOL123
+CREATE TABLE IF NOT EXISTS misc.target_signal_params (
+    f0 Float64 COMMENT 'Частота исследуемого сигнала, Гц',
+    sigPhiCoef Float64 DEFAULT 1 COMMENT 'Коэффициент повышения СКО флуктуации фазы (для отладки), Разы',
+    R_T Float64 COMMENT 'Скорость передачи информации, бит/с',
+    B_S Float64 COMMENT 'База сигнала'
+) ENGINE = ReplacingMergeTree
+ORDER BY (f0)
+SETTINGS index_granularity=8192
+EOL123

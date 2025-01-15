@@ -289,6 +289,17 @@ object TecCalculationV2 extends Serializable {
         })
     }
 
+    // Target signal parameters
+    val sc = spark.sqlContext;
+    val sig_params = sc.read.jdbc(
+      jdbcUri,
+      s"""
+         |(SELECT * FROM misc.target_signal_params
+         |FINAL)
+        """.stripMargin,
+      jdbcProps
+    )
+
     // Data plans
 
     val ismdetobsStream = createKafkaStream("datapoint-raw-ismdetobs").load()
@@ -486,13 +497,14 @@ object TecCalculationV2 extends Serializable {
           stddev_pop($"delNT").as("sigNT"),
           avg($"avgNT").as("avgNT"),
           avg($"cno1").as("cno1"))
-        .withColumn("sigPhi", sigPhi($"sigNT", $"f1"))
+        .join(sig_params)
+        .withColumn("sigPhi", $"sigPhiCoef" * sigPhi($"sigNT", $"f0"))
         .withColumn("gamma", gamma($"sigPhi"))
-        .withColumn("Fd", Fd($"avgNT", $"f1"))
-        .withColumn("Fk", Fk($"sigPhi", $"f1"))
-        .withColumn("Fc", fc($"sigPhi", $"f1"))
+        .withColumn("Fd", Fd($"avgNT", $"f0"))
+        .withColumn("Fk", Fk($"sigPhi", $"f0"))
+        .withColumn("Fc", fc($"sigPhi", $"f0"))
         .withColumn("Pc", pc($"sigPhi"))
-        .withColumn("Perror", Perror($"cno1", $"gamma", $"Fd", $"Fk"))
+        .withColumn("Perror", Perror($"R_T", $"B_S", $"cno1", $"gamma", $"Fd", $"Fk"))
         .select("time", "sat", "sigcomb", "f1", "f2",
                 "sigNT", "sigPhi", "gamma", "Fd", "Fk", "Fc", "Pc", "Perror")
 

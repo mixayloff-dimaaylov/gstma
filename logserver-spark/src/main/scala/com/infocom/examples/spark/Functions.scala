@@ -303,10 +303,8 @@ object Functions extends Serializable {
   }
 
   def Perror: UserDefinedFunction = udf {
-    (h2: Double, gamma2: Double, F_d: Double, F_k: Double) => {
-      val R_T = 2.7 * 1e3
+    (R_T: Double, B_S: Double, h2: Double, gamma2: Double, F_d: Double, F_k: Double) => {
       val T_S = 1.0 / R_T
-      val B_S = 1.0
       val F_0 = B_S / T_S
 
       P_err(h2, gamma2,
