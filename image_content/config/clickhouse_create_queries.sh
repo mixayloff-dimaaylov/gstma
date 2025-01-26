@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# v20
+# v21
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata

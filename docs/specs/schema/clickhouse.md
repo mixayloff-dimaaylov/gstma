@@ -1,4 +1,4 @@
-ClickHouse database layout v20
+ClickHouse database layout v21
 ================================
 
 ## Таблицы для входных данных
