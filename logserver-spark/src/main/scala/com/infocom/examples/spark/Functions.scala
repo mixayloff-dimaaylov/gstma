@@ -279,8 +279,8 @@ object Functions extends Serializable {
    */
   def eta_d: UserDefinedFunction = udf {
     (_F_0: Double, _F_d: Double) => {
-      val _v = (_F_0 / _F_d)
-      val _C_2 = fresnel_C(_v)
+      val _v = ns.power(_F_0 / _F_d, 2)
+      val _C_2 = fresnel_C(sqrt(2 * _v / Pi))
 
       (Pi * (_C_2 * _C_2)) / (2.0 * _v)
     }
