@@ -1,0 +1,14 @@
+### Sbt & Ivy build cache
+./target/
+./assembly/target/
+
+### Ammonite REPL ###
+.ammonite/
+
+### Bloop ###
+.bloop/
+
+### Metals LSP ###
+.metals/
+.project/metals.sbt
+metals.sbt
