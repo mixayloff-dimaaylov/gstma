@@ -1,7 +1,3 @@
-[submodule "logserver-spark"]
-	path = logserver-spark
-	url = https://github.com/mixayloff-dimaaylov/logserver-spark
-	branch = master
 [submodule "clickhouse-grafana"]
 	path = clickhouse-grafana
 	url = https://github.com/mixayloff-dimaaylov/clickhouse-grafana
