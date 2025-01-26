@@ -7,17 +7,22 @@
 - **dependencies:** Обновление Grafana с `9.1.3` до `9.5.1`
   ([#58](https://github.com/mixayloff-dimaaylov/gstma/pull/58))
 
-- **breaking(API):** Версия таблиц ClickHouse обновлена с 16.1 до 19
+- **breaking(API):** Версия таблиц ClickHouse обновлена с 16.1 до 20
   ([#60](https://github.com/mixayloff-dimaaylov/gstma/pull/60),
   [#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62),
-  [#68](https://github.com/mixayloff-dimaaylov/gstma/pull/68))
+  [#68](https://github.com/mixayloff-dimaaylov/gstma/pull/68),
+  [#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75))
+
+- **logserver-spark:** Получение параметров исследуемого сигнала из ClickHouse
+  ([#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75))
 
 - **docs:** Добавлена справка по использованию Monocker для мониторинга
   состояния кластера в Telegram
   ([#65](https://github.com/mixayloff-dimaaylov/gstma/pull/65))
 
 - **docs:** Добавлен блокнот расчетов помехоустойчивости
-  ([#66](https://github.com/mixayloff-dimaaylov/gstma/pull/66))
+  ([#66](https://github.com/mixayloff-dimaaylov/gstma/pull/66),
+  [#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75))
 
 ### Added
 
@@ -43,6 +48,12 @@
 - **jupyter:** Установлены pylsp, MyPy и Git-клиент для удобства работы
   ([#73](https://github.com/mixayloff-dimaaylov/gstma/pull/73))
 
+- **jupyter:** Добавлен скрипт Графики вероятности ошибки (Scala)
+  ([#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75))
+
+- **jupyter:** Добавлен скрипт Рисование графиков в Scala + JupyterLab
+  ([#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75))
+
 - **utils:** Добавлен скрипт для выгрузки данных в формате Parquet
   ([#69](https://github.com/mixayloff-dimaaylov/gstma/pull/69),
    [#71](https://github.com/mixayloff-dimaaylov/gstma/pull/71))
@@ -63,6 +74,11 @@
 - **logserver-spark:** Добавлены колонки `geopointStr`, `ionpointStr` со
   строковым GeoHash в таблице `rawdata.satxyz2` для работы плагина Grafana
   GeoMap ([#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62))
+
+- **logserver-spark:** Добавлен расчет вероятности ошибки $P_{error}$ с учетом
+  $\eta_ч$, $\eta_д$, $\eta_м$. Расчет полос когенетности ($F_к$),
+  дисперсионности ($F_д$)
+  ([#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75))
 
 ### Fixed
 

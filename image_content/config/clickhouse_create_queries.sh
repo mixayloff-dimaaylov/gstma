@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# v19
+# v20
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
@@ -282,8 +282,11 @@ CREATE TABLE IF NOT EXISTS computed.xz1 (
   sigNT Float64,
   sigPhi Float64,
   gamma Float64,
+  Fd Float64,
+  Fk Float64,
   Fc Float64,
   Pc Float64,
+  Perror Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree()
 PARTITION BY toYYYYMM(d)
