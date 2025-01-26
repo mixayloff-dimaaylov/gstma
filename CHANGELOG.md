@@ -13,6 +13,9 @@
   [#68](https://github.com/mixayloff-dimaaylov/gstma/pull/68),
   [#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75))
 
+- **breaking(logserver-spark):** Использование поддерева (git-subtree)
+  ([#76](https://github.com/mixayloff-dimaaylov/gstma/pull/76))
+
 - **logserver-spark:** Получение параметров исследуемого сигнала из ClickHouse
   ([#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75))
 
