@@ -11,13 +11,15 @@
   ([#60](https://github.com/mixayloff-dimaaylov/gstma/pull/60),
   [#62](https://github.com/mixayloff-dimaaylov/gstma/pull/62),
   [#68](https://github.com/mixayloff-dimaaylov/gstma/pull/68),
-  [#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75))
+  [#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75),
+  [#77](https://github.com/mixayloff-dimaaylov/gstma/pull/77))
 
 - **breaking(logserver-spark):** Использование поддерева (git-subtree)
   ([#76](https://github.com/mixayloff-dimaaylov/gstma/pull/76))
 
 - **logserver-spark:** Получение параметров исследуемого сигнала из ClickHouse
-  ([#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75))
+  ([#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75),
+  [#77](https://github.com/mixayloff-dimaaylov/gstma/pull/77))
 
 - **docs:** Добавлена справка по использованию Monocker для мониторинга
   состояния кластера в Telegram
@@ -81,7 +83,8 @@
 - **logserver-spark:** Добавлен расчет вероятности ошибки $P_{error}$ с учетом
   $\eta_ч$, $\eta_д$, $\eta_м$. Расчет полос когенетности ($F_к$),
   дисперсионности ($F_д$)
-  ([#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75))
+  ([#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75),
+  [#77](https://github.com/mixayloff-dimaaylov/gstma/pull/77))
 
 ### Fixed
 
