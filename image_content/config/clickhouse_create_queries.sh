@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# v20
+# v21
 
 clickhouse-client <<EOL123
 CREATE DATABASE IF NOT EXISTS rawdata
@@ -286,6 +286,9 @@ CREATE TABLE IF NOT EXISTS computed.xz1 (
   Fk Float64,
   Fc Float64,
   Pc Float64,
+  eta_ch Float64,
+  eta_d Float64,
+  eta_m Float64,
   Perror Float64,
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree()
@@ -317,5 +320,16 @@ CREATE TABLE IF NOT EXISTS misc.sdcb (
     sdcb Float64 COMMENT 'Поправка TEC SDCB'
 ) ENGINE = ReplacingMergeTree()
 ORDER BY (system, sat, sigcomb)
+SETTINGS index_granularity=8192
+EOL123
+
+clickhouse-client <<EOL123
+CREATE TABLE IF NOT EXISTS misc.target_signal_params (
+    f0 Float64 COMMENT 'Частота исследуемого сигнала, Гц',
+    sigPhiCoef Float64 DEFAULT 1 COMMENT 'Коэффициент повышения СКО флуктуации фазы (для отладки), Разы',
+    R_T Float64 COMMENT 'Скорость передачи информации, бит/с',
+    B_S Float64 COMMENT 'База сигнала'
+) ENGINE = ReplacingMergeTree
+ORDER BY (f0)
 SETTINGS index_granularity=8192
 EOL123

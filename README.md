@@ -58,13 +58,26 @@ services:
       WEBDRIVER_TZ: 'Europe/Moscow'
 ```
 
-3. Запустить кластер 
+3. Создать БД и указать параметры исследуемого сигнала
+
+```sh
+docker-compose --profile default up -d clickhouse
+docker-compose --profile default exec clickhouse{,-client}
+```
+
+Выполнить запись параметров в SQL-консоли:
+
+```sql
+INSERT INTO misc.target_signal_params (f0, sigPhiCoef, R_T, B_S) Values (1.6e9, 2, 64e3, 1)
+```
+
+4. Запустить кластер
 
 ```sh
 docker-compose --profile default up -d
 ```
 
-4. Установить NovAtelLogReader и направить трафик вычислительному кластеру по
+5. Установить NovAtelLogReader и направить трафик вычислительному кластеру по
    указанному адресу
 
 Дополнительная документация по развертыванию в папке [docs/appnotes/][docs].

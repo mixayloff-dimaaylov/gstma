@@ -1,4 +1,4 @@
-ClickHouse database layout v20
+ClickHouse database layout v21
 ================================
 
 ## Таблицы для входных данных
@@ -306,6 +306,9 @@ CREATE TABLE computed.xz1 (
     Fk Float64 COMMENT 'Значение полосы когерентности',
     Fc Float64 COMMENT 'Значение интервала частотной корреляции',
     Pc Float64 COMMENT 'Значение интервала пространственной корреляции',
+    eta_ch Float64 COMMENT 'Степени ЧСЗ',
+    eta_d Float64 COMMENT 'Степени ДИ',
+    eta_m Float64 COMMENT 'Степени МСИ',
     Perror Float64 COMMENT 'Значение вероятности ошибки',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192) 
@@ -402,5 +405,20 @@ CREATE TABLE IF NOT EXISTS misc.dcb (
     dcb Float64 COMMENT 'Поправка TEC DCB'
 ) ENGINE = ReplacingMergeTree()
 ORDER BY (system, sat, sigcomb)
+SETTINGS index_granularity=8192
+```
+
+### `misc.target_signal_params`
+
+Параметры исследуемого сигнала
+
+```sql
+CREATE TABLE IF NOT EXISTS misc.target_signal_params (
+    f0 Float64 COMMENT 'Частота исследуемого сигнала, Гц',
+    sigPhiCoef Float64 DEFAULT 1 COMMENT 'Коэффициент повышения СКО флуктуации фазы (для отладки), Разы',
+    R_T Float64 COMMENT 'Скорость передачи информации, бит/с',
+    B_S Float64 COMMENT 'База сигнала'
+) ENGINE = ReplacingMergeTree
+ORDER BY (f0)
 SETTINGS index_granularity=8192
 ```
