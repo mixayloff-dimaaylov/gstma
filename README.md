@@ -9,7 +9,7 @@ Apache Spark, и прочее вспомогательное ПО.
 - [clickhouse-grafana][clickhouse-grafana]
 - [satmap-panel][satmap-panel]
 
-## Установка через docker-compose
+## Установка через docker compose
 
 По-умолчанию compose-файл реализует простой кластер. Чтобы его запустить
 необходимо:
@@ -19,7 +19,7 @@ Apache Spark, и прочее вспомогательное ПО.
 ```sh
 git clone --recurse-submodules https://github.com/mixayloff-dimaaylov/gstma.git
 cd gstma/
-docker-compose --profile default build
+docker compose --profile default build
 ```
 
 2. Указать настройки для кластера
@@ -61,8 +61,8 @@ services:
 3. Создать БД и указать параметры исследуемого сигнала
 
 ```sh
-docker-compose --profile default up -d clickhouse
-docker-compose --profile default exec clickhouse{,-client}
+docker compose --profile default up -d clickhouse
+docker compose --profile default exec clickhouse{,-client}
 ```
 
 Выполнить запись параметров в SQL-консоли:
@@ -74,7 +74,7 @@ INSERT INTO misc.target_signal_params (f0, sigPhiCoef, R_T, B_S) Values (1.6e9, 
 4. Запустить кластер
 
 ```sh
-docker-compose --profile default up -d
+docker compose --profile default up -d
 ```
 
 5. Установить NovAtelLogReader и направить трафик вычислительному кластеру по

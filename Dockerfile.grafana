@@ -43,7 +43,7 @@ RUN env GOCACHE="/go-cache" RUN_TESTS="${RUN_TESTS:-.+}" && \
 FROM node:lts as build-datasource-frontend
 WORKDIR '/home/node/clickhouse-grafana/'
 COPY --from=build-datasource-backend /go/src/grafana-clickhouse .
-RUN if [ "3" -eq `ls -la ./node_modules/ | wc -l` ]; then npm install --production=false; fi && \
+RUN npm install --production=false && \
     npm run build:prod && \
     npm run test:docker
 
