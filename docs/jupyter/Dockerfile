@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM jupyter/pyspark-notebook:spark-3.3.1
+FROM jupyter/pyspark-notebook@sha256:7c60360e8592f4f5b895bfa286c2d914a2fa30d715a51946a7dd1e362d4d6b0e
 
 # Install Almond kernel
 
