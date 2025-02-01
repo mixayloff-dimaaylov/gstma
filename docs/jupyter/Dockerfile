@@ -42,4 +42,5 @@ USER $NB_USER
 # git, jupyterlab-lsp already installed
 COPY environment.yaml /tmp
 RUN mamba env update -f=/tmp/environment.yaml && \
-    jupyter labextension install jupyterlab-plotly
+    jupyter labextension install jupyterlab-plotly && \
+    jupytext-config set-default-viewer
