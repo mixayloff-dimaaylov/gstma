@@ -40,6 +40,6 @@ USER $NB_USER
 
 # Install JupyterLab extensions
 # git, jupyterlab-lsp already installed
-RUN mamba install -y -c conda-forge jupyterlab-git jupyterlab-lsp python-lsp-server \
-    pylsp-mypy && \
+COPY environment.yaml /tmp
+RUN mamba env update -f=/tmp/environment.yaml && \
     jupyter labextension install jupyterlab-plotly
