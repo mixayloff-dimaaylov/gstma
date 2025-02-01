@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM jupyter/pyspark-notebook:spark-3.3.1
+FROM jupyter/pyspark-notebook@sha256:7c60360e8592f4f5b895bfa286c2d914a2fa30d715a51946a7dd1e362d4d6b0e
 
 # Install Almond kernel
 
@@ -40,6 +40,7 @@ USER $NB_USER
 
 # Install JupyterLab extensions
 # git, jupyterlab-lsp already installed
-RUN mamba install -y -c conda-forge jupyterlab-git jupyterlab-lsp python-lsp-server \
-    pylsp-mypy && \
-    jupyter labextension install jupyterlab-plotly
+COPY environment.yaml /tmp
+RUN mamba env update -f=/tmp/environment.yaml && \
+    jupyter labextension install jupyterlab-plotly && \
+    jupytext-config set-default-viewer

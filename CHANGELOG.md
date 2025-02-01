@@ -29,6 +29,10 @@
   ([#66](https://github.com/mixayloff-dimaaylov/gstma/pull/66),
   [#75](https://github.com/mixayloff-dimaaylov/gstma/pull/75))
 
+- **jupyter:** Использование плагина Jupytext, чтобы упростить работу с
+  Jupyter-блокнотами
+  ([#79](https://github.com/mixayloff-dimaaylov/gstma/pull/79))
+
 ### Added
 
 - **grafana:** Добавлена поддержку тепловых карт плагина GeoMap, официальный
@@ -97,6 +101,9 @@
 
 - **grafana:** Проблемы производительности дашборда TEC
   ([#74](https://github.com/mixayloff-dimaaylov/gstma/pull/74))
+
+- **jupyter:** Фиксация версий JupyterLab и его пакетов для воспроизводимости
+  ([#79](https://github.com/mixayloff-dimaaylov/gstma/pull/79))
 
 ### Removed
 
