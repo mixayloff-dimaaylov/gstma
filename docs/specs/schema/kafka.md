@@ -32,28 +32,28 @@ GISTM-приёмника NovAtel GPStation-6 через Apach Kafka.
 
 Топик лога `ISMREDOBS`.
 
-[AVRO-схема сообщения](./avro/datapoint-raw-ismrawtec.avsc)
+[AVRO-схема сообщения](./avro/datapoint-raw-ismredobs.avsc)
 
 ### datapoint-raw-psrpos
 
 Топик лога `PSRPOS`.
 
-[AVRO-схема сообщения](./avro/datapoint-raw-ismrawtec.avsc)
+[AVRO-схема сообщения](./avro/datapoint-raw-psrpos.avsc)
 
 ### datapoint-raw-range
 
 Топик лога `RANGE`.
 
-[AVRO-схема сообщения](./avro/datapoint-raw-ismrawtec.avsc)
+[AVRO-схема сообщения](./avro/datapoint-raw-range.avsc)
 
 ### datapoint-raw-satvis
 
 Топик лога `SATVIS`.
 
-[AVRO-схема сообщения](./avro/datapoint-raw-ismrawtec.avsc)
+[AVRO-схема сообщения](./avro/datapoint-raw-satvis.avsc)
 
 ### datapoint-raw-satxyz2
 
 Топик лога `SATXYZ2`.
 
-[AVRO-схема сообщения](./avro/datapoint-raw-ismrawtec.avsc)
+[AVRO-схема сообщения](./avro/datapoint-raw-satxyz2.avsc)
