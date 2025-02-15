@@ -338,7 +338,7 @@ TTL d + INTERVAL 1 MONTH DELETE
 Источник: *rawdata.range*  
 Частота дискретизации: 1 Гц  
 
-*Примечание:* Эта S4 считается для частот, а не для их комбинаций.  
+*Примечание:* Эта $S_4$ считается для частот, а не для их комбинаций.  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -358,7 +358,7 @@ TTL d + INTERVAL 1 MONTH DELETE
 Источник: *rawdata.ismdetobs*  
 Частота дискретизации: 1 Гц  
 
-*Примечание:* Эта S4 считается для частот, а не для их комбинаций.  
+*Примечание:* Эта $S_4$ считается для частот, а не для их комбинаций.  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -402,7 +402,7 @@ CREATE TABLE IF NOT EXISTS misc.dcb (
     sat String COMMENT 'Спутник',
     system String COMMENT 'Навигационная система',
     sigcomb String COMMENT 'Комбинация сигналов',
-    dcb Float64 COMMENT 'Поправка TEC DCB'
+    sdcb Float64 COMMENT 'Поправка TEC DCB'
 ) ENGINE = ReplacingMergeTree()
 ORDER BY (system, sat, sigcomb)
 SETTINGS index_granularity=8192
