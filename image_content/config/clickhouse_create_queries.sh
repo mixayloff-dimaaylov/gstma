@@ -316,7 +316,7 @@ clickhouse-client <<EOL123
 CREATE TABLE IF NOT EXISTS misc.sdcb (
     sat String COMMENT 'Спутник',
     system String COMMENT 'Навигационная система',
-    sigcomb String COMMENT 'Частота передатчика',
+    sigcomb String COMMENT 'Комбинация сигналов',
     sdcb Float64 COMMENT 'Поправка TEC SDCB'
 ) ENGINE = ReplacingMergeTree()
 ORDER BY (system, sat, sigcomb)

@@ -14,16 +14,16 @@ ClickHouse database layout v21
 
 ```sql
 CREATE TABLE rawdata.range (
-  time UInt64,
-  adr Float64,
-  psr Float64,
-  cno Float64,
-  locktime Float64,
-  sat String,
-  system String,
-  freq String,
-  glofreq Int32,
-  prn Int32,
+  time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+  adr Float64 COMMENT 'Псевдодальность',
+  psr Float64 COMMENT 'Псевдофаза',
+  cno Float64 COMMENT 'Отношение сигнал / шум',
+  locktime Float64 COMMENT 'Время непрерывного слежения за спутником',
+  sat String COMMENT 'Спутник',
+  system String COMMENT 'Навигационная система',
+  freq String COMMENT 'Метка частоты сигнала',
+  glofreq Int32 COMMENT 'Частота сигнала в GLONASS',
+  prn Int32 COMMENT 'Номер космического аппарата в спутниковой системе (группировке)',
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree(d, (time, sat, freq), 8192)
 TTL d + INVERVAL 24 HOUR DELETE
@@ -38,13 +38,13 @@ TTL d + INVERVAL 24 HOUR DELETE
 
 ```sql
 CREATE TABLE IF NOT EXISTS rawdata.ismredobs (
-  time UInt64,
-  totals4 Float64,
-  sat String,
-  system String,
-  freq String,
-  glofreq Int32,
-  prn Int32,
+  time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+  totals4 Float64 COMMENT 'Индекс мерцаний, посчитанный по формуле totals4',
+  sat String COMMENT 'Спутник',
+  system String COMMENT 'Навигационная система',
+  freq String COMMENT 'Метка частоты сигнала',
+  glofreq Int32 COMMENT 'Частота сигнала в GLONASS',
+  prn Int32 COMMENT 'Номер космического аппарата в спутниковой системе (группировке)',
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
@@ -62,13 +62,13 @@ SETTINGS index_granularity=8192
 
 ```sql
 CREATE TABLE IF NOT EXISTS rawdata.ismdetobs (
-  time UInt64,
-  power Float64,
-  sat String,
-  system String,
-  freq String,
-  glofreq Int32,
-  prn Int32,
+  time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+  power Float64 COMMENT 'Мощность сигнала',
+  sat String COMMENT 'Спутник',
+  system String COMMENT 'Навигационная система',
+  freq String COMMENT 'Метка частоты сигнала',
+  glofreq Int32 COMMENT 'Частота сигнала в GLONASS',
+  prn Int32 COMMENT 'Номер космического аппарата в спутниковой системе (группировке)',
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
@@ -86,14 +86,14 @@ SETTINGS index_granularity=8192
 
 ```sql
 CREATE TABLE IF NOT EXISTS rawdata.ismrawtec (
-  time UInt64,
-  tec Float64,
-  sat String,
-  system String,
-  primaryfreq String,
-  secondaryfreq String,
-  glofreq Int32,
-  prn Int32,
+  time UInt64 COMMENT 'Метка времени (timestamp в ms)',
+  tec Float64 COMMENT 'Полное электронное содержание',
+  sat String COMMENT 'Спутник',
+  system String COMMENT 'Навигационная система',
+  primaryfreq String COMMENT 'Первая частота, текстовая метка',
+  secondaryfreq String COMMENT 'Вторая частота, текстовая метка',
+  glofreq Int32 COMMENT 'Частота сигнала в GLONASS',
+  prn Int32 COMMENT 'Номер космического аппарата в спутниковой системе (группировке)',
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree()
 PARTITION BY toYYYYMM(d)
@@ -111,15 +111,15 @@ SETTINGS index_granularity=8192
 
 ```sql
 CREATE TABLE rawdata.satxyz2 (
-  time UInt64,
+  time UInt64 COMMENT 'Метка времени (timestamp в ms)',
   geopoint UInt64,
   geopointStr String COMMENT Подспутниковая точка в формате строкового GeoHash,
   ionpoint UInt64,
   ionpointStr String COMMENT Подионосферная точка в формате строкового GeoHash,
   elevation Float64,
-  sat String,
-  system String,
-  prn Int32,
+  sat String COMMENT 'Спутник',
+  system String COMMENT 'Навигационная система',
+  prn Int32 COMMENT 'Номер космического аппарата в спутниковой системе (группировке)',
   d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = MergeTree(d, (time, sat), 8192)
 TTL d + INVERVAL 24 HOUR DELETE
@@ -338,7 +338,7 @@ TTL d + INTERVAL 1 MONTH DELETE
 Источник: *rawdata.range*  
 Частота дискретизации: 1 Гц  
 
-*Примечание:* Эта S4 считается для частот, а не для их комбинаций.  
+*Примечание:* Эта $S_4$ считается для частот, а не для их комбинаций.  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -347,7 +347,7 @@ CREATE TABLE computed.s4cno (
     time UInt64 COMMENT 'Метка времени (timestamp в ms)',
     sat String COMMENT 'Спутник',
     freq String COMMENT 'Частота, для которой рассчитано значение',
-    s4 Float64 COMMENT 'S4 cno,
+    s4 Float64 COMMENT 'S4 cno',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, freq), 8192)
 TTL d + INTERVAL 1 MONTH DELETE
@@ -358,7 +358,7 @@ TTL d + INTERVAL 1 MONTH DELETE
 Источник: *rawdata.ismdetobs*  
 Частота дискретизации: 1 Гц  
 
-*Примечание:* Эта S4 считается для частот, а не для их комбинаций.  
+*Примечание:* Эта $S_4$ считается для частот, а не для их комбинаций.  
 
 *Примечание:* для поддержки TTL необходима версия clickhouse>=19.6(1.1.54370)
 
@@ -401,8 +401,8 @@ TTL d + INTERVAL 1 MONTH DELETE
 CREATE TABLE IF NOT EXISTS misc.dcb (
     sat String COMMENT 'Спутник',
     system String COMMENT 'Навигационная система',
-    sigcomb String COMMENT 'Частота передатчика',
-    dcb Float64 COMMENT 'Поправка TEC DCB'
+    sigcomb String COMMENT 'Комбинация сигналов',
+    sdcb Float64 COMMENT 'Поправка TEC DCB'
 ) ENGINE = ReplacingMergeTree()
 ORDER BY (system, sat, sigcomb)
 SETTINGS index_granularity=8192
