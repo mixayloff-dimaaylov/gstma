@@ -16,19 +16,17 @@
 
 package com.infocom.examples.spark
 
-import java.nio.file.{Files, Paths}
-import java.util.{Properties, UUID}
-
 import scala.math
+import scala.util.{Try,Success}
 
+import com.typesafe.config.Config
 import org.apache.spark.sql._
-import org.apache.spark.sql.avro.functions.from_avro
-import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.streaming.{GroupStateTimeout, OutputMode, GroupState}
-import org.apache.spark.SparkConf
+import org.tupol.spark._
 
-import com.infocom.examples.spark.StreamFunctions
+import java.util.Properties
+
 import Functions._
 
 /* Private RDDs */
@@ -92,16 +90,20 @@ private case class RangeDerNT (
   delNt: Double)
     extends Serializable
 
+case class AppContextTecCalculationV2 (
+  spark: SparkSession,
+  jdbcUri: String,
+  jdbcProps: Properties,
+  rangeDeser: DataFrame,
+  satxyz2Deser: DataFrame,
+  ismdetobsDeser: DataFrame,
+  sig_params: DataFrame
+)
+
 /**
  * Created by mixayloff-dimaaylov on 07.03.2023.
  */
-object TecCalculationV2 extends Serializable {
-  private val ismdetobsSchemaPath = "/spark/avro-schemas/ismdetobs.avsc"
-  private val ismrawtecSchemaPath = "/spark/avro-schemas/ismrawtec.avsc"
-  private val ismredobsSchemaPath = "/spark/avro-schemas/ismredobs.avsc"
-  private val rangeSchemaPath = "/spark/avro-schemas/range.avsc"
-  private val satxyz2SchemaPath = "/spark/avro-schemas/satxyz2.avsc"
-
+object TecCalculationV2 extends Serializable with SparkRunnable[AppContextTecCalculationV2, Unit] {
   // implicit val RangeNTEncoder: Encoder[RangeNT] =
   //   Encoders.kryo[RangeNT]
   @transient implicit val dntEstimatorEncoder: Encoder[DNTEstimator] =
@@ -186,217 +188,30 @@ object TecCalculationV2 extends Serializable {
     res.iterator
   }
 
-  private def readSchemaFile(path: String): String = {
-    new String(Files.readAllBytes(Paths.get(path)))
-  }
-
-  /* main */
-
-  def main(args: Array[String]): Unit = {
-    System.out.println("Run main")
-
-    if (args.length < 5) {
-      System.out.println("Wrong arguments")
-      printHelp()
-      System.exit(1)
-    }
-
-    if (args.length > 5) {
-      System.out.println("Extra arguments")
-      printHelp()
-      System.exit(1)
-    }
-
-    val recLat = args(0).toDouble
-    val recLon = args(1).toDouble
-    val recAlt = args(2).toDouble
-
-    /* Definitions */
-    val sf = new StreamFunctions(recLat, recLon, recAlt)
-
-    def satGeoPoint: UserDefinedFunction
-      = udf[Long, Double, Double, Double](sf.satGeoPoint _)
-
-    def satGeoPointStr: UserDefinedFunction
-      = udf[String, Double, Double, Double](sf.satGeoPointStr _)
-
-    def satIonPoint: UserDefinedFunction
-      = udf[Long, Double, Double, Double](sf.satIonPoint _)
-
-    def satIonPointStr: UserDefinedFunction
-      = udf[String, Double, Double, Double](sf.satIonPointStr _)
-
-    def satElevation: UserDefinedFunction
-      = udf[Double, Double, Double, Double](sf.satElevation _)
-
-    val kafkaServerAddress = args(3)
-    val clickHouseServerAddress = args(4)
-    val jdbcUri = s"jdbc:clickhouse://$clickHouseServerAddress"
-    val clientUID = s"${UUID.randomUUID}"
-
-    // Read AVRO schemas
-    val ismdetobsSchema = readSchemaFile(ismdetobsSchemaPath)
-    val ismrawtecSchema = readSchemaFile(ismrawtecSchemaPath)
-    val ismredobsSchema = readSchemaFile(ismredobsSchemaPath)
-    val rangeSchema = readSchemaFile(rangeSchemaPath)
-    val satxyz2Schema = readSchemaFile(satxyz2SchemaPath)
-
-    val conf: SparkConf = new SparkConf().setAppName("GNSS TecCalculationV2")
-
-    val master = conf.getOption("spark.master")
-
-    if (master.isEmpty) {
-      conf.setMaster("local[*]")
-    }
-
-    conf.set("spark.sql.streaming.statefulOperator.checkCorrectness.enabled", "false")
-    System.out.println("Init conf")
-
-    val spark = SparkSession.builder.config(conf).getOrCreate()
-    spark.sparkContext.setLogLevel("WARN")
-    import spark.implicits._
-
-    // Sinks and Sources
-
-    def createKafkaStream(topic: String) = {
-      spark
-        .readStream
-        .format("kafka")
-        .option("kafka.bootstrap.servers", kafkaServerAddress)
-        .option("enable.auto.commit", (false: java.lang.Boolean))
-        .option("auto.offset.reset", "latest")
-        .option("failOnDataLoss", (false: java.lang.Boolean))
-        .option("group.id", s"gnss-stream-receiver-${clientUID}-${topic}")
-        .option("subscribe", topic)
-    }
-
-    // Ref: https://github.com/ClickHouse/clickhouse-java/issues/975
-    // Ref: https://github.com/ClickHouse/clickhouse-java/pull/1008#issuecomment-1303964814
-    val jdbcProps = new Properties()
-    jdbcProps.setProperty("isolationLevel", "NONE")
-    jdbcProps.setProperty("numPartitions", "1")
-    jdbcProps.setProperty("user", "default")
-    jdbcProps.setProperty("password", "")
-
-    def jdbcSink(stream: DataFrame, tableName: String) = {
-      stream
-        .writeStream
-        .queryName(tableName)
-        .foreachBatch((batchDF: DataFrame, batchId: Long) => {
-          batchDF.write.mode("append")
-            .jdbc(jdbcUri, tableName, jdbcProps)
-          ()
-        })
-    }
-
-    // Target signal parameters
-    val sc = spark.sqlContext;
-    val sig_params = sc.read.jdbc(
-      jdbcUri,
-      s"""
-         |(SELECT * FROM misc.target_signal_params
-         |FINAL)
-        """.stripMargin,
-      jdbcProps
-    )
-
+  override def run(implicit spark: SparkSession, context: AppContextTecCalculationV2): Try[Unit] = {
     // Data plans
 
-    val ismdetobsStream = createKafkaStream("datapoint-raw-ismdetobs").load()
-    val ismrawtecStream = createKafkaStream("datapoint-raw-ismrawtec").load()
-    val ismredobsStream = createKafkaStream("datapoint-raw-ismredobs").load()
-    val rangeStream     = createKafkaStream("datapoint-raw-range").load()
-    val satxyz2Stream   = createKafkaStream("datapoint-raw-satxyz2").load()
+    val outcome = appLogic(spark, context)
 
-    // Calculations (rawdata)
+    return outcome
+  }
 
-    val ismdetobsDeser =
-      ismdetobsStream
-        .select(from_avro($"value", ismdetobsSchema).as("array"))
-        .withColumn("point", explode($"array"))
-        .select(
-          $"point.Timestamp".as("time"),
-          $"point.NavigationSystem".as("system"),
-          $"point.SignalType".as("freq"),
-          $"point.Satellite".as("sat"),
-          $"point.Prn".as("prn"),
-          $"point.GloFreq".as("glofreq"),
-          $"point.Power".as("power"))
-
-    val ismrawtecDeser =
-      ismrawtecStream
-        .select(from_avro($"value", ismrawtecSchema).as("array"))
-        .withColumn("point", explode($"array"))
-        .select(
-          $"point.Timestamp".as("time"),
-          $"point.NavigationSystem".as("system"),
-          $"point.Satellite".as("sat"),
-          $"point.Prn".as("prn"),
-          $"point.GloFreq".as("glofreq"),
-          $"point.PrimarySignal".as("primaryfreq"),
-          $"point.SecondarySignal".as("secondaryfreq"),
-          $"point.Tec".as("tec"))
-
-    val ismredobsDeser =
-      ismredobsStream
-        .select(from_avro($"value", ismredobsSchema).as("array"))
-        .withColumn("point", explode($"array"))
-        .select(
-          $"point.Timestamp".as("time"),
-          $"point.NavigationSystem".as("system"),
-          $"point.SignalType".as("freq"),
-          $"point.Satellite".as("sat"),
-          $"point.Prn".as("prn"),
-          $"point.GloFreq".as("glofreq"),
-          $"point.TotalS4".as("totals4"))
-
-    val rangeDeser =
-      rangeStream
-        .select(from_avro($"value", rangeSchema).as("array"))
-        .withColumn("point", explode($"array"))
-        .select(
-          $"point.Timestamp".as("time"),
-          $"point.NavigationSystem".as("system"),
-          $"point.SignalType".as("freq"),
-          $"point.Satellite".as("sat"),
-          $"point.Prn".as("prn"),
-          $"point.GloFreq".as("glofreq"),
-          $"point.Psr".as("psr"),
-          $"point.Adr".as("adr"),
-          $"point.CNo".as("cno"),
-          $"point.LockTime".as("locktime"))
-
-    val satxyz2Deser =
-      satxyz2Stream
-        .select(from_avro($"value", satxyz2Schema).as("array"))
-        .withColumn("point", explode($"array"))
-        .select(
-          $"point.Timestamp".as("time"),
-          satGeoPoint($"point.X", $"point.Y", $"point.Z").as("geopoint"),
-          satGeoPointStr($"point.X", $"point.Y", $"point.Z").as("geopointStr"),
-          satIonPoint($"point.X", $"point.Y", $"point.Z").as("ionpoint"),
-          satIonPointStr($"point.X", $"point.Y", $"point.Z").as("ionpointStr"),
-          satElevation($"point.X", $"point.Y", $"point.Z").as("elevation"),
-          $"point.Satellite".as("sat"),
-          $"point.NavigationSystem".as("system"),
-          $"point.Prn".as("prn"))
-
-    jdbcSink(ismdetobsDeser, "rawdata.ismdetobs").start()
-    jdbcSink(ismrawtecDeser, "rawdata.ismrawtec").start()
-    jdbcSink(ismredobsDeser, "rawdata.ismredobs").start()
-    jdbcSink(rangeDeser, "rawdata.range").start()
-    jdbcSink(satxyz2Deser, "rawdata.satxyz2").start()
+  def appLogic(
+    spark: SparkSession,
+    context: AppContextTecCalculationV2
+  ): Try[Unit] = {
+    import spark.implicits._
 
     // Calculations (computed)
 
     /* watermark to prevent infinite caching on joins */
     val rangeTimestamped =
-      rangeDeser
+      context.rangeDeser
         .withColumn("ts", expr("timestamp_millis(time)"))
         .withWatermark("ts", "10 seconds")
 
     val satxyz2Timestamped =
-      satxyz2Deser
+      context.satxyz2Deser
         .withColumn("ts", expr("timestamp_millis(time)"))
         .withWatermark("ts", "10 seconds")
 
@@ -437,7 +252,7 @@ object TecCalculationV2 extends Serializable {
         .withColumn("nt", rawNt($"adr1", $"adr2", $"f1", $"f2", $"DNT"))
         .select("time", "sat", "sigcomb", "f1", "f2", "cno1", "cno2", "nt", "adrNt", "psrNt")
 
-    jdbcSink(
+    jdbcSink(context.jdbcUri, context.jdbcProps,
       rangeNT
         .select("time", "sat", "sigcomb", "f1", "f2", "nt", "adrNt", "psrNt"), "computed.NT").start()
 
@@ -478,7 +293,8 @@ object TecCalculationV2 extends Serializable {
           (sin($"c4.elevation") * $"c3.avgNT").as("avgNT"),
           (sin($"c4.elevation") * $"c3.delNT").as("delNT"))
 
-    jdbcSink(derivativesNTuncurved, "computed.NTDerivatives").start()
+    jdbcSink(context.jdbcUri, context.jdbcProps,
+      derivativesNTuncurved, "computed.NTDerivatives").start()
 
     // Sigma calculation
 
@@ -497,7 +313,7 @@ object TecCalculationV2 extends Serializable {
           stddev_pop($"delNT").as("sigNT"),
           avg($"avgNT").as("avgNT"),
           avg($"cno1").as("cno1"))
-        .join(sig_params)
+        .join(context.sig_params)
         .withColumn("sigPhi", $"sigPhiCoef" * sigPhi($"sigNT", $"f0"))
         .withColumn("gamma", gamma($"sigPhi"))
         .withColumn("Fd", Fd($"avgNT", $"f0"))
@@ -514,7 +330,8 @@ object TecCalculationV2 extends Serializable {
           "sigNT", "sigPhi", "gamma", "Fd", "Fk", "Fc", "Pc",
           "eta_ch", "eta_d", "eta_m", "Perror")
 
-    jdbcSink(xz1, "computed.xz1").start()
+    jdbcSink(context.jdbcUri, context.jdbcProps,
+      xz1, "computed.xz1").start()
 
     // S4 C/No calculation
 
@@ -531,12 +348,13 @@ object TecCalculationV2 extends Serializable {
         .withColumn("s4", ($"c1" - pow($"c2", 2)) / pow($"c2", 2))
         .select("time", "sat", "freq", "s4")
 
-    jdbcSink(S4cno, "computed.s4cno").start()
+    jdbcSink(context.jdbcUri, context.jdbcProps,
+      S4cno, "computed.s4cno").start()
 
     // S4 Power calculation
 
     val ismdetobsTimestamped =
-      ismdetobsDeser
+      context.ismdetobsDeser
         .withColumn("ts", expr("timestamp_millis(time)"))
         .withWatermark("ts", "10 seconds")
 
@@ -553,7 +371,8 @@ object TecCalculationV2 extends Serializable {
         .withColumn("s4", sqrt(($"c1" - pow($"c2", 2)) / pow($"c2", 2)))
         .select("time", "sat", "freq", "s4")
 
-    jdbcSink(S4pwr, "computed.s4pwr").start()
+    jdbcSink(context.jdbcUri, context.jdbcProps,
+      S4pwr, "computed.s4pwr").start()
 
     // S4 calculation
 
@@ -562,20 +381,9 @@ object TecCalculationV2 extends Serializable {
         .select($"time", $"sat", $"sigcomb",
           (sqrt(lit(1) - exp(lit(-2) * pow($"sigPhi", 2)))).as("s4"))
 
-    jdbcSink(S4, "computed.s4").start()
+    jdbcSink(context.jdbcUri, context.jdbcProps,
+      S4, "computed.s4").start()
 
-    spark.streams.awaitAnyTermination()
-  }
-
-  def printHelp(): Unit = {
-    val usagestr = """
-    Usage: <progname> <lat> <lon> <alt> <kafka_server> <clickhouse_server>
-    <lat>                 - receiver latitude
-    <lon>                 - receiver longitude
-    <alt>                 - receiver altitude
-    <kafka_server>        - Kafka server address:port, (string)
-    <clickhouse_server>   - ClickHouse server (HTTP-interface) address:port, (string)
-    """
-    System.out.println(usagestr)
+    Success(Unit)
   }
 }

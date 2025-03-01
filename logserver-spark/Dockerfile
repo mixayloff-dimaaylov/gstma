@@ -31,7 +31,7 @@ FROM install AS spark-TecCalculationV2
 CMD /spark/bin/spark-submit \
     --deploy-mode client \
     --master local[*] \
-    --class com.infocom.examples.spark.TecCalculationV2 \
+    --class com.infocom.examples.spark.App \
     --driver-memory 2g \
     --num-executors 1 \
     --executor-cores 2 \

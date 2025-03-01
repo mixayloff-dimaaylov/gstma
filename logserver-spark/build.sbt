@@ -87,7 +87,8 @@ val assemblyDependencies = (scope: String) => Seq(
 
   "org.apache.spark" %% "spark-avro" % sparkVersion,
   "org.apache.spark" %% "spark-streaming-kafka-0-10" % sparkVersion,
-  "org.apache.spark" %% "spark-sql-kafka-0-10" % sparkVersion
+  "org.apache.spark" %% "spark-sql-kafka-0-10" % sparkVersion,
+  "org.tupol" %% "spark-utils-io-pureconfig" % "1.0.0-RC7"
 )
 
 /*if it's a library the scope is "compile" since we want the transitive dependencies on the library
@@ -95,6 +96,7 @@ val assemblyDependencies = (scope: String) => Seq(
 lazy val assemblyDependenciesScope: String = if (isALibrary) "compile" else "provided"
 
 libraryDependencies ++= Seq(
+  "com.typesafe" % "config" % "1.4.3",
   "org.apache.spark" %% "spark-core" % sparkVersion,
   "org.apache.spark" %% "spark-sql" % sparkVersion,
   "org.apache.spark" %% "spark-yarn" % sparkVersion,

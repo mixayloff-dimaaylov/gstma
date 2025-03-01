@@ -18,6 +18,8 @@ package com.infocom.examples
 
 import java.io.File
 import java.net.{ URL, URLClassLoader }
+import java.util.Properties
+import org.apache.spark.sql.{DataFrame}
 
 package object spark {
   //Simple function for adding a directory to the system classpath
@@ -31,5 +33,16 @@ package object spark {
   def getJar(klass: Class[_]): String = {
     val codeSource = klass.getProtectionDomain.getCodeSource
     codeSource.getLocation.getPath
+  }
+
+  def jdbcSink(jdbcUri: String, jdbcProps: Properties, stream: DataFrame, tableName: String) = {
+    stream
+      .writeStream
+      .queryName(tableName)
+      .foreachBatch((batchDF: DataFrame, batchId: Long) => {
+        batchDF.write.mode("append")
+          .jdbc(jdbcUri, tableName, jdbcProps)
+        ()
+      })
   }
 }
