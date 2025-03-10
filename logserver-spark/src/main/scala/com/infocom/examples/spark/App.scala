@@ -22,6 +22,7 @@ import org.apache.spark.sql.avro.functions.from_avro
 import org.apache.spark.sql.functions.{explode,udf}
 import org.apache.spark.sql.expressions.UserDefinedFunction
 
+import scala.util.{Try,Success,Failure}
 import java.nio.file.{Files, Paths}
 import java.util.{Properties, UUID}
 
@@ -269,8 +270,6 @@ object App {
 
     val tecContext = AppContextTecCalculationV2(
       spark,
-      jdbcUri,
-      jdbcProps,
       rangeDeser,
       satxyz2Deser,
       ismdetobsDeser,
@@ -281,9 +280,20 @@ object App {
       result    <- TecCalculationV2.run(spark, tecContext)
     } yield result
 
-    spark.streams.awaitAnyTermination()
+    outcome match {
+      case Success(ResultTecCalculationV2(range, derivativesNT, xz1, s4cno, s4pwr, s4)) => {
+        jdbcSink(jdbcUri, jdbcProps, range, "computed.NT").start()
+        jdbcSink(jdbcUri, jdbcProps, derivativesNT, "computed.NTDerivatives").start()
+        jdbcSink(jdbcUri, jdbcProps, xz1, "computed.xz1").start()
+        jdbcSink(jdbcUri, jdbcProps, s4cno, "computed.s4cno").start()
+        jdbcSink(jdbcUri, jdbcProps, s4pwr, "computed.s4pwr").start()
+        jdbcSink(jdbcUri, jdbcProps, s4, "computed.s4").start()
 
-    outcome.get
+        spark.streams.awaitAnyTermination()
+      }
+
+      case Failure(_) => Unit
+    }
   }
 
   private def printHelp(): Unit = {

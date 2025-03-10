@@ -92,18 +92,25 @@ private case class RangeDerNT (
 
 case class AppContextTecCalculationV2 (
   spark: SparkSession,
-  jdbcUri: String,
-  jdbcProps: Properties,
   rangeDeser: DataFrame,
   satxyz2Deser: DataFrame,
   ismdetobsDeser: DataFrame,
   sig_params: DataFrame
 )
 
+case class ResultTecCalculationV2(
+  range: DataFrame,
+  derivativesNT: DataFrame,
+  xz: DataFrame,
+  s4cno: DataFrame,
+  s4pwr: DataFrame,
+  s4: DataFrame
+)
+
 /**
  * Created by mixayloff-dimaaylov on 07.03.2023.
  */
-object TecCalculationV2 extends Serializable with SparkRunnable[AppContextTecCalculationV2, Unit] {
+object TecCalculationV2 extends Serializable with SparkRunnable[AppContextTecCalculationV2, ResultTecCalculationV2] {
   // implicit val RangeNTEncoder: Encoder[RangeNT] =
   //   Encoders.kryo[RangeNT]
   @transient implicit val dntEstimatorEncoder: Encoder[DNTEstimator] =
@@ -188,18 +195,18 @@ object TecCalculationV2 extends Serializable with SparkRunnable[AppContextTecCal
     res.iterator
   }
 
-  override def run(implicit spark: SparkSession, context: AppContextTecCalculationV2): Try[Unit] = {
+  override def run(
+    implicit spark: SparkSession, context: AppContextTecCalculationV2): Try[ResultTecCalculationV2] = {
+
     // Data plans
 
-    val outcome = appLogic(spark, context)
-
-    return outcome
+    appLogic(spark, context)
   }
 
   def appLogic(
     spark: SparkSession,
     context: AppContextTecCalculationV2
-  ): Try[Unit] = {
+  ): Try[ResultTecCalculationV2] = {
     import spark.implicits._
 
     // Calculations (computed)
@@ -252,10 +259,6 @@ object TecCalculationV2 extends Serializable with SparkRunnable[AppContextTecCal
         .withColumn("nt", rawNt($"adr1", $"adr2", $"f1", $"f2", $"DNT"))
         .select("time", "sat", "sigcomb", "f1", "f2", "cno1", "cno2", "nt", "adrNt", "psrNt")
 
-    jdbcSink(context.jdbcUri, context.jdbcProps,
-      rangeNT
-        .select("time", "sat", "sigcomb", "f1", "f2", "nt", "adrNt", "psrNt"), "computed.NT").start()
-
     // Derivatives calculation
 
     val rangeGrouped =
@@ -293,9 +296,6 @@ object TecCalculationV2 extends Serializable with SparkRunnable[AppContextTecCal
           (sin($"c4.elevation") * $"c3.avgNT").as("avgNT"),
           (sin($"c4.elevation") * $"c3.delNT").as("delNT"))
 
-    jdbcSink(context.jdbcUri, context.jdbcProps,
-      derivativesNTuncurved, "computed.NTDerivatives").start()
-
     // Sigma calculation
 
     val xz1 =
@@ -330,12 +330,9 @@ object TecCalculationV2 extends Serializable with SparkRunnable[AppContextTecCal
           "sigNT", "sigPhi", "gamma", "Fd", "Fk", "Fc", "Pc",
           "eta_ch", "eta_d", "eta_m", "Perror")
 
-    jdbcSink(context.jdbcUri, context.jdbcProps,
-      xz1, "computed.xz1").start()
-
     // S4 C/No calculation
 
-    val S4cno =
+    val s4cno =
       rangeTimestamped
         .groupBy($"sat", $"freq",
           window($"ts", "1 second"))
@@ -348,9 +345,6 @@ object TecCalculationV2 extends Serializable with SparkRunnable[AppContextTecCal
         .withColumn("s4", ($"c1" - pow($"c2", 2)) / pow($"c2", 2))
         .select("time", "sat", "freq", "s4")
 
-    jdbcSink(context.jdbcUri, context.jdbcProps,
-      S4cno, "computed.s4cno").start()
-
     // S4 Power calculation
 
     val ismdetobsTimestamped =
@@ -358,7 +352,7 @@ object TecCalculationV2 extends Serializable with SparkRunnable[AppContextTecCal
         .withColumn("ts", expr("timestamp_millis(time)"))
         .withWatermark("ts", "10 seconds")
 
-    val S4pwr =
+    val s4pwr =
       ismdetobsTimestamped
         .groupBy($"sat", $"freq",
           window($"ts", "1 second"))
@@ -371,19 +365,20 @@ object TecCalculationV2 extends Serializable with SparkRunnable[AppContextTecCal
         .withColumn("s4", sqrt(($"c1" - pow($"c2", 2)) / pow($"c2", 2)))
         .select("time", "sat", "freq", "s4")
 
-    jdbcSink(context.jdbcUri, context.jdbcProps,
-      S4pwr, "computed.s4pwr").start()
-
     // S4 calculation
 
-    val S4 =
+    val s4 =
       xz1
         .select($"time", $"sat", $"sigcomb",
           (sqrt(lit(1) - exp(lit(-2) * pow($"sigPhi", 2)))).as("s4"))
 
-    jdbcSink(context.jdbcUri, context.jdbcProps,
-      S4, "computed.s4").start()
-
-    Success(Unit)
+    Success(ResultTecCalculationV2(
+      (rangeNT.select("time", "sat", "sigcomb", "f1", "f2", "nt", "adrNt", "psrNt")),
+      derivativesNTuncurved,
+      xz1,
+      s4cno,
+      s4pwr,
+      s4
+    ))
   }
 }
