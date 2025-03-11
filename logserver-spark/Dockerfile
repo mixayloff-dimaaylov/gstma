@@ -46,3 +46,23 @@ CMD /spark/bin/spark-submit \
     /spark/jars/novatel-streaming-assembly-0.3.0.jar \
     $REC_LAT $REC_LON $REC_ALT \
     $KAFKA_HOST:9092 $CH_HOST:8123
+
+FROM install AS spark-FromDB
+# KAFKA_HOST: Kafka host:port
+# CH_HOST: ClickHouse host:port
+ENTRYPOINT [ "/spark/bin/spark-submit", \
+    "--deploy-mode", "client", \
+    "--master", "local[*]", \
+    "--class", "com.infocom.examples.spark.AppFromDB", \
+    "--driver-memory", "2g", \
+    "--num-executors", "1", \
+    "--executor-cores", "2", \
+    "--executor-memory", "1500m", \
+    "--conf", "spark.locality.wait=10", \
+    "--conf", "spark.task.maxFailures=8", \
+    "--conf", "spark.yarn.maxAppAttempts=4", \
+    "--conf", "spark.yarn.am.attemptFailuresValidityInterval=1h", \
+    "--conf", "spark.yarn.max.executor.failures=8", \
+    "--conf", "spark.yarn.executor.failuresValidityInterval=1h", \
+    "--conf", "spark.sql.shuffle.partitions=1", \
+    "/spark/jars/novatel-streaming-assembly-0.3.0.jar" ]
