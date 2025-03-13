@@ -88,6 +88,7 @@ val assemblyDependencies = (scope: String) => Seq(
   "org.apache.spark" %% "spark-avro" % sparkVersion,
   "org.apache.spark" %% "spark-streaming-kafka-0-10" % sparkVersion,
   "org.apache.spark" %% "spark-sql-kafka-0-10" % sparkVersion,
+  "com.github.mrpowers" %% "spark-daria" % "1.2.3",
   "org.tupol" %% "spark-utils-io-pureconfig" % "1.0.0-RC7"
 )
 

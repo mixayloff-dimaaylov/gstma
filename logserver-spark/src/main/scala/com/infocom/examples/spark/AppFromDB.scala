@@ -18,12 +18,31 @@ package com.infocom.examples.spark
 
 import org.apache.spark.sql._
 import org.apache.spark.SparkConf
+import com.github.mrpowers.spark.daria.sql.DariaWriters
 import com.infocom.examples.spark.clickhouse._
 
+import scala.reflect.io.Directory
 import scala.util.{Try,Success,Failure}
+import java.io.File
 import java.util.Properties
 
 object AppFromDB {
+  private def writeSingleFile(spark: SparkSession, df: DataFrame, path: String): Unit = {
+    val tmpDir = "/tmp/spark-daria-tmp"
+
+    val res = DariaWriters.writeSingleFile(
+      df = df,
+      format = "parquet",
+      sc = spark.sparkContext,
+      tmpFolder = tmpDir,
+      filename = path
+    )
+
+    (new Directory(new File(tmpDir))).deleteRecursively()
+
+    res
+  }
+
   @SuppressWarnings(Array("org.wartremover.warts.TryPartial"))
   def main(implicit args: Array[String]): Unit = {
     System.out.println("Run main")
@@ -94,12 +113,12 @@ object AppFromDB {
 
     outcome match {
       case Success(ResultTecCalculationV2(range, derivativesNT, xz1, s4cno, s4pwr, s4)) => {
-        range.write.parquet("computed.NT.parquet")
-        derivativesNT.write.parquet("computed.NTDerivatives.parquet")
-        xz1.write.parquet("computed.xz1.parquet")
-        s4cno.write.parquet("computed.s4cno.parquet")
-        s4pwr.write.parquet("computed.s4pwr.parquet")
-        s4.write.parquet("computed.s4.parquet")
+        writeSingleFile(spark, range, "computed.NT.parquet")
+        writeSingleFile(spark, derivativesNT, "computed.NTDerivatives.parquet")
+        writeSingleFile(spark, xz1, "computed.xz1.parquet")
+        writeSingleFile(spark, s4cno, "computed.s4cno.parquet")
+        writeSingleFile(spark, s4pwr, "computed.s4pwr.parquet")
+        writeSingleFile(spark, s4, "computed.s4.parquet")
       }
 
       case Failure(_) => Unit
