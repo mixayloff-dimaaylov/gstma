@@ -15,8 +15,8 @@ ClickHouse database layout v21
 ```sql
 CREATE TABLE rawdata.range (
   time UInt64 COMMENT 'Метка времени (timestamp в ms)',
-  adr Float64 COMMENT 'Псевдодальность',
-  psr Float64 COMMENT 'Псевдофаза',
+  adr Float64 COMMENT 'Псевдофаза',
+  psr Float64 COMMENT 'Псевдодальность',
   cno Float64 COMMENT 'Отношение сигнал / шум',
   locktime Float64 COMMENT 'Время непрерывного слежения за спутником',
   sat String COMMENT 'Спутник',
@@ -255,7 +255,7 @@ CREATE TABLE computed.NT (
     f1 Float64 COMMENT 'Частота 1',
     f2 Float64 COMMENT 'Частота 2',
     nt Float64 COMMENT 'ПЭС',
-    adrNt Float64 COMMENT 'ПЭС псевдодальностный',
+    adrNt Float64 COMMENT 'ПЭС псевдофазовый',
     psrNt Float64 COMMENT 'ПЭС псевдодальностный',
     d Date MATERIALIZED toDate(round(time / 1000))
 ) ENGINE = ReplacingMergeTree(d, (time, sat, sigcomb), 8192)
