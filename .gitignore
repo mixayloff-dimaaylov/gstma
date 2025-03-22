@@ -4,3 +4,6 @@ docker-compose.override.yml
 
 # JupyterLab checkpointing
 **/.ipynb_checkpoints/
+
+# Data dumps folder
+/data
