@@ -75,6 +75,18 @@ services:
       - kafka
       - clickhouse
 
+  spark-fromdb:
+    container_name: gstma-spark-fromdb
+    profiles: ["spark-fromdb"]
+    build:
+      context: ./logserver-spark/
+      target: spark-FromDB
+    logging:
+      driver: "local"
+      options:
+        max-size: "1g"
+        compress: "true"
+
   clickhouse:
     container_name: gstma-clickhouse
     profiles: ["base", "default"]
